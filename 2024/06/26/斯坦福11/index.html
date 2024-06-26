@@ -9,6 +9,8 @@
     
     <title>
         
+            斯坦福编程范式公开课第十一节：指针与引用 |
+        
         TK&#39;s blog
     </title>
     
@@ -157,7 +159,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation"></span>
+                <span class="title-hover-animation">斯坦福编程范式公开课第十一节：指针与引用</span>
             </div>
 
             
@@ -169,7 +171,7 @@
                         <div class="author">
                             <span class="name">TKCC</span>
                             
-                                <span class="author-label">Lv1</span>
+                                <span class="author-label">Lv2</span>
                             
                         </div>
                         <div class="meta-info">
@@ -179,13 +181,13 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2023-10-30 17:11:53</span>
-        <span class="mobile">2023-10-30 17:11</span>
+        <span class="pc">2024-06-26 15:10:51</span>
+        <span class="mobile">2024-06-26 15:10</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2023-10-30 17:11:53</span>
+        <span class="pc">2024-06-26 15:19:12</span>
     </span>
     
     
@@ -193,9 +195,13 @@
 
     
     
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>592 字</span>
+        </span>
+    
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>1 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>2 分钟</span>
         </span>
     
     
@@ -213,7 +219,35 @@
             <div class="article-content keep-markdown-body">
                 
 
-                
+                <h3 id="第11节：指针与引用"><a href="#第11节：指针与引用" class="headerlink" title="第11节：指针与引用"></a>第11节：指针与引用</h3><p><strong>swap的c和c++版本，来讲述指针如何在内存中实现。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line">    <span class="type">int</span> y;</span><br><span class="line">    x=<span class="number">11</span>;</span><br><span class="line">    y=<span class="number">17</span>;</span><br><span class="line">    swap(&amp;x,&amp;y);<span class="comment">//swap(&amp;x,&amp;y); in c++</span></span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">M[SP+<span class="number">4</span>]=<span class="number">11</span>;</span><br><span class="line">M[SP]=<span class="number">17</span>;</span><br><span class="line">R1=SP;   <span class="comment">//&amp;y</span></span><br><span class="line">R2=SP+<span class="number">4</span>; <span class="comment">//&amp;x</span></span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">M[SP]=R2;</span><br><span class="line">M[SP+<span class="number">4</span>]=R1;</span><br><span class="line">CALL &lt;swap&gt;;</span><br><span class="line">SP=SP+<span class="number">8</span>;</span><br><span class="line">RET;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>c语言版本的SWAP</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span> *ap,<span class="type">int</span> *bp)</span>&#123;</span><br><span class="line">    <span class="type">int</span> temp=*ap;</span><br><span class="line">    *ap=*bp;</span><br><span class="line">    *bp=temp;</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">&lt;swap&gt;:</span><br><span class="line">SP=SP<span class="number">-4</span>;</span><br><span class="line">R1=M[SP+<span class="number">8</span>];</span><br><span class="line">R2=M[R1];</span><br><span class="line">M[SP]=R2;   <span class="comment">//temp=*ap</span></span><br><span class="line">R1=M[SP+<span class="number">12</span>];</span><br><span class="line">R2=M[R1];</span><br><span class="line">R3=M[SP+<span class="number">8</span>]; </span><br><span class="line">M[R3]=R2;   <span class="comment">//*ap=*bp</span></span><br><span class="line">R1=M[SP];</span><br><span class="line">R2=M[SP+<span class="number">12</span>];</span><br><span class="line">M[R2]=R1;   <span class="comment">//*bp=temp</span></span><br><span class="line">SP=SP+<span class="number">4</span>;</span><br><span class="line">RET;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">┌───────────────┐</span><br><span class="line">│               │	bp</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	ap</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	temp</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>C++版本的SWAP</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">swap</span><span class="params">(<span class="type">int</span> &amp;a,<span class="type">int</span> &amp;b)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> temp=a;</span><br><span class="line">    a=b;</span><br><span class="line">    b=temp;</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line"><span class="comment">//在swap例子中，c++的引用与c语言使用指针在汇编级别没有任何区别，引用只是在编译器中自动对指针进行解引。</span></span><br></pre></td></tr></table></figure>
+
+<p>引用一旦赋值就不能随便改变指向的变量。例如int x&#x3D;10; int y&#x3D;15; int &amp;z&#x3D;y; 一旦z与y绑定了之后，就不能再让其与x绑定。</p>
+<p>而指针可以，所以想要实现链表仍然需要指针。这就是为什么C++中指针仍然有很重要的地位</p>
+<p><strong>this指针和对象在内存的存储</strong></p>
+<p>C++中结构体和类的唯一区别在于类默认为praite，结构体是public</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">binky</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    	<span class="function"><span class="type">int</span> <span class="title">dunky</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">    	<span class="function"><span class="type">char</span> *<span class="title">minky</span><span class="params">(<span class="type">int</span> *z)</span></span>&#123;</span><br><span class="line">            <span class="type">int</span> w=*z;</span><br><span class="line">            <span class="keyword">return</span> slinky+<span class="built_in">dunky</span>(winky,winky);</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    	<span class="type">int</span> winky;</span><br><span class="line">    	<span class="type">char</span> *binky;</span><br><span class="line">    	<span class="type">char</span> slinky;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> n=<span class="number">17</span>;</span><br><span class="line">binky b;</span><br><span class="line">b.<span class="built_in">minky</span>(&amp;n);</span><br><span class="line"><span class="comment">//binky::minky(&amp;b,&amp;n)实际上汇编代码级别的调用</span></span><br><span class="line"><span class="comment">//如下图所示，传入的This=&amp;b实际上是一个指针，指向类存储的一片区域。</span></span><br><span class="line"><span class="comment">//当在minky函数中调用dunky函数时，默认是使用this-&gt;dunky，即还调用该对象的函数</span></span><br><span class="line"><span class="comment">//也可将binky改为下面这样，那么就意味着minky函数会调用传入对象的dunky函数</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">binky</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    	<span class="function"><span class="type">int</span> <span class="title">dunky</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">    	<span class="function"><span class="type">char</span> *<span class="title">minky</span><span class="params">(<span class="type">int</span> *z，binky&amp; d)</span></span>&#123;</span><br><span class="line">            <span class="type">int</span> w=*z;</span><br><span class="line">            <span class="keyword">return</span> slinky+d.<span class="built_in">dunky</span>(winky,winky);</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    	<span class="type">int</span> winky;</span><br><span class="line">    	<span class="type">char</span> *binky;</span><br><span class="line">    	<span class="type">char</span> slinky;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img  
+                     lazyload
+                     alt="image"
+                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\1716983234574.png"
+                      alt="1716983234574"
+                ><strong>static</strong></p>
+<p>类中定义static，表示该函数不需要被对象绑定，即在调用该函数的时候不需要this指针的传入。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">fraction</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">fraction</span>(<span class="type">int</span> n,<span class="type">int</span> d<span class="number">-1</span>);</span><br><span class="line">    ---</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">reduce</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">god</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
             </div>
 
             
@@ -222,16 +256,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content"></span>
+            <span class="type">本文标题</span>：<span class="content">斯坦福编程范式公开课第十一节：指针与引用</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">TKCC</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2023-10-30 17:11:53</span>
+            <span class="type">创建时间</span>：<span class="content">2024-06-26 15:10:51</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2023/10/30/vscode服务器手动更新/</span>
+            <span class="type">本文链接</span>：<span class="content">2024/06/26/斯坦福11/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -253,13 +287,13 @@
                         <div class="article-prev">
                             <a class="prev"
                                rel="prev"
-                               href="/2023/11/02/python%20setup%E5%87%BD%E6%95%B0/"
+                               href="/2024/06/26/%E6%96%AF%E5%9D%A6%E7%A6%8F10/"
                             >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
                                 <span class="title flex-center">
-                                <span class="post-nav-title-item"></span>
+                                <span class="post-nav-title-item">斯坦福编程范式公开课第十节：栈与函数调用</span>
                                 <span class="post-nav-item">上一篇</span>
                             </span>
                             </a>
@@ -269,10 +303,10 @@
                         <div class="article-next">
                             <a class="next"
                                rel="next"
-                               href="/2023/07/03/HoughLine%E5%8F%98%E6%8D%A2/"
+                               href="/2024/06/26/%E6%96%AF%E5%9D%A6%E7%A6%8F12/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item"></span>
+                                <span class="post-nav-title-item">斯坦福编程范式公开课第十二节：预处理器</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
@@ -291,7 +325,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC11%E8%8A%82%EF%BC%9A%E6%8C%87%E9%92%88%E4%B8%8E%E5%BC%95%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">第11节：指针与引用</span></a></li></ol>
     </div>
 </div>
 
