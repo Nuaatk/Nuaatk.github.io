@@ -79,6 +79,24 @@
   </entry>
   <entry>
     <title></title>
+    <url>/2023/11/02/python%20setup%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>解决hexo d 命令报错 Deploer not found git</title>
+    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
+    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
+<p>命令：</p>
+<p><code>npm insatll --save hexo-deployer-git</code></p>
+]]></content>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2023/10/30/vscode%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%89%8B%E5%8A%A8%E6%9B%B4%E6%96%B0/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title></title>
     <url>/2023/07/03/HoughLine%E5%8F%98%E6%8D%A2/</url>
     <content><![CDATA[<p>通过将笛卡尔坐标转换为霍夫坐标，再检测相交点多的直线，</p>
 <p>最后存为极坐标的表示方法</p>
@@ -87,14 +105,6 @@
 <p>应用到cv2中，默认原点在图片左上角，与x轴正方向为0度，</p>
 <p>如果r可正可负，theta取值范围为[0,180]</p>
 <p>如果r仅为正，theta取值范围应为[0,360]</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>解决hexo d 命令报错 Deploer not found git</title>
-    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
-    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
-<p>命令：</p>
-<p><code>npm insatll --save hexo-deployer-git</code></p>
 ]]></content>
   </entry>
 </search>
