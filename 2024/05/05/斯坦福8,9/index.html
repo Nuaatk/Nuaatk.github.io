@@ -9,7 +9,7 @@
     
     <title>
         
-            如何上传本地项目到GitHub |
+            斯坦福编程范式公开课第八，九节：堆栈的内存分配 |
         
         TK&#39;s blog
     </title>
@@ -159,7 +159,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">如何上传本地项目到GitHub</span>
+                <span class="title-hover-animation">斯坦福编程范式公开课第八，九节：堆栈的内存分配</span>
             </div>
 
             
@@ -181,13 +181,13 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2023-06-17 17:04:00</span>
-        <span class="mobile">2023-06-17 17:04</span>
+        <span class="pc">2024-05-05 00:00:00</span>
+        <span class="mobile">2024-05-05 00:00</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2023-07-10 14:19:41</span>
+        <span class="pc">2024-06-26 15:19:28</span>
     </span>
     
     
@@ -196,12 +196,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>277 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>957 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>1 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>3 分钟</span>
         </span>
     
     
@@ -219,18 +219,48 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <h1 id="上传本地项目到Github"><a href="#上传本地项目到Github" class="headerlink" title="上传本地项目到Github"></a>上传本地项目到Github</h1><h3 id="第一步：安装Git"><a href="#第一步：安装Git" class="headerlink" title="第一步：安装Git"></a>第一步：安装Git</h3><h3 id="第二步：创建文件夹"><a href="#第二步：创建文件夹" class="headerlink" title="第二步：创建文件夹"></a>第二步：创建文件夹</h3><p>创建一个本地项目所在的文件夹</p>
-<p>然后右击<code>Git bash</code>在该文件夹目录下打开Git终端</p>
-<h3 id="第三步：git-init"><a href="#第三步：git-init" class="headerlink" title="第三步：git init"></a>第三步：git init</h3><p>在命令行中输入<code>git init</code>使得该文件夹变成一个可由git管理的仓库</p>
-<h3 id="第四步：git-add"><a href="#第四步：git-add" class="headerlink" title="第四步：git add ."></a>第四步：git add .</h3><p>在命令行中输入<code>git add .</code>将该文件夹所有的文件添加到缓存区</p>
-<h3 id="第五步：git-commit-m"><a href="#第五步：git-commit-m" class="headerlink" title="第五步：git commit -m"></a>第五步：git commit -m</h3><p>使用命令<code>git commit -m &quot;commit的备注信息&quot;</code></p>
-<h3 id="第六步：关联github与本地仓库"><a href="#第六步：关联github与本地仓库" class="headerlink" title="第六步：关联github与本地仓库"></a>第六步：关联github与本地仓库</h3><p>此步骤仅需要进行一次，输入<code>git remote add origin https://github.com/.git你自己的github网址</code></p>
-<p>首先在github创建一个空项目。复制https，即为本项目所上传到的网址</p>
-<p>如果想要免密登录需要在config里设置用户邮箱和github一致 </p>
-<p>并在gihub账户端设置ssh的公钥</p>
-<p>这两步缺一都需要输入密码才能关联</p>
-<h3 id="第七步：git-push-origin-master"><a href="#第七步：git-push-origin-master" class="headerlink" title="第七步：git push origin master"></a>第七步：git push origin master</h3><p>输入命令<code>git push origin master</code>将本地仓库推送到GitHub中</p>
-<p>第一次上传添加 -u</p>
+                <h3 id="第8-9节：堆栈内存分配"><a href="#第8-9节：堆栈内存分配" class="headerlink" title="第8,9节：堆栈内存分配"></a>第8,9节：堆栈内存分配</h3><p>（这节将的都是最一些远古时期计算机管理内存的方法，现代计算机肯定有更好更复杂的方法，只学分配的机制和其中的思想就够了，不用纠结他写的伪代码和具体方案）</p>
+<ul>
+<li>堆的分配</li>
+</ul>
+<p><img  
+                     lazyload
+                     alt="image"
+                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\1714204618085.png"
+                      alt="1714204618085"
+                ></p>
+<p>​	每个被分配出去的内存块都有一个头部，记录了内存块的大小，某些还会记录后面的内存块是否空闲</p>
+<p>​	使用链表来记录堆内的空闲空间。该链表由堆的开头和结尾组成，中间节点记录了当前空闲空间的头地址，并且指向了下一个空闲空间的地址。当调用mallco时就会遍历这个链表来寻址合适的空间来分配。当调用free的时候就相当于在链表插入新的节点，当有连续的空闲空间时，节点有时候也会合并{这个链表应该也会记录空间空间的大小}</p>
+<ul>
+<li><p>堆内存压缩</p>
+<p>​	mallco函数必须分配连续的内存空间，但频繁的mallco和free内存会导致堆内存中存在大量的分散小内存碎片。堆内存压缩的目标是通过整理堆内存中的内存块，将分散的小块内存合并成更大的连续内存块，从而减少碎片化。这样做的好处是可以提高内存的利用率，避免由于碎片化导致无法满足大内存分配请求的情况。</p>
+<p>​	Mac OS 7.6通过handle来对堆内存进行压缩，即通过二级指针。如图所示，操作系统返回给用户的实际是一个指针，指向列表中指针的地址，而这个表中的指针又真正指向内存中的一片区域</p>
+<p>​	这样做的好处在于，当需要对堆内存进行压缩的时候，只需要修改列表中指针的指向就可以了，而不需要去修改用户端获取的指针。</p>
+<p><img  
+                     lazyload
+                     alt="image"
+                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\1714294645239.png"
+                      alt="1714294645239"
+                ></p>
+</li>
+</ul>
+<p>​			在操作时，有时候不希望操作系统进行压缩可以使用Handlelock来保护这块内存，类似于线程锁（见并发编程）</p>
+<ul>
+<li><p>汇编语言  </p>
+<ul>
+<li>for循环例子</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="built_in">array</span>[<span class="number">4</span>];</span><br><span class="line"><span class="type">int</span> i;</span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)&#123;</span><br><span class="line">	<span class="built_in">array</span>[i]=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">i--;</span><br><span class="line">---------------------</span><br><span class="line"><span class="comment">//伪汇编表达</span></span><br><span class="line"><span class="number">0</span>:M[R1]=<span class="number">0</span></span><br><span class="line">    <span class="comment">//i=0</span></span><br><span class="line"><span class="number">1</span>:R2=M[R1]</span><br><span class="line"><span class="number">2</span>:BGE R2,<span class="number">4</span>,PC+<span class="number">40</span></span><br><span class="line">    <span class="comment">//i&lt;4</span></span><br><span class="line"><span class="number">3</span>:R3=M[R1]</span><br><span class="line"><span class="number">4</span>:R4=R3*<span class="number">4</span></span><br><span class="line"><span class="number">5</span>:R5=R1+<span class="number">4</span></span><br><span class="line"><span class="number">6</span>:R6=R4+R5</span><br><span class="line"><span class="number">7</span>:M[R6]=<span class="number">0</span></span><br><span class="line">    <span class="comment">//array[i]=0</span></span><br><span class="line"><span class="number">8</span>:R2=M[R1]*</span><br><span class="line"><span class="number">9</span>:R2=R2+<span class="number">1</span></span><br><span class="line"><span class="number">10</span>:M[R1]=R2</span><br><span class="line">    <span class="comment">//i++</span></span><br><span class="line"><span class="number">11</span>:JMP PC<span class="number">-40</span></span><br><span class="line">    [] <span class="comment">//i-- 课程没有给出，大概就是R2=M[R1],R2=R2-1,M[R1]=R2</span></span><br><span class="line">   </span><br><span class="line">    <span class="comment">//学生提问：为什么要跳回到10行代码之前,即第1行</span></span><br><span class="line">    <span class="comment">//回答：养成写上下文无关代码的习惯，虽然这里的R2恰好是i的值，这也是for循环的统一规律，但为了保证更复杂的情况，还是需要养成习惯。</span></span><br><span class="line">    <span class="comment">//think：现代的编译器应该会对这些进行优化，不过自己写的时候这样更能避免出错</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>结构体例子</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fraction</span>&#123;</span></span><br><span class="line">    <span class="type">int</span> num;</span><br><span class="line">    <span class="type">int</span> denom;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fraction</span> <span class="title">pi</span>;</span><span class="comment">//R1存储了指向结构体低地址的一个指针</span></span><br><span class="line">pi.num=<span class="number">22</span>;	<span class="comment">//M[R1]=22</span></span><br><span class="line">pi.denom=<span class="number">7</span>;	<span class="comment">//M[R1+4]=7</span></span><br><span class="line"></span><br><span class="line">((<span class="keyword">struct</span> fraction)&amp;pi.denom)-&gt;denom=<span class="number">451</span>;	<span class="comment">//M[R1+8]=451</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//这个例子表明了对于机器以及汇编级别来说，并不关心数据的类型，只关心数据本身以及数据的地址和大小</span></span><br><span class="line">	<span class="comment">//强制类型转换只是针对编译器来设计的伎俩</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//这里是在栈上申请空间，mallco是在堆上，不过存储形式没有什么区别，只是位置不同</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指令编码</p>
+<p>讲的并不详细，直接去看riscv的编码格式就可以</p>
+</li>
+</ul>
 
             </div>
 
@@ -240,16 +270,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">如何上传本地项目到GitHub</span>
+            <span class="type">本文标题</span>：<span class="content">斯坦福编程范式公开课第八，九节：堆栈的内存分配</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">TKCC</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2023-06-17 17:04:00</span>
+            <span class="type">创建时间</span>：<span class="content">2024-05-05 00:00:00</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2023/06/17/github上传/</span>
+            <span class="type">本文链接</span>：<span class="content">2024/05/05/斯坦福8,9/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -271,13 +301,13 @@
                         <div class="article-prev">
                             <a class="prev"
                                rel="prev"
-                               href="/2024/05/01/%E6%96%AF%E5%9D%A6%E7%A6%8F1/"
+                               href="/2024/05/06/%E6%96%AF%E5%9D%A6%E7%A6%8F10/"
                             >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
                                 <span class="title flex-center">
-                                <span class="post-nav-title-item">斯坦福编程范式公开课第一节：课程大纲</span>
+                                <span class="post-nav-title-item">斯坦福编程范式公开课第十节：栈与函数调用</span>
                                 <span class="post-nav-item">上一篇</span>
                             </span>
                             </a>
@@ -287,10 +317,10 @@
                         <div class="article-next">
                             <a class="next"
                                rel="next"
-                               href="/2023/06/17/DDR%E9%87%8D%E8%A6%81%E6%97%B6%E5%BA%8F%E5%8F%82%E6%95%B0/"
+                               href="/2024/05/04/%E6%96%AF%E5%9D%A6%E7%A6%8F6,7/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">DDR重要时序参数</span>
+                                <span class="post-nav-title-item">斯坦福编程范式公开课第六，七节：“方法”泛化</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
@@ -309,7 +339,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8A%E4%BC%A0%E6%9C%AC%E5%9C%B0%E9%A1%B9%E7%9B%AE%E5%88%B0Github"><span class="nav-number">1.</span> <span class="nav-text">上传本地项目到Github</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%AE%89%E8%A3%85Git"><span class="nav-number">1.0.1.</span> <span class="nav-text">第一步：安装Git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="nav-number">1.0.2.</span> <span class="nav-text">第二步：创建文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9Agit-init"><span class="nav-number">1.0.3.</span> <span class="nav-text">第三步：git init</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9Agit-add"><span class="nav-number">1.0.4.</span> <span class="nav-text">第四步：git add .</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%EF%BC%9Agit-commit-m"><span class="nav-number">1.0.5.</span> <span class="nav-text">第五步：git commit -m</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%85%AD%E6%AD%A5%EF%BC%9A%E5%85%B3%E8%81%94github%E4%B8%8E%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93"><span class="nav-number">1.0.6.</span> <span class="nav-text">第六步：关联github与本地仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%83%E6%AD%A5%EF%BC%9Agit-push-origin-master"><span class="nav-number">1.0.7.</span> <span class="nav-text">第七步：git push origin master</span></a></li></ol></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC8-9%E8%8A%82%EF%BC%9A%E5%A0%86%E6%A0%88%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="nav-number">1.</span> <span class="nav-text">第8,9节：堆栈内存分配</span></a></li></ol>
     </div>
 </div>
 

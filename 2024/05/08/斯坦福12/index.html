@@ -9,7 +9,7 @@
     
     <title>
         
-            如何上传本地项目到GitHub |
+            斯坦福编程范式公开课第十二节：预处理器 |
         
         TK&#39;s blog
     </title>
@@ -159,7 +159,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">如何上传本地项目到GitHub</span>
+                <span class="title-hover-animation">斯坦福编程范式公开课第十二节：预处理器</span>
             </div>
 
             
@@ -181,13 +181,13 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2023-06-17 17:04:00</span>
-        <span class="mobile">2023-06-17 17:04</span>
+        <span class="pc">2024-05-08 00:00:00</span>
+        <span class="mobile">2024-05-08 00:00</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2023-07-10 14:19:41</span>
+        <span class="pc">2024-06-26 15:18:50</span>
     </span>
     
     
@@ -196,12 +196,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>277 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>463 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>1 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>2 分钟</span>
         </span>
     
     
@@ -219,18 +219,21 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <h1 id="上传本地项目到Github"><a href="#上传本地项目到Github" class="headerlink" title="上传本地项目到Github"></a>上传本地项目到Github</h1><h3 id="第一步：安装Git"><a href="#第一步：安装Git" class="headerlink" title="第一步：安装Git"></a>第一步：安装Git</h3><h3 id="第二步：创建文件夹"><a href="#第二步：创建文件夹" class="headerlink" title="第二步：创建文件夹"></a>第二步：创建文件夹</h3><p>创建一个本地项目所在的文件夹</p>
-<p>然后右击<code>Git bash</code>在该文件夹目录下打开Git终端</p>
-<h3 id="第三步：git-init"><a href="#第三步：git-init" class="headerlink" title="第三步：git init"></a>第三步：git init</h3><p>在命令行中输入<code>git init</code>使得该文件夹变成一个可由git管理的仓库</p>
-<h3 id="第四步：git-add"><a href="#第四步：git-add" class="headerlink" title="第四步：git add ."></a>第四步：git add .</h3><p>在命令行中输入<code>git add .</code>将该文件夹所有的文件添加到缓存区</p>
-<h3 id="第五步：git-commit-m"><a href="#第五步：git-commit-m" class="headerlink" title="第五步：git commit -m"></a>第五步：git commit -m</h3><p>使用命令<code>git commit -m &quot;commit的备注信息&quot;</code></p>
-<h3 id="第六步：关联github与本地仓库"><a href="#第六步：关联github与本地仓库" class="headerlink" title="第六步：关联github与本地仓库"></a>第六步：关联github与本地仓库</h3><p>此步骤仅需要进行一次，输入<code>git remote add origin https://github.com/.git你自己的github网址</code></p>
-<p>首先在github创建一个空项目。复制https，即为本项目所上传到的网址</p>
-<p>如果想要免密登录需要在config里设置用户邮箱和github一致 </p>
-<p>并在gihub账户端设置ssh的公钥</p>
-<p>这两步缺一都需要输入密码才能关联</p>
-<h3 id="第七步：git-push-origin-master"><a href="#第七步：git-push-origin-master" class="headerlink" title="第七步：git push origin master"></a>第七步：git push origin master</h3><p>输入命令<code>git push origin master</code>将本地仓库推送到GitHub中</p>
-<p>第一次上传添加 -u</p>
+                <h3 id="第12节：预处理器"><a href="#第12节：预处理器" class="headerlink" title="第12节：预处理器"></a>第12节：预处理器</h3><p><strong>#define</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> KWidth  480</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> KHeight 720</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> KPerameter 2*(KWidth+KHeight)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Width is %d&quot;</span>, KWdith);</span><br><span class="line"><span class="type">int</span> area=KWidth*KHeight;</span><br><span class="line"></span><br><span class="line"><span class="comment">//当预处理器遇到#define，会将两个值存储到一个hashset中。以KWidth为Key，480为值。</span></span><br><span class="line"><span class="comment">//通过预处理器，代码中的KWdith会通过hashset转化为常量</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//预处理器不会进行错误检查</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//计算VectorNth 即计算第N个元素的地址</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NthElemAddr(base,elemSize,index) ((cahr*)base+index*elemSize)</span></span><br><span class="line">		</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> NDEBUG</span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> assert(cond) (void)0</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> assert(cond) (cond)?((void) 0):fprintf(stderr,<span class="string">&quot;---&quot;</span>),exit(0)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="type">void</span> *<span class="title function_">VectorNth</span><span class="params">(<span class="built_in">vector</span> *v,<span class="type">int</span> position)</span>&#123;</span><br><span class="line">    assert(position&gt;=<span class="number">0</span>);</span><br><span class="line">    assert(position&lt;v-&gt;loglength);</span><br><span class="line">    <span class="keyword">return</span> NthElemAddr(v-&gt;elems,v-&gt;elemSize,position);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在下面这些情况预处理器会有一些不足：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(a,b)   (((a)&gt;(b))?(a):(b))</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> max=MAX(fib(<span class="number">100</span>),fact(<span class="number">4000</span>));</span><br><span class="line"><span class="comment">//实际上会被展开为</span></span><br><span class="line"><span class="comment">//int max=(fib(100)&gt;fact(4000))?fib(100):fact(4000)</span></span><br><span class="line"><span class="comment">//fibnacci数列本身计算时间就非常长，使用宏会调用两次fib()，导致性能变差</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> max=MAX(m++,n++);</span><br><span class="line"><span class="comment">//int max=((m++)&gt;(n++))?(m++):(n++);</span></span><br><span class="line"><span class="comment">//较大的呢个数将会被自增两次</span></span><br></pre></td></tr></table></figure>
+
+<p>Jerry Cain：由于这些原因，我更喜欢使用static const来定义全局常量而不是#define，大家应该尽量避免预处理的这些特性。</p>
+<p><strong>#include</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;vector.h&quot;</span></span></span><br><span class="line"><span class="comment">//&lt;&gt;代表了这是一个系统头文件，由编译器提供，使用默认路径找到其位置</span></span><br><span class="line"><span class="comment">//&quot;&quot;的表示，预处理器会将vector.h中的内容写入到此文件中</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//cc.h</span></span><br><span class="line"><span class="comment">//在头文件定义的时候加入,避免同一个头文件被多次调用</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _cc_h_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _cc_h_</span></span><br><span class="line">----</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br></pre></td></tr></table></figure>
+
+<p>只能#include头文件，因为头文件只能用于声明，不能分配任何的存储空间（除非定义全局共享变量），也不并不产生相应的机器代码。</p>
 
             </div>
 
@@ -240,16 +243,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">如何上传本地项目到GitHub</span>
+            <span class="type">本文标题</span>：<span class="content">斯坦福编程范式公开课第十二节：预处理器</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">TKCC</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2023-06-17 17:04:00</span>
+            <span class="type">创建时间</span>：<span class="content">2024-05-08 00:00:00</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2023/06/17/github上传/</span>
+            <span class="type">本文链接</span>：<span class="content">2024/05/08/斯坦福12/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -271,13 +274,13 @@
                         <div class="article-prev">
                             <a class="prev"
                                rel="prev"
-                               href="/2024/05/01/%E6%96%AF%E5%9D%A6%E7%A6%8F1/"
+                               href="/2024/05/09/%E6%96%AF%E5%9D%A6%E7%A6%8F13/"
                             >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
                                 <span class="title flex-center">
-                                <span class="post-nav-title-item">斯坦福编程范式公开课第一节：课程大纲</span>
+                                <span class="post-nav-title-item">斯坦福编程范式公开课第十三节：编译与链接</span>
                                 <span class="post-nav-item">上一篇</span>
                             </span>
                             </a>
@@ -287,10 +290,10 @@
                         <div class="article-next">
                             <a class="next"
                                rel="next"
-                               href="/2023/06/17/DDR%E9%87%8D%E8%A6%81%E6%97%B6%E5%BA%8F%E5%8F%82%E6%95%B0/"
+                               href="/2024/05/07/%E6%96%AF%E5%9D%A6%E7%A6%8F11/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">DDR重要时序参数</span>
+                                <span class="post-nav-title-item">斯坦福编程范式公开课第十一节：指针与引用</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
@@ -309,7 +312,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8A%E4%BC%A0%E6%9C%AC%E5%9C%B0%E9%A1%B9%E7%9B%AE%E5%88%B0Github"><span class="nav-number">1.</span> <span class="nav-text">上传本地项目到Github</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%AE%89%E8%A3%85Git"><span class="nav-number">1.0.1.</span> <span class="nav-text">第一步：安装Git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="nav-number">1.0.2.</span> <span class="nav-text">第二步：创建文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9Agit-init"><span class="nav-number">1.0.3.</span> <span class="nav-text">第三步：git init</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9Agit-add"><span class="nav-number">1.0.4.</span> <span class="nav-text">第四步：git add .</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%EF%BC%9Agit-commit-m"><span class="nav-number">1.0.5.</span> <span class="nav-text">第五步：git commit -m</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%85%AD%E6%AD%A5%EF%BC%9A%E5%85%B3%E8%81%94github%E4%B8%8E%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93"><span class="nav-number">1.0.6.</span> <span class="nav-text">第六步：关联github与本地仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%83%E6%AD%A5%EF%BC%9Agit-push-origin-master"><span class="nav-number">1.0.7.</span> <span class="nav-text">第七步：git push origin master</span></a></li></ol></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC12%E8%8A%82%EF%BC%9A%E9%A2%84%E5%A4%84%E7%90%86%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">第12节：预处理器</span></a></li></ol>
     </div>
 </div>
 

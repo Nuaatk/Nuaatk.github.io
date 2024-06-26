@@ -9,7 +9,7 @@
     
     <title>
         
-            如何上传本地项目到GitHub |
+            斯坦福编程范式公开课第二，三节：数据在内存中的存储格式 |
         
         TK&#39;s blog
     </title>
@@ -159,7 +159,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">如何上传本地项目到GitHub</span>
+                <span class="title-hover-animation">斯坦福编程范式公开课第二，三节：数据在内存中的存储格式</span>
             </div>
 
             
@@ -181,13 +181,13 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2023-06-17 17:04:00</span>
-        <span class="mobile">2023-06-17 17:04</span>
+        <span class="pc">2024-05-02 00:00:00</span>
+        <span class="mobile">2024-05-02 00:00</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2023-07-10 14:19:41</span>
+        <span class="pc">2024-06-26 15:20:08</span>
     </span>
     
     
@@ -196,7 +196,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>277 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>448 字</span>
         </span>
     
     
@@ -219,18 +219,95 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <h1 id="上传本地项目到Github"><a href="#上传本地项目到Github" class="headerlink" title="上传本地项目到Github"></a>上传本地项目到Github</h1><h3 id="第一步：安装Git"><a href="#第一步：安装Git" class="headerlink" title="第一步：安装Git"></a>第一步：安装Git</h3><h3 id="第二步：创建文件夹"><a href="#第二步：创建文件夹" class="headerlink" title="第二步：创建文件夹"></a>第二步：创建文件夹</h3><p>创建一个本地项目所在的文件夹</p>
-<p>然后右击<code>Git bash</code>在该文件夹目录下打开Git终端</p>
-<h3 id="第三步：git-init"><a href="#第三步：git-init" class="headerlink" title="第三步：git init"></a>第三步：git init</h3><p>在命令行中输入<code>git init</code>使得该文件夹变成一个可由git管理的仓库</p>
-<h3 id="第四步：git-add"><a href="#第四步：git-add" class="headerlink" title="第四步：git add ."></a>第四步：git add .</h3><p>在命令行中输入<code>git add .</code>将该文件夹所有的文件添加到缓存区</p>
-<h3 id="第五步：git-commit-m"><a href="#第五步：git-commit-m" class="headerlink" title="第五步：git commit -m"></a>第五步：git commit -m</h3><p>使用命令<code>git commit -m &quot;commit的备注信息&quot;</code></p>
-<h3 id="第六步：关联github与本地仓库"><a href="#第六步：关联github与本地仓库" class="headerlink" title="第六步：关联github与本地仓库"></a>第六步：关联github与本地仓库</h3><p>此步骤仅需要进行一次，输入<code>git remote add origin https://github.com/.git你自己的github网址</code></p>
-<p>首先在github创建一个空项目。复制https，即为本项目所上传到的网址</p>
-<p>如果想要免密登录需要在config里设置用户邮箱和github一致 </p>
-<p>并在gihub账户端设置ssh的公钥</p>
-<p>这两步缺一都需要输入密码才能关联</p>
-<h3 id="第七步：git-push-origin-master"><a href="#第七步：git-push-origin-master" class="headerlink" title="第七步：git push origin master"></a>第七步：git push origin master</h3><p>输入命令<code>git push origin master</code>将本地仓库推送到GitHub中</p>
-<p>第一次上传添加 -u</p>
+                <h3 id="第2-3节：数据存储格式"><a href="#第2-3节：数据存储格式" class="headerlink" title="第2,3节：数据存储格式"></a>第2,3节：数据存储格式</h3><p>c&#x2F;c++<strong>的数据类型</strong></p>
+<table>
+<thead>
+<tr>
+<th>bool</th>
+<th>char</th>
+<th>short</th>
+<th>int</th>
+<th>long</th>
+<th>float</th>
+<th>double</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1byte</td>
+<td>1byte</td>
+<td>2byte</td>
+<td>4byte</td>
+<td>4byte</td>
+<td>4byte</td>
+<td>8byte</td>
+</tr>
+</tbody></table>
+<ul>
+<li>整型数据与字符数据在内存中的存储格式</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">short</span> s =<span class="number">67</span>;</span><br><span class="line"><span class="type">char</span> ch =s;</span><br><span class="line">cout &lt;&lt; ch &lt;&lt;endl;<span class="comment">//ch = &quot;c&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>浮点数在内存中的存储格式（IEEE754规定）</li>
+</ul>
+<p><code>[(-1)**Sign ]  *  Mantissa *  [2**(Exp -127)]</code></p>
+<table>
+<thead>
+<tr>
+<th>1位</th>
+<th>8位</th>
+<th>23位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sign</td>
+<td>Mantissa</td>
+<td>Exp</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>以8.25为例：转化为二进制1000.01将整数部分化为1，即1.00001*2exp3</p>
+<p>则浮点数为：-1exp0 * 1.00001 * 2exp130</p>
+<p>符号位 0，小数00001，指数130&#x3D;0b10000010</p>
+<p>则32位浮点数存储8.25的格式为：0 10000010  00001000000000000000000</p>
+</li>
+<li><p>当Exp为0时，Mantissa的整数位为0。指数为-126</p>
+<p>当Exp大于等于1时，Mantissa的的整数位为1。</p>
+<p>也就是Exp的最后一位表示了Mantissa有无整数位，这样的目的是为了更高的精度。</p>
+<p>同时仍保留-127的格式，如果Exp为0时，指数为-127，那么表示的数就不连续了</p>
+<p>1<em>（2</em>*-126）&#x3D;1.1754944e-38</p>
+<p>0.9999998807907104<em>（2</em>*-126） &#x3D; 1.1754942e-38</p>
+</li>
+</ul>
+<p><strong>浮点数与整型的转化</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> i = <span class="number">5</span>;</span><br><span class="line"><span class="type">float</span> f =i;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%f\n&quot;</span>,f);<span class="comment">//f =5.000000</span></span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; f &lt;&lt;<span class="built_in">endl</span>; <span class="comment">//f =5</span></span><br><span class="line"></span><br><span class="line"><span class="type">float</span> p = *(<span class="type">float</span>*)&amp;o; <span class="comment">//p =7.00649e-45=1/(2**149)+1/(2**147)</span></span><br><span class="line"><span class="comment">//int类型在内存中的数据应为0x00000005=0b0 00000000 00000000000000000000101（小端模式）</span></span><br><span class="line"><span class="comment">//转化为浮点数格式 1.0 * 2exp-117</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//7.00649e-45 = 1/(2**149)+1/(2**147) 即变为二进制为 1.01 * (2**-147)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//0b0 00000000 00000000000000000000101 当exp等于0时 尾数首位不为1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>大小端区别</strong></p>
+<p><img  
+                     lazyload
+                     alt="image"
+                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\07b36950f6f5fc8bc8096f071aafd003.png"
+                      alt="07b36950f6f5fc8bc8096f071aafd003"
+                ></p>
+<p>以int 5小端为例子</p>
+<table>
+<thead>
+<tr>
+<th>0x7fffffffdfe4</th>
+<th>0x7fffffffdfe5</th>
+<th>0x7fffffffdfe6</th>
+<th>0x7fffffffdfe7</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>00000101</td>
+<td>00000000</td>
+<td>00000000</td>
+<td>00000000</td>
+</tr>
+</tbody></table>
+<p>​	进行float强制转换的时候，也会先进行小端读取，0 00000000 00000000000000000000101，再进行位划分</p>
+<p>​	也就是浮点数也是按照小端格式存储的（转换再转换，负负得正了）</p>
 
             </div>
 
@@ -240,16 +317,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">如何上传本地项目到GitHub</span>
+            <span class="type">本文标题</span>：<span class="content">斯坦福编程范式公开课第二，三节：数据在内存中的存储格式</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">TKCC</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2023-06-17 17:04:00</span>
+            <span class="type">创建时间</span>：<span class="content">2024-05-02 00:00:00</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2023/06/17/github上传/</span>
+            <span class="type">本文链接</span>：<span class="content">2024/05/02/斯坦福2,3/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -271,13 +348,13 @@
                         <div class="article-prev">
                             <a class="prev"
                                rel="prev"
-                               href="/2024/05/01/%E6%96%AF%E5%9D%A6%E7%A6%8F1/"
+                               href="/2024/05/03/%E6%96%AF%E5%9D%A6%E7%A6%8F4,5/"
                             >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
                                 <span class="title flex-center">
-                                <span class="post-nav-title-item">斯坦福编程范式公开课第一节：课程大纲</span>
+                                <span class="post-nav-title-item">斯坦福编程范式公开课第四，五节：“函数”泛化</span>
                                 <span class="post-nav-item">上一篇</span>
                             </span>
                             </a>
@@ -287,10 +364,10 @@
                         <div class="article-next">
                             <a class="next"
                                rel="next"
-                               href="/2023/06/17/DDR%E9%87%8D%E8%A6%81%E6%97%B6%E5%BA%8F%E5%8F%82%E6%95%B0/"
+                               href="/2024/05/01/%E6%96%AF%E5%9D%A6%E7%A6%8F1/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">DDR重要时序参数</span>
+                                <span class="post-nav-title-item">斯坦福编程范式公开课第一节：课程大纲</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
@@ -309,7 +386,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8A%E4%BC%A0%E6%9C%AC%E5%9C%B0%E9%A1%B9%E7%9B%AE%E5%88%B0Github"><span class="nav-number">1.</span> <span class="nav-text">上传本地项目到Github</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%AE%89%E8%A3%85Git"><span class="nav-number">1.0.1.</span> <span class="nav-text">第一步：安装Git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="nav-number">1.0.2.</span> <span class="nav-text">第二步：创建文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9Agit-init"><span class="nav-number">1.0.3.</span> <span class="nav-text">第三步：git init</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9Agit-add"><span class="nav-number">1.0.4.</span> <span class="nav-text">第四步：git add .</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%EF%BC%9Agit-commit-m"><span class="nav-number">1.0.5.</span> <span class="nav-text">第五步：git commit -m</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%85%AD%E6%AD%A5%EF%BC%9A%E5%85%B3%E8%81%94github%E4%B8%8E%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93"><span class="nav-number">1.0.6.</span> <span class="nav-text">第六步：关联github与本地仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%83%E6%AD%A5%EF%BC%9Agit-push-origin-master"><span class="nav-number">1.0.7.</span> <span class="nav-text">第七步：git push origin master</span></a></li></ol></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC2-3%E8%8A%82%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">第2,3节：数据存储格式</span></a></li></ol>
     </div>
 </div>
 

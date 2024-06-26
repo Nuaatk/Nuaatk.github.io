@@ -9,7 +9,7 @@
     
     <title>
         
-            如何上传本地项目到GitHub |
+            斯坦福编程范式公开课第十四节：程序调试错误 |
         
         TK&#39;s blog
     </title>
@@ -159,7 +159,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">如何上传本地项目到GitHub</span>
+                <span class="title-hover-animation">斯坦福编程范式公开课第十四节：程序调试错误</span>
             </div>
 
             
@@ -181,13 +181,13 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2023-06-17 17:04:00</span>
-        <span class="mobile">2023-06-17 17:04</span>
+        <span class="pc">2024-05-10 00:00:00</span>
+        <span class="mobile">2024-05-10 00:00</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2023-07-10 14:19:41</span>
+        <span class="pc">2024-06-26 15:18:28</span>
     </span>
     
     
@@ -196,12 +196,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>277 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>564 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>1 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>2 分钟</span>
         </span>
     
     
@@ -219,18 +219,24 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <h1 id="上传本地项目到Github"><a href="#上传本地项目到Github" class="headerlink" title="上传本地项目到Github"></a>上传本地项目到Github</h1><h3 id="第一步：安装Git"><a href="#第一步：安装Git" class="headerlink" title="第一步：安装Git"></a>第一步：安装Git</h3><h3 id="第二步：创建文件夹"><a href="#第二步：创建文件夹" class="headerlink" title="第二步：创建文件夹"></a>第二步：创建文件夹</h3><p>创建一个本地项目所在的文件夹</p>
-<p>然后右击<code>Git bash</code>在该文件夹目录下打开Git终端</p>
-<h3 id="第三步：git-init"><a href="#第三步：git-init" class="headerlink" title="第三步：git init"></a>第三步：git init</h3><p>在命令行中输入<code>git init</code>使得该文件夹变成一个可由git管理的仓库</p>
-<h3 id="第四步：git-add"><a href="#第四步：git-add" class="headerlink" title="第四步：git add ."></a>第四步：git add .</h3><p>在命令行中输入<code>git add .</code>将该文件夹所有的文件添加到缓存区</p>
-<h3 id="第五步：git-commit-m"><a href="#第五步：git-commit-m" class="headerlink" title="第五步：git commit -m"></a>第五步：git commit -m</h3><p>使用命令<code>git commit -m &quot;commit的备注信息&quot;</code></p>
-<h3 id="第六步：关联github与本地仓库"><a href="#第六步：关联github与本地仓库" class="headerlink" title="第六步：关联github与本地仓库"></a>第六步：关联github与本地仓库</h3><p>此步骤仅需要进行一次，输入<code>git remote add origin https://github.com/.git你自己的github网址</code></p>
-<p>首先在github创建一个空项目。复制https，即为本项目所上传到的网址</p>
-<p>如果想要免密登录需要在config里设置用户邮箱和github一致 </p>
-<p>并在gihub账户端设置ssh的公钥</p>
-<p>这两步缺一都需要输入密码才能关联</p>
-<h3 id="第七步：git-push-origin-master"><a href="#第七步：git-push-origin-master" class="headerlink" title="第七步：git push origin master"></a>第七步：git push origin master</h3><p>输入命令<code>git push origin master</code>将本地仓库推送到GitHub中</p>
-<p>第一次上传添加 -u</p>
+                <h3 id="第14节：程序调试错误"><a href="#第14节：程序调试错误" class="headerlink" title="第14节：程序调试错误"></a>第14节：程序调试错误</h3><p><strong>Segmentation  faul :</strong>  </p>
+<p>访问程序内存地址之外的地址,通常由于访问了一个空地址造成，即*(NULL)</p>
+<p><strong>Bus errors:</strong> </p>
+<p>由于未对齐的读或写引起的。之所以被称为总线错误，是因为出现未对齐的内存访问请求时，被堵塞的组件就是地址总线。</p>
+<p>内存对齐是由于内存电路的特性决定的，比如DRAM一次输出64Byte到Cache，而Cache一次输出4Byte到32位CPU的寄存器中。也就是对于32位CPU而言内存访问的最小粒度为4Byte，也就是访问0x001和0x003都是访问同一个地址即[0x000-0x003].</p>
+<p>为了适应内存这一特点，减少CPU的访存次数。因此提出了内存对齐存放。</p>
+<p><img  
+                     lazyload
+                     alt="image"
+                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\内存对齐.jpg"
+                      alt="内存对齐"
+                ></p>
+<p>如图所示，定义a,b两个char类型变量和c一个int类型变量。</p>
+<p>如果不进行内存对齐，变量c会存储在两个内存访问块中，读取或写入c都需要进行两次操作，并且还可能会与a，b产生冲突。如果进行内存对齐那么只需要一次读写。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//访问未对齐地址的例子，对于某些机器会产生bus errors，但在目前通用的处理器上不会，只会导致访问效率变低</span></span><br><span class="line"><span class="type">void</span> *vp=---;</span><br><span class="line">*(<span class="type">short</span> *)vp=<span class="number">7</span>;</span><br><span class="line">*(<span class="type">int</span> *)vp=<span class="number">55</span>;</span><br></pre></td></tr></table></figure>
+
+<p> <strong>数组访问溢出:</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//例1</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="type">short</span> arr[<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=<span class="number">4</span>;i++)&#123;</span><br><span class="line">        arr[i]=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//访问arr[0]-arr[3]正常，但当i=4，访问的是arr[4]也就是i变量所在地址</span></span><br><span class="line"><span class="comment">//如果是大端系统，那么会将i赋值为0</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│ <span class="number">0</span>   <span class="number">0</span>   <span class="number">0</span>   <span class="number">4</span> │	i</span><br><span class="line">├───┼───┼───┼───┤</span><br><span class="line">│ <span class="number">0</span> │ <span class="number">0</span> │ <span class="number">0</span> │ <span class="number">0</span> │	arr[<span class="number">3</span>,<span class="number">0</span>]</span><br><span class="line">├───┴───┴───┴───┤</span><br><span class="line">│               │	why</span><br><span class="line">└───┴───┴───┴───┘</span><br><span class="line"><span class="comment">//例2</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="built_in">array</span>[<span class="number">4</span>];</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=<span class="number">4</span>;i++)&#123;</span><br><span class="line">    <span class="built_in">array</span>[i]-=<span class="number">4</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//访问arr[0]-arr[3]正常，但当i=4，访问的是arr[4]也就是saved PC所在地址</span></span><br><span class="line"><span class="comment">//saved PC会-4，saved PC本来应该指向CALL &lt;foo&gt;函数后面的第一条指令</span></span><br><span class="line"><span class="comment">//-4之后却又指向了CALL &lt;foo&gt;造成了无限递归</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">3</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">2</span>]	</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">1</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">0</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	i</span><br><span class="line">└───┴───┴───┴───┘</span><br><span class="line"></span><br><span class="line"><span class="comment">//这些只会在比较古老的版本中发生，现代的编译器会通过__stack_chk_guard来保护数组避免溢出</span></span><br></pre></td></tr></table></figure>
 
             </div>
 
@@ -240,16 +246,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">如何上传本地项目到GitHub</span>
+            <span class="type">本文标题</span>：<span class="content">斯坦福编程范式公开课第十四节：程序调试错误</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">TKCC</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2023-06-17 17:04:00</span>
+            <span class="type">创建时间</span>：<span class="content">2024-05-10 00:00:00</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2023/06/17/github上传/</span>
+            <span class="type">本文链接</span>：<span class="content">2024/05/10/斯坦福14/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -271,13 +277,13 @@
                         <div class="article-prev">
                             <a class="prev"
                                rel="prev"
-                               href="/2024/05/01/%E6%96%AF%E5%9D%A6%E7%A6%8F1/"
+                               href="/2024/05/11/%E6%96%AF%E5%9D%A6%E7%A6%8F15/"
                             >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
                                 <span class="title flex-center">
-                                <span class="post-nav-title-item">斯坦福编程范式公开课第一节：课程大纲</span>
+                                <span class="post-nav-title-item">斯坦福编程范式公开课第十五节：并发编程</span>
                                 <span class="post-nav-item">上一篇</span>
                             </span>
                             </a>
@@ -287,10 +293,10 @@
                         <div class="article-next">
                             <a class="next"
                                rel="next"
-                               href="/2023/06/17/DDR%E9%87%8D%E8%A6%81%E6%97%B6%E5%BA%8F%E5%8F%82%E6%95%B0/"
+                               href="/2024/05/09/%E6%96%AF%E5%9D%A6%E7%A6%8F13/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">DDR重要时序参数</span>
+                                <span class="post-nav-title-item">斯坦福编程范式公开课第十三节：编译与链接</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
@@ -309,7 +315,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8A%E4%BC%A0%E6%9C%AC%E5%9C%B0%E9%A1%B9%E7%9B%AE%E5%88%B0Github"><span class="nav-number">1.</span> <span class="nav-text">上传本地项目到Github</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%AE%89%E8%A3%85Git"><span class="nav-number">1.0.1.</span> <span class="nav-text">第一步：安装Git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="nav-number">1.0.2.</span> <span class="nav-text">第二步：创建文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9Agit-init"><span class="nav-number">1.0.3.</span> <span class="nav-text">第三步：git init</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9Agit-add"><span class="nav-number">1.0.4.</span> <span class="nav-text">第四步：git add .</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%EF%BC%9Agit-commit-m"><span class="nav-number">1.0.5.</span> <span class="nav-text">第五步：git commit -m</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%85%AD%E6%AD%A5%EF%BC%9A%E5%85%B3%E8%81%94github%E4%B8%8E%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93"><span class="nav-number">1.0.6.</span> <span class="nav-text">第六步：关联github与本地仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%83%E6%AD%A5%EF%BC%9Agit-push-origin-master"><span class="nav-number">1.0.7.</span> <span class="nav-text">第七步：git push origin master</span></a></li></ol></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC14%E8%8A%82%EF%BC%9A%E7%A8%8B%E5%BA%8F%E8%B0%83%E8%AF%95%E9%94%99%E8%AF%AF"><span class="nav-number">1.</span> <span class="nav-text">第14节：程序调试错误</span></a></li></ol>
     </div>
 </div>
 
