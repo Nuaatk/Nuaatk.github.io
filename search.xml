@@ -89,65 +89,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>斯坦福编程范式公开课第十节：栈与函数调用</title>
-    <url>/2024/05/06/%E6%96%AF%E5%9D%A6%E7%A6%8F10/</url>
-    <content><![CDATA[<h3 id="第10节：栈与函数调用"><a href="#第10节：栈与函数调用" class="headerlink" title="第10节：栈与函数调用"></a>第10节：栈与函数调用</h3><ul>
-<li>函数传入的参数为什么还要保存到栈中呢。现代的编译器貌似并不是这么操作的</li>
-</ul>
-<p>​		riscv64-gcc是直接将参数传入a0,a1寄存器，然后调用函数，不需要再存到内存中去</p>
-<ul>
-<li>PC寄存器的值也需要保存，相当于riscv中的ra寄存器的作用&#x2F;&#x2F;不对</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数调用中栈的活动记录</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">(<span class="type">int</span> bar,<span class="type">int</span> * baz)</span>&#123;</span><br><span class="line">    <span class="type">char</span> snink[<span class="number">4</span>];</span><br><span class="line">    <span class="type">short</span> *why;</span><br><span class="line">    why=(<span class="type">short</span>*)(snink+<span class="number">2</span>);</span><br><span class="line">    *why=<span class="number">50</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>* argv)</span>&#123;</span><br><span class="line">    <span class="type">int</span> i=<span class="number">4</span>;</span><br><span class="line">    foo(i,&amp;i);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">main:</span><br><span class="line">SP=SP<span class="number">-4</span>;<span class="comment">//最开始SP指向栈顶,也就是第一个saved PC</span></span><br><span class="line">M[SP]=<span class="number">4</span>;</span><br><span class="line"><span class="comment">//Params</span></span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">R1=M[SP+<span class="number">8</span>];</span><br><span class="line">R2=SP+<span class="number">8</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">M[SP+<span class="number">4</span>]=R2;</span><br><span class="line">CALL&lt;foo&gt;;<span class="comment">//当call指令执行的时候，会自动将PC-4，并存起来，也就是第二个saved PC</span></span><br><span class="line">SP=SP+<span class="number">8</span>;</span><br><span class="line">RV=<span class="number">0</span>;</span><br><span class="line">foo:</span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">R1=SP+<span class="number">6</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">R1=M[SP];</span><br><span class="line">M[R1]=<span class="number">.2</span> <span class="number">50</span>;</span><br><span class="line">sp=sp+<span class="number">8</span>;</span><br><span class="line">RET;<span class="comment">//与call类似，执行ret的时候也会将saved PC呢块地址自动的进行一个PC+4</span></span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">┌───────────────┐</span><br><span class="line">│               │	argv</span><br><span class="line">├───────────────┤	</span><br><span class="line">│       <span class="number">2</span>       │	argc</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤</span><br><span class="line">│       <span class="number">4</span>       │	i</span><br><span class="line">├───────────────┤</span><br><span class="line">│      &amp;i       │	baz</span><br><span class="line">├───────────────┤</span><br><span class="line">│       <span class="number">4</span>       │	bar</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───┼───┼───┼───┤</span><br><span class="line">│   │   │   │   │	snink[<span class="number">0</span>,,<span class="number">3</span>]</span><br><span class="line">├───┴───┴───┴───┤</span><br><span class="line">│               │	why</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
-
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\1715912901808.png"
-                      alt="1715912901808"
-                ></p>
-<ul>
-<li>从baz以后的变量控制权都交给了foo函数<br>baz和bar是传入参数，属于caller<br>sinik[]和why属于局部变量，属于callee<br>只有调用者才知道怎样将有意义的参数值写入内存，因此必须一个空间一个空间的申请，而不是直接全部由main函数申请。</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//递归函数中栈的活动记录</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fact</span><span class="params">(<span class="type">int</span> n)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>)return1;</span><br><span class="line">    <span class="keyword">return</span> n*fact(n<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">&lt;fact&gt;:</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">BNE R1,<span class="number">0</span>,PC+<span class="number">12</span>;<span class="comment">//PC指的就是当前这条指令，在有些情况下在执行BNE这条指令时PC已经+4了，这里假设PC不变</span></span><br><span class="line">RV=<span class="number">1</span>;</span><br><span class="line">RET;</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">R1=R1<span class="number">-1</span>;</span><br><span class="line">SP=SP<span class="number">-4</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">CALL&lt;fact&gt;;</span><br><span class="line">SP=SP+<span class="number">4</span>;</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">RV=RV*R1;</span><br></pre></td></tr></table></figure>
-
-<p>call是一个占位符，在Linked其中会赋予真正的汇编代码含义。这样做的好处是不同文件一块编译的时候更加方便相对数值的计算</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>斯坦福编程范式公开课第十一节：指针与引用</title>
-    <url>/2024/05/07/%E6%96%AF%E5%9D%A6%E7%A6%8F11/</url>
-    <content><![CDATA[<h3 id="第11节：指针与引用"><a href="#第11节：指针与引用" class="headerlink" title="第11节：指针与引用"></a>第11节：指针与引用</h3><p><strong>swap的c和c++版本，来讲述指针如何在内存中实现。</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line">    <span class="type">int</span> y;</span><br><span class="line">    x=<span class="number">11</span>;</span><br><span class="line">    y=<span class="number">17</span>;</span><br><span class="line">    swap(&amp;x,&amp;y);<span class="comment">//swap(&amp;x,&amp;y); in c++</span></span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">M[SP+<span class="number">4</span>]=<span class="number">11</span>;</span><br><span class="line">M[SP]=<span class="number">17</span>;</span><br><span class="line">R1=SP;   <span class="comment">//&amp;y</span></span><br><span class="line">R2=SP+<span class="number">4</span>; <span class="comment">//&amp;x</span></span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">M[SP]=R2;</span><br><span class="line">M[SP+<span class="number">4</span>]=R1;</span><br><span class="line">CALL &lt;swap&gt;;</span><br><span class="line">SP=SP+<span class="number">8</span>;</span><br><span class="line">RET;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>c语言版本的SWAP</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span> *ap,<span class="type">int</span> *bp)</span>&#123;</span><br><span class="line">    <span class="type">int</span> temp=*ap;</span><br><span class="line">    *ap=*bp;</span><br><span class="line">    *bp=temp;</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">&lt;swap&gt;:</span><br><span class="line">SP=SP<span class="number">-4</span>;</span><br><span class="line">R1=M[SP+<span class="number">8</span>];</span><br><span class="line">R2=M[R1];</span><br><span class="line">M[SP]=R2;   <span class="comment">//temp=*ap</span></span><br><span class="line">R1=M[SP+<span class="number">12</span>];</span><br><span class="line">R2=M[R1];</span><br><span class="line">R3=M[SP+<span class="number">8</span>]; </span><br><span class="line">M[R3]=R2;   <span class="comment">//*ap=*bp</span></span><br><span class="line">R1=M[SP];</span><br><span class="line">R2=M[SP+<span class="number">12</span>];</span><br><span class="line">M[R2]=R1;   <span class="comment">//*bp=temp</span></span><br><span class="line">SP=SP+<span class="number">4</span>;</span><br><span class="line">RET;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">┌───────────────┐</span><br><span class="line">│               │	bp</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	ap</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	temp</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>C++版本的SWAP</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">swap</span><span class="params">(<span class="type">int</span> &amp;a,<span class="type">int</span> &amp;b)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> temp=a;</span><br><span class="line">    a=b;</span><br><span class="line">    b=temp;</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line"><span class="comment">//在swap例子中，c++的引用与c语言使用指针在汇编级别没有任何区别，引用只是在编译器中自动对指针进行解引。</span></span><br></pre></td></tr></table></figure>
-
-<p>引用一旦赋值就不能随便改变指向的变量。例如int x&#x3D;10; int y&#x3D;15; int &amp;z&#x3D;y; 一旦z与y绑定了之后，就不能再让其与x绑定。</p>
-<p>而指针可以，所以想要实现链表仍然需要指针。这就是为什么C++中指针仍然有很重要的地位</p>
-<p><strong>this指针和对象在内存的存储</strong></p>
-<p>C++中结构体和类的唯一区别在于类默认为praite，结构体是public</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">binky</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    	<span class="function"><span class="type">int</span> <span class="title">dunky</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">    	<span class="function"><span class="type">char</span> *<span class="title">minky</span><span class="params">(<span class="type">int</span> *z)</span></span>&#123;</span><br><span class="line">            <span class="type">int</span> w=*z;</span><br><span class="line">            <span class="keyword">return</span> slinky+<span class="built_in">dunky</span>(winky,winky);</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    	<span class="type">int</span> winky;</span><br><span class="line">    	<span class="type">char</span> *binky;</span><br><span class="line">    	<span class="type">char</span> slinky;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> n=<span class="number">17</span>;</span><br><span class="line">binky b;</span><br><span class="line">b.<span class="built_in">minky</span>(&amp;n);</span><br><span class="line"><span class="comment">//binky::minky(&amp;b,&amp;n)实际上汇编代码级别的调用</span></span><br><span class="line"><span class="comment">//如下图所示，传入的This=&amp;b实际上是一个指针，指向类存储的一片区域。</span></span><br><span class="line"><span class="comment">//当在minky函数中调用dunky函数时，默认是使用this-&gt;dunky，即还调用该对象的函数</span></span><br><span class="line"><span class="comment">//也可将binky改为下面这样，那么就意味着minky函数会调用传入对象的dunky函数</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">binky</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    	<span class="function"><span class="type">int</span> <span class="title">dunky</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">    	<span class="function"><span class="type">char</span> *<span class="title">minky</span><span class="params">(<span class="type">int</span> *z，binky&amp; d)</span></span>&#123;</span><br><span class="line">            <span class="type">int</span> w=*z;</span><br><span class="line">            <span class="keyword">return</span> slinky+d.<span class="built_in">dunky</span>(winky,winky);</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    	<span class="type">int</span> winky;</span><br><span class="line">    	<span class="type">char</span> *binky;</span><br><span class="line">    	<span class="type">char</span> slinky;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\1716983234574.png"
-                      alt="1716983234574"
-                ><strong>static</strong></p>
-<p>类中定义static，表示该函数不需要被对象绑定，即在调用该函数的时候不需要this指针的传入。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">fraction</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">fraction</span>(<span class="type">int</span> n,<span class="type">int</span> d<span class="number">-1</span>);</span><br><span class="line">    ---</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">reduce</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">god</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-  </entry>
-  <entry>
     <title>斯坦福编程范式公开课第一节：课程大纲</title>
     <url>/2024/05/01/%E6%96%AF%E5%9D%A6%E7%A6%8F1/</url>
     <content><![CDATA[<h3 id="第1节：课程大纲"><a href="#第1节：课程大纲" class="headerlink" title="第1节：课程大纲"></a>第1节：课程大纲</h3><p><strong>编程语言</strong></p>
@@ -174,6 +115,32 @@
 <li><p>函数式编程</p>
 </li>
 </ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>斯坦福编程范式公开课第十节：栈与函数调用</title>
+    <url>/2024/05/06/%E6%96%AF%E5%9D%A6%E7%A6%8F10/</url>
+    <content><![CDATA[<h3 id="第10节：栈与函数调用"><a href="#第10节：栈与函数调用" class="headerlink" title="第10节：栈与函数调用"></a>第10节：栈与函数调用</h3><ul>
+<li>函数传入的参数为什么还要保存到栈中呢。现代的编译器貌似并不是这么操作的</li>
+</ul>
+<p>​		riscv64-gcc是直接将参数传入a0,a1寄存器，然后调用函数，不需要再存到内存中去</p>
+<ul>
+<li>PC寄存器的值也需要保存，相当于riscv中的ra寄存器的作用&#x2F;&#x2F;不对</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数调用中栈的活动记录</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">(<span class="type">int</span> bar,<span class="type">int</span> * baz)</span>&#123;</span><br><span class="line">    <span class="type">char</span> snink[<span class="number">4</span>];</span><br><span class="line">    <span class="type">short</span> *why;</span><br><span class="line">    why=(<span class="type">short</span>*)(snink+<span class="number">2</span>);</span><br><span class="line">    *why=<span class="number">50</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>* argv)</span>&#123;</span><br><span class="line">    <span class="type">int</span> i=<span class="number">4</span>;</span><br><span class="line">    foo(i,&amp;i);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">main:</span><br><span class="line">SP=SP<span class="number">-4</span>;<span class="comment">//最开始SP指向栈顶,也就是第一个saved PC</span></span><br><span class="line">M[SP]=<span class="number">4</span>;</span><br><span class="line"><span class="comment">//Params</span></span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">R1=M[SP+<span class="number">8</span>];</span><br><span class="line">R2=SP+<span class="number">8</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">M[SP+<span class="number">4</span>]=R2;</span><br><span class="line">CALL&lt;foo&gt;;<span class="comment">//当call指令执行的时候，会自动将PC-4，并存起来，也就是第二个saved PC</span></span><br><span class="line">SP=SP+<span class="number">8</span>;</span><br><span class="line">RV=<span class="number">0</span>;</span><br><span class="line">foo:</span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">R1=SP+<span class="number">6</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">R1=M[SP];</span><br><span class="line">M[R1]=<span class="number">.2</span> <span class="number">50</span>;</span><br><span class="line">sp=sp+<span class="number">8</span>;</span><br><span class="line">RET;<span class="comment">//与call类似，执行ret的时候也会将saved PC呢块地址自动的进行一个PC+4</span></span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">┌───────────────┐</span><br><span class="line">│               │	argv</span><br><span class="line">├───────────────┤	</span><br><span class="line">│       <span class="number">2</span>       │	argc</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤</span><br><span class="line">│       <span class="number">4</span>       │	i</span><br><span class="line">├───────────────┤</span><br><span class="line">│      &amp;i       │	baz</span><br><span class="line">├───────────────┤</span><br><span class="line">│       <span class="number">4</span>       │	bar</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───┼───┼───┼───┤</span><br><span class="line">│   │   │   │   │	snink[<span class="number">0</span>,,<span class="number">3</span>]</span><br><span class="line">├───┴───┴───┴───┤</span><br><span class="line">│               │	why</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
+
+<p><img  
+                     lazyload
+                     alt="image"
+                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\1715912901808.png"
+                      alt="1715912901808"
+                ></p>
+<ul>
+<li>从baz以后的变量控制权都交给了foo函数<br>baz和bar是传入参数，属于caller<br>sinik[]和why属于局部变量，属于callee<br>只有调用者才知道怎样将有意义的参数值写入内存，因此必须一个空间一个空间的申请，而不是直接全部由main函数申请。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//递归函数中栈的活动记录</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fact</span><span class="params">(<span class="type">int</span> n)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>)return1;</span><br><span class="line">    <span class="keyword">return</span> n*fact(n<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">&lt;fact&gt;:</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">BNE R1,<span class="number">0</span>,PC+<span class="number">12</span>;<span class="comment">//PC指的就是当前这条指令，在有些情况下在执行BNE这条指令时PC已经+4了，这里假设PC不变</span></span><br><span class="line">RV=<span class="number">1</span>;</span><br><span class="line">RET;</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">R1=R1<span class="number">-1</span>;</span><br><span class="line">SP=SP<span class="number">-4</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">CALL&lt;fact&gt;;</span><br><span class="line">SP=SP+<span class="number">4</span>;</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">RV=RV*R1;</span><br></pre></td></tr></table></figure>
+
+<p>call是一个占位符，在Linked其中会赋予真正的汇编代码含义。这样做的好处是不同文件一块编译的时候更加方便相对数值的计算</p>
 ]]></content>
   </entry>
   <entry>
@@ -209,6 +176,39 @@
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//多传入参数的例子</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">strlen</span><span class="params">(<span class="type">char</span> *s,<span class="type">int</span> num)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> num=<span class="number">65</span>;</span><br><span class="line">    <span class="type">int</span> length=<span class="built_in">strlen</span>((<span class="type">char</span>*)&amp;num,num);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;length=%d\n&quot;</span>,length);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//尽管strlen多传入了一个参数。但是通过声明骗过了编译器，仍然可以通过编译运行。</span></span><br><span class="line"><span class="comment">//运行时，caller会将65和&amp;num当作参数传入。但对于callee，strlen函数只有一个参数，它只关注&amp;num这一个参数</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│  <span class="number">65</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>  │	num</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	length</span><br><span class="line">├───────────────┤</span><br><span class="line">│      <span class="number">65</span>       │	</span><br><span class="line">├───────────────┤   &lt;-----</span><br><span class="line">│     &amp;num      │	</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//少传入参数的例子</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">memcmp</span><span class="params">(<span class="type">void</span> *v1)</span></span>&#123;</span><br><span class="line">	<span class="type">int</span> n=<span class="number">17</span>;</span><br><span class="line">    <span class="type">int</span> m=<span class="built_in">memcmp</span>(&amp;n);</span><br><span class="line">&#125; </span><br><span class="line">C: CALL&lt;memcmp&gt;</span><br><span class="line">  </span><br><span class="line">C++: CALL&lt;memcmp_void_p&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">//memcmp的函数原型</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">memcmp</span><span class="params">(<span class="type">void</span> *v1,<span class="type">void</span> *v2,<span class="type">int</span> size)</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">C++: CALL&lt;memcmp_void_p_void_p_int&gt;</span><br><span class="line">    </span><br><span class="line"><span class="comment">//与上述例子类似，在运行时，对于caller来说，输入的只有&amp;n一个参数。</span></span><br><span class="line"><span class="comment">//但是对于callee来说，memcmp会调用三个参数，会将saved PC上面的三个4byte数据当作输入参数</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│      <span class="number">17</span>       │	n</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	m</span><br><span class="line">├───────────────┤</span><br><span class="line">│      &amp;n       │		</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
+    <title>斯坦福编程范式公开课第十一节：指针与引用</title>
+    <url>/2024/05/07/%E6%96%AF%E5%9D%A6%E7%A6%8F11/</url>
+    <content><![CDATA[<h3 id="第11节：指针与引用"><a href="#第11节：指针与引用" class="headerlink" title="第11节：指针与引用"></a>第11节：指针与引用</h3><p><strong>swap的c和c++版本，来讲述指针如何在内存中实现。</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line">    <span class="type">int</span> y;</span><br><span class="line">    x=<span class="number">11</span>;</span><br><span class="line">    y=<span class="number">17</span>;</span><br><span class="line">    swap(&amp;x,&amp;y);<span class="comment">//swap(&amp;x,&amp;y); in c++</span></span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">M[SP+<span class="number">4</span>]=<span class="number">11</span>;</span><br><span class="line">M[SP]=<span class="number">17</span>;</span><br><span class="line">R1=SP;   <span class="comment">//&amp;y</span></span><br><span class="line">R2=SP+<span class="number">4</span>; <span class="comment">//&amp;x</span></span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">M[SP]=R2;</span><br><span class="line">M[SP+<span class="number">4</span>]=R1;</span><br><span class="line">CALL &lt;swap&gt;;</span><br><span class="line">SP=SP+<span class="number">8</span>;</span><br><span class="line">RET;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>c语言版本的SWAP</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span> *ap,<span class="type">int</span> *bp)</span>&#123;</span><br><span class="line">    <span class="type">int</span> temp=*ap;</span><br><span class="line">    *ap=*bp;</span><br><span class="line">    *bp=temp;</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">&lt;swap&gt;:</span><br><span class="line">SP=SP<span class="number">-4</span>;</span><br><span class="line">R1=M[SP+<span class="number">8</span>];</span><br><span class="line">R2=M[R1];</span><br><span class="line">M[SP]=R2;   <span class="comment">//temp=*ap</span></span><br><span class="line">R1=M[SP+<span class="number">12</span>];</span><br><span class="line">R2=M[R1];</span><br><span class="line">R3=M[SP+<span class="number">8</span>]; </span><br><span class="line">M[R3]=R2;   <span class="comment">//*ap=*bp</span></span><br><span class="line">R1=M[SP];</span><br><span class="line">R2=M[SP+<span class="number">12</span>];</span><br><span class="line">M[R2]=R1;   <span class="comment">//*bp=temp</span></span><br><span class="line">SP=SP+<span class="number">4</span>;</span><br><span class="line">RET;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">┌───────────────┐</span><br><span class="line">│               │	bp</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	ap</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	temp</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>C++版本的SWAP</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">swap</span><span class="params">(<span class="type">int</span> &amp;a,<span class="type">int</span> &amp;b)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> temp=a;</span><br><span class="line">    a=b;</span><br><span class="line">    b=temp;</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line"><span class="comment">//在swap例子中，c++的引用与c语言使用指针在汇编级别没有任何区别，引用只是在编译器中自动对指针进行解引。</span></span><br></pre></td></tr></table></figure>
+
+<p>引用一旦赋值就不能随便改变指向的变量。例如int x&#x3D;10; int y&#x3D;15; int &amp;z&#x3D;y; 一旦z与y绑定了之后，就不能再让其与x绑定。</p>
+<p>而指针可以，所以想要实现链表仍然需要指针。这就是为什么C++中指针仍然有很重要的地位</p>
+<p><strong>this指针和对象在内存的存储</strong></p>
+<p>C++中结构体和类的唯一区别在于类默认为praite，结构体是public</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">binky</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    	<span class="function"><span class="type">int</span> <span class="title">dunky</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">    	<span class="function"><span class="type">char</span> *<span class="title">minky</span><span class="params">(<span class="type">int</span> *z)</span></span>&#123;</span><br><span class="line">            <span class="type">int</span> w=*z;</span><br><span class="line">            <span class="keyword">return</span> slinky+<span class="built_in">dunky</span>(winky,winky);</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    	<span class="type">int</span> winky;</span><br><span class="line">    	<span class="type">char</span> *binky;</span><br><span class="line">    	<span class="type">char</span> slinky;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> n=<span class="number">17</span>;</span><br><span class="line">binky b;</span><br><span class="line">b.<span class="built_in">minky</span>(&amp;n);</span><br><span class="line"><span class="comment">//binky::minky(&amp;b,&amp;n)实际上汇编代码级别的调用</span></span><br><span class="line"><span class="comment">//如下图所示，传入的This=&amp;b实际上是一个指针，指向类存储的一片区域。</span></span><br><span class="line"><span class="comment">//当在minky函数中调用dunky函数时，默认是使用this-&gt;dunky，即还调用该对象的函数</span></span><br><span class="line"><span class="comment">//也可将binky改为下面这样，那么就意味着minky函数会调用传入对象的dunky函数</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">binky</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    	<span class="function"><span class="type">int</span> <span class="title">dunky</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">    	<span class="function"><span class="type">char</span> *<span class="title">minky</span><span class="params">(<span class="type">int</span> *z，binky&amp; d)</span></span>&#123;</span><br><span class="line">            <span class="type">int</span> w=*z;</span><br><span class="line">            <span class="keyword">return</span> slinky+d.<span class="built_in">dunky</span>(winky,winky);</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    	<span class="type">int</span> winky;</span><br><span class="line">    	<span class="type">char</span> *binky;</span><br><span class="line">    	<span class="type">char</span> slinky;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img  
+                     lazyload
+                     alt="image"
+                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\1716983234574.png"
+                      alt="1716983234574"
+                ><strong>static</strong></p>
+<p>类中定义static，表示该函数不需要被对象绑定，即在调用该函数的时候不需要this指针的传入。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">fraction</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">fraction</span>(<span class="type">int</span> n,<span class="type">int</span> d<span class="number">-1</span>);</span><br><span class="line">    ---</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">reduce</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">god</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 ]]></content>
   </entry>
@@ -409,53 +409,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>斯坦福编程范式公开课第八，九节：堆栈的内存分配</title>
-    <url>/2024/05/05/%E6%96%AF%E5%9D%A6%E7%A6%8F8,9/</url>
-    <content><![CDATA[<h3 id="第8-9节：堆栈内存分配"><a href="#第8-9节：堆栈内存分配" class="headerlink" title="第8,9节：堆栈内存分配"></a>第8,9节：堆栈内存分配</h3><p>（这节将的都是最一些远古时期计算机管理内存的方法，现代计算机肯定有更好更复杂的方法，只学分配的机制和其中的思想就够了，不用纠结他写的伪代码和具体方案）</p>
-<ul>
-<li>堆的分配</li>
-</ul>
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\1714204618085.png"
-                      alt="1714204618085"
-                ></p>
-<p>​	每个被分配出去的内存块都有一个头部，记录了内存块的大小，某些还会记录后面的内存块是否空闲</p>
-<p>​	使用链表来记录堆内的空闲空间。该链表由堆的开头和结尾组成，中间节点记录了当前空闲空间的头地址，并且指向了下一个空闲空间的地址。当调用mallco时就会遍历这个链表来寻址合适的空间来分配。当调用free的时候就相当于在链表插入新的节点，当有连续的空闲空间时，节点有时候也会合并{这个链表应该也会记录空间空间的大小}</p>
-<ul>
-<li><p>堆内存压缩</p>
-<p>​	mallco函数必须分配连续的内存空间，但频繁的mallco和free内存会导致堆内存中存在大量的分散小内存碎片。堆内存压缩的目标是通过整理堆内存中的内存块，将分散的小块内存合并成更大的连续内存块，从而减少碎片化。这样做的好处是可以提高内存的利用率，避免由于碎片化导致无法满足大内存分配请求的情况。</p>
-<p>​	Mac OS 7.6通过handle来对堆内存进行压缩，即通过二级指针。如图所示，操作系统返回给用户的实际是一个指针，指向列表中指针的地址，而这个表中的指针又真正指向内存中的一片区域</p>
-<p>​	这样做的好处在于，当需要对堆内存进行压缩的时候，只需要修改列表中指针的指向就可以了，而不需要去修改用户端获取的指针。</p>
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\1714294645239.png"
-                      alt="1714294645239"
-                ></p>
-</li>
-</ul>
-<p>​			在操作时，有时候不希望操作系统进行压缩可以使用Handlelock来保护这块内存，类似于线程锁（见并发编程）</p>
-<ul>
-<li><p>汇编语言  </p>
-<ul>
-<li>for循环例子</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="built_in">array</span>[<span class="number">4</span>];</span><br><span class="line"><span class="type">int</span> i;</span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)&#123;</span><br><span class="line">	<span class="built_in">array</span>[i]=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">i--;</span><br><span class="line">---------------------</span><br><span class="line"><span class="comment">//伪汇编表达</span></span><br><span class="line"><span class="number">0</span>:M[R1]=<span class="number">0</span></span><br><span class="line">    <span class="comment">//i=0</span></span><br><span class="line"><span class="number">1</span>:R2=M[R1]</span><br><span class="line"><span class="number">2</span>:BGE R2,<span class="number">4</span>,PC+<span class="number">40</span></span><br><span class="line">    <span class="comment">//i&lt;4</span></span><br><span class="line"><span class="number">3</span>:R3=M[R1]</span><br><span class="line"><span class="number">4</span>:R4=R3*<span class="number">4</span></span><br><span class="line"><span class="number">5</span>:R5=R1+<span class="number">4</span></span><br><span class="line"><span class="number">6</span>:R6=R4+R5</span><br><span class="line"><span class="number">7</span>:M[R6]=<span class="number">0</span></span><br><span class="line">    <span class="comment">//array[i]=0</span></span><br><span class="line"><span class="number">8</span>:R2=M[R1]*</span><br><span class="line"><span class="number">9</span>:R2=R2+<span class="number">1</span></span><br><span class="line"><span class="number">10</span>:M[R1]=R2</span><br><span class="line">    <span class="comment">//i++</span></span><br><span class="line"><span class="number">11</span>:JMP PC<span class="number">-40</span></span><br><span class="line">    [] <span class="comment">//i-- 课程没有给出，大概就是R2=M[R1],R2=R2-1,M[R1]=R2</span></span><br><span class="line">   </span><br><span class="line">    <span class="comment">//学生提问：为什么要跳回到10行代码之前,即第1行</span></span><br><span class="line">    <span class="comment">//回答：养成写上下文无关代码的习惯，虽然这里的R2恰好是i的值，这也是for循环的统一规律，但为了保证更复杂的情况，还是需要养成习惯。</span></span><br><span class="line">    <span class="comment">//think：现代的编译器应该会对这些进行优化，不过自己写的时候这样更能避免出错</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>结构体例子</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fraction</span>&#123;</span></span><br><span class="line">    <span class="type">int</span> num;</span><br><span class="line">    <span class="type">int</span> denom;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fraction</span> <span class="title">pi</span>;</span><span class="comment">//R1存储了指向结构体低地址的一个指针</span></span><br><span class="line">pi.num=<span class="number">22</span>;	<span class="comment">//M[R1]=22</span></span><br><span class="line">pi.denom=<span class="number">7</span>;	<span class="comment">//M[R1+4]=7</span></span><br><span class="line"></span><br><span class="line">((<span class="keyword">struct</span> fraction)&amp;pi.denom)-&gt;denom=<span class="number">451</span>;	<span class="comment">//M[R1+8]=451</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//这个例子表明了对于机器以及汇编级别来说，并不关心数据的类型，只关心数据本身以及数据的地址和大小</span></span><br><span class="line">	<span class="comment">//强制类型转换只是针对编译器来设计的伎俩</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//这里是在栈上申请空间，mallco是在堆上，不过存储形式没有什么区别，只是位置不同</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>指令编码</p>
-<p>讲的并不详细，直接去看riscv的编码格式就可以</p>
-</li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
     <title>编程语言中符号的英文读法</title>
     <url>/2024/06/26/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%AC%A6%E5%8F%B7%E7%9A%84%E8%8B%B1%E6%96%87%E8%AF%BB%E6%B3%95/</url>
     <content><![CDATA[<table>
@@ -572,6 +525,53 @@
 <td>逗号</td>
 </tr>
 </tbody></table>
+]]></content>
+  </entry>
+  <entry>
+    <title>斯坦福编程范式公开课第八，九节：堆栈的内存分配</title>
+    <url>/2024/05/05/%E6%96%AF%E5%9D%A6%E7%A6%8F8,9/</url>
+    <content><![CDATA[<h3 id="第8-9节：堆栈内存分配"><a href="#第8-9节：堆栈内存分配" class="headerlink" title="第8,9节：堆栈内存分配"></a>第8,9节：堆栈内存分配</h3><p>（这节将的都是最一些远古时期计算机管理内存的方法，现代计算机肯定有更好更复杂的方法，只学分配的机制和其中的思想就够了，不用纠结他写的伪代码和具体方案）</p>
+<ul>
+<li>堆的分配</li>
+</ul>
+<p><img  
+                     lazyload
+                     alt="image"
+                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\1714204618085.png"
+                      alt="1714204618085"
+                ></p>
+<p>​	每个被分配出去的内存块都有一个头部，记录了内存块的大小，某些还会记录后面的内存块是否空闲</p>
+<p>​	使用链表来记录堆内的空闲空间。该链表由堆的开头和结尾组成，中间节点记录了当前空闲空间的头地址，并且指向了下一个空闲空间的地址。当调用mallco时就会遍历这个链表来寻址合适的空间来分配。当调用free的时候就相当于在链表插入新的节点，当有连续的空闲空间时，节点有时候也会合并{这个链表应该也会记录空间空间的大小}</p>
+<ul>
+<li><p>堆内存压缩</p>
+<p>​	mallco函数必须分配连续的内存空间，但频繁的mallco和free内存会导致堆内存中存在大量的分散小内存碎片。堆内存压缩的目标是通过整理堆内存中的内存块，将分散的小块内存合并成更大的连续内存块，从而减少碎片化。这样做的好处是可以提高内存的利用率，避免由于碎片化导致无法满足大内存分配请求的情况。</p>
+<p>​	Mac OS 7.6通过handle来对堆内存进行压缩，即通过二级指针。如图所示，操作系统返回给用户的实际是一个指针，指向列表中指针的地址，而这个表中的指针又真正指向内存中的一片区域</p>
+<p>​	这样做的好处在于，当需要对堆内存进行压缩的时候，只需要修改列表中指针的指向就可以了，而不需要去修改用户端获取的指针。</p>
+<p><img  
+                     lazyload
+                     alt="image"
+                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\1714294645239.png"
+                      alt="1714294645239"
+                ></p>
+</li>
+</ul>
+<p>​			在操作时，有时候不希望操作系统进行压缩可以使用Handlelock来保护这块内存，类似于线程锁（见并发编程）</p>
+<ul>
+<li><p>汇编语言  </p>
+<ul>
+<li>for循环例子</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="built_in">array</span>[<span class="number">4</span>];</span><br><span class="line"><span class="type">int</span> i;</span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)&#123;</span><br><span class="line">	<span class="built_in">array</span>[i]=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">i--;</span><br><span class="line">---------------------</span><br><span class="line"><span class="comment">//伪汇编表达</span></span><br><span class="line"><span class="number">0</span>:M[R1]=<span class="number">0</span></span><br><span class="line">    <span class="comment">//i=0</span></span><br><span class="line"><span class="number">1</span>:R2=M[R1]</span><br><span class="line"><span class="number">2</span>:BGE R2,<span class="number">4</span>,PC+<span class="number">40</span></span><br><span class="line">    <span class="comment">//i&lt;4</span></span><br><span class="line"><span class="number">3</span>:R3=M[R1]</span><br><span class="line"><span class="number">4</span>:R4=R3*<span class="number">4</span></span><br><span class="line"><span class="number">5</span>:R5=R1+<span class="number">4</span></span><br><span class="line"><span class="number">6</span>:R6=R4+R5</span><br><span class="line"><span class="number">7</span>:M[R6]=<span class="number">0</span></span><br><span class="line">    <span class="comment">//array[i]=0</span></span><br><span class="line"><span class="number">8</span>:R2=M[R1]*</span><br><span class="line"><span class="number">9</span>:R2=R2+<span class="number">1</span></span><br><span class="line"><span class="number">10</span>:M[R1]=R2</span><br><span class="line">    <span class="comment">//i++</span></span><br><span class="line"><span class="number">11</span>:JMP PC<span class="number">-40</span></span><br><span class="line">    [] <span class="comment">//i-- 课程没有给出，大概就是R2=M[R1],R2=R2-1,M[R1]=R2</span></span><br><span class="line">   </span><br><span class="line">    <span class="comment">//学生提问：为什么要跳回到10行代码之前,即第1行</span></span><br><span class="line">    <span class="comment">//回答：养成写上下文无关代码的习惯，虽然这里的R2恰好是i的值，这也是for循环的统一规律，但为了保证更复杂的情况，还是需要养成习惯。</span></span><br><span class="line">    <span class="comment">//think：现代的编译器应该会对这些进行优化，不过自己写的时候这样更能避免出错</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>结构体例子</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fraction</span>&#123;</span></span><br><span class="line">    <span class="type">int</span> num;</span><br><span class="line">    <span class="type">int</span> denom;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fraction</span> <span class="title">pi</span>;</span><span class="comment">//R1存储了指向结构体低地址的一个指针</span></span><br><span class="line">pi.num=<span class="number">22</span>;	<span class="comment">//M[R1]=22</span></span><br><span class="line">pi.denom=<span class="number">7</span>;	<span class="comment">//M[R1+4]=7</span></span><br><span class="line"></span><br><span class="line">((<span class="keyword">struct</span> fraction)&amp;pi.denom)-&gt;denom=<span class="number">451</span>;	<span class="comment">//M[R1+8]=451</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//这个例子表明了对于机器以及汇编级别来说，并不关心数据的类型，只关心数据本身以及数据的地址和大小</span></span><br><span class="line">	<span class="comment">//强制类型转换只是针对编译器来设计的伎俩</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//这里是在栈上申请空间，mallco是在堆上，不过存储形式没有什么区别，只是位置不同</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指令编码</p>
+<p>讲的并不详细，直接去看riscv的编码格式就可以</p>
+</li>
+</ul>
 ]]></content>
   </entry>
 </search>
