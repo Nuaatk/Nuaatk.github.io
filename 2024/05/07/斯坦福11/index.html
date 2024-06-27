@@ -187,7 +187,7 @@
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2024-06-26 15:19:12</span>
+        <span class="pc">2024-06-27 11:49:56</span>
     </span>
     
     
@@ -196,7 +196,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>592 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>591 字</span>
         </span>
     
     
@@ -238,12 +238,13 @@
 <p>C++中结构体和类的唯一区别在于类默认为praite，结构体是public</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">binky</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    	<span class="function"><span class="type">int</span> <span class="title">dunky</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">    	<span class="function"><span class="type">char</span> *<span class="title">minky</span><span class="params">(<span class="type">int</span> *z)</span></span>&#123;</span><br><span class="line">            <span class="type">int</span> w=*z;</span><br><span class="line">            <span class="keyword">return</span> slinky+<span class="built_in">dunky</span>(winky,winky);</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    	<span class="type">int</span> winky;</span><br><span class="line">    	<span class="type">char</span> *binky;</span><br><span class="line">    	<span class="type">char</span> slinky;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> n=<span class="number">17</span>;</span><br><span class="line">binky b;</span><br><span class="line">b.<span class="built_in">minky</span>(&amp;n);</span><br><span class="line"><span class="comment">//binky::minky(&amp;b,&amp;n)实际上汇编代码级别的调用</span></span><br><span class="line"><span class="comment">//如下图所示，传入的This=&amp;b实际上是一个指针，指向类存储的一片区域。</span></span><br><span class="line"><span class="comment">//当在minky函数中调用dunky函数时，默认是使用this-&gt;dunky，即还调用该对象的函数</span></span><br><span class="line"><span class="comment">//也可将binky改为下面这样，那么就意味着minky函数会调用传入对象的dunky函数</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">binky</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    	<span class="function"><span class="type">int</span> <span class="title">dunky</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">    	<span class="function"><span class="type">char</span> *<span class="title">minky</span><span class="params">(<span class="type">int</span> *z，binky&amp; d)</span></span>&#123;</span><br><span class="line">            <span class="type">int</span> w=*z;</span><br><span class="line">            <span class="keyword">return</span> slinky+d.<span class="built_in">dunky</span>(winky,winky);</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    	<span class="type">int</span> winky;</span><br><span class="line">    	<span class="type">char</span> *binky;</span><br><span class="line">    	<span class="type">char</span> slinky;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img  
+<img  
                      lazyload
                      alt="image"
-                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\1716983234574.png"
-                      alt="1716983234574"
-                ><strong>static</strong></p>
+                     data-src="/2024/05/07/%E6%96%AF%E5%9D%A6%E7%A6%8F11/1716983234574.png"
+                      class="" width="1716983234574"
+                >
+
 <p>类中定义static，表示该函数不需要被对象绑定，即在调用该函数的时候不需要this指针的传入。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">fraction</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">fraction</span>(<span class="type">int</span> n,<span class="type">int</span> d<span class="number">-1</span>);</span><br><span class="line">    ---</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">reduce</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">god</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 

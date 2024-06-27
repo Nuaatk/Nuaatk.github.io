@@ -187,7 +187,7 @@
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2024-06-26 15:18:28</span>
+        <span class="pc">2024-06-27 11:48:41</span>
     </span>
     
     
@@ -225,12 +225,13 @@
 <p>由于未对齐的读或写引起的。之所以被称为总线错误，是因为出现未对齐的内存访问请求时，被堵塞的组件就是地址总线。</p>
 <p>内存对齐是由于内存电路的特性决定的，比如DRAM一次输出64Byte到Cache，而Cache一次输出4Byte到32位CPU的寄存器中。也就是对于32位CPU而言内存访问的最小粒度为4Byte，也就是访问0x001和0x003都是访问同一个地址即[0x000-0x003].</p>
 <p>为了适应内存这一特点，减少CPU的访存次数。因此提出了内存对齐存放。</p>
-<p><img  
+<img  
                      lazyload
                      alt="image"
-                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\内存对齐.jpg"
-                      alt="内存对齐"
-                ></p>
+                     data-src="/2024/05/10/%E6%96%AF%E5%9D%A6%E7%A6%8F14/%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90.jpg"
+                      class="" title="内存对齐"
+                >
+
 <p>如图所示，定义a,b两个char类型变量和c一个int类型变量。</p>
 <p>如果不进行内存对齐，变量c会存储在两个内存访问块中，读取或写入c都需要进行两次操作，并且还可能会与a，b产生冲突。如果进行内存对齐那么只需要一次读写。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//访问未对齐地址的例子，对于某些机器会产生bus errors，但在目前通用的处理器上不会，只会导致访问效率变低</span></span><br><span class="line"><span class="type">void</span> *vp=---;</span><br><span class="line">*(<span class="type">short</span> *)vp=<span class="number">7</span>;</span><br><span class="line">*(<span class="type">int</span> *)vp=<span class="number">55</span>;</span><br></pre></td></tr></table></figure>

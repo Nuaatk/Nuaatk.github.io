@@ -187,7 +187,7 @@
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2024-06-26 15:20:08</span>
+        <span class="pc">2024-06-27 11:55:04</span>
     </span>
     
     
@@ -283,12 +283,13 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> i = <span class="number">5</span>;</span><br><span class="line"><span class="type">float</span> f =i;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%f\n&quot;</span>,f);<span class="comment">//f =5.000000</span></span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; f &lt;&lt;<span class="built_in">endl</span>; <span class="comment">//f =5</span></span><br><span class="line"></span><br><span class="line"><span class="type">float</span> p = *(<span class="type">float</span>*)&amp;o; <span class="comment">//p =7.00649e-45=1/(2**149)+1/(2**147)</span></span><br><span class="line"><span class="comment">//int类型在内存中的数据应为0x00000005=0b0 00000000 00000000000000000000101（小端模式）</span></span><br><span class="line"><span class="comment">//转化为浮点数格式 1.0 * 2exp-117</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//7.00649e-45 = 1/(2**149)+1/(2**147) 即变为二进制为 1.01 * (2**-147)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//0b0 00000000 00000000000000000000101 当exp等于0时 尾数首位不为1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p><strong>大小端区别</strong></p>
-<p><img  
+<img  
                      lazyload
                      alt="image"
-                     data-src="E:\paper\SynologyDrive\基础知识学习\C++学习\pic\07b36950f6f5fc8bc8096f071aafd003.png"
-                      alt="07b36950f6f5fc8bc8096f071aafd003"
-                ></p>
+                     data-src="/2024/05/02/%E6%96%AF%E5%9D%A6%E7%A6%8F2,3/07b36950f6f5fc8bc8096f071aafd003.png"
+                      class="" title="07b36950f6f5fc8bc8096f071aafd003"
+                >
+
 <p>以int 5小端为例子</p>
 <table>
 <thead>
