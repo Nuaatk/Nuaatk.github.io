@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>解决hexo d 命令报错 Deploer not found git</title>
-    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
-    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
-<p>命令：</p>
-<p><code>npm insatll --save hexo-deployer-git</code></p>
+    <title>如何上传本地项目到GitHub</title>
+    <url>/2023/06/17/github%E4%B8%8A%E4%BC%A0/</url>
+    <content><![CDATA[<h1 id="上传本地项目到Github"><a href="#上传本地项目到Github" class="headerlink" title="上传本地项目到Github"></a>上传本地项目到Github</h1><h3 id="第一步：安装Git"><a href="#第一步：安装Git" class="headerlink" title="第一步：安装Git"></a>第一步：安装Git</h3><h3 id="第二步：创建文件夹"><a href="#第二步：创建文件夹" class="headerlink" title="第二步：创建文件夹"></a>第二步：创建文件夹</h3><p>创建一个本地项目所在的文件夹</p>
+<p>然后右击<code>Git bash</code>在该文件夹目录下打开Git终端</p>
+<h3 id="第三步：git-init"><a href="#第三步：git-init" class="headerlink" title="第三步：git init"></a>第三步：git init</h3><p>在命令行中输入<code>git init</code>使得该文件夹变成一个可由git管理的仓库</p>
+<h3 id="第四步：git-add"><a href="#第四步：git-add" class="headerlink" title="第四步：git add ."></a>第四步：git add .</h3><p>在命令行中输入<code>git add .</code>将该文件夹所有的文件添加到缓存区</p>
+<h3 id="第五步：git-commit-m"><a href="#第五步：git-commit-m" class="headerlink" title="第五步：git commit -m"></a>第五步：git commit -m</h3><p>使用命令<code>git commit -m &quot;commit的备注信息&quot;</code></p>
+<h3 id="第六步：关联github与本地仓库"><a href="#第六步：关联github与本地仓库" class="headerlink" title="第六步：关联github与本地仓库"></a>第六步：关联github与本地仓库</h3><p>此步骤仅需要进行一次，输入<code>git remote add origin https://github.com/.git你自己的github网址</code></p>
+<p>首先在github创建一个空项目。复制https，即为本项目所上传到的网址</p>
+<p>如果想要免密登录需要在config里设置用户邮箱和github一致 </p>
+<p>并在gihub账户端设置ssh的公钥</p>
+<p>这两步缺一都需要输入密码才能关联</p>
+<h3 id="第七步：git-push-origin-master"><a href="#第七步：git-push-origin-master" class="headerlink" title="第七步：git push origin master"></a>第七步：git push origin master</h3><p>输入命令<code>git push origin master</code>将本地仓库推送到GitHub中</p>
+<p>第一次上传添加 -u</p>
 ]]></content>
   </entry>
   <entry>
@@ -72,112 +81,11 @@
 ]]></content>
   </entry>
   <entry>
-    <title>斯坦福编程范式公开课第一节：课程大纲</title>
-    <url>/2024/05/01/%E6%96%AF%E5%9D%A6%E7%A6%8F1/</url>
-    <content><![CDATA[<h3 id="第1节：课程大纲"><a href="#第1节：课程大纲" class="headerlink" title="第1节：课程大纲"></a>第1节：课程大纲</h3><p><strong>编程语言</strong></p>
-<ul>
-<li>C</li>
-<li>Assembly</li>
-<li>C++</li>
-<li>Concurrent Programming</li>
-<li>Scheme</li>
-<li>Python</li>
-</ul>
-<p><strong>编程思想</strong></p>
-<p>学习这些语言，更重要的是学习其背后的范式。即编程思想。 </p>
-<ul>
-<li><p>面向过程</p>
-<p>面向过程是一种以事件为中心的编程思想，编程的时候把解决问题的步骤分析出来，然后用函数把这些步骤实现，在一步一步的具体步骤中再按顺序调用函数。举个五子棋的例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">下五子棋&#123;</span><br><span class="line">开始游戏（）；</span><br><span class="line">黑子先走（）；</span><br><span class="line">绘制画面（）；</span><br><span class="line">判断输赢（）；</span><br><span class="line">轮到白子（）；</span><br><span class="line">绘制画面（）；</span><br><span class="line">判断输赢（）；</span><br><span class="line">返回到 黑子先走（）；</span><br><span class="line">输出最后结果；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>面向对象</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">下五子棋&#123;</span><br><span class="line">开始游戏（）；</span><br><span class="line">选手.黑落子（）；</span><br><span class="line">棋盘系统.绘制（）；</span><br><span class="line">规则系统.判断（）；</span><br><span class="line">选手.白落子（）；</span><br><span class="line">棋盘系统.绘制（）；</span><br><span class="line">规则系统.判断（）；</span><br><span class="line">循环到输出结果；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>并发编程</p>
-</li>
-<li><p>函数式编程</p>
-</li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
-    <title>如何上传本地项目到GitHub</title>
-    <url>/2023/06/17/github%E4%B8%8A%E4%BC%A0/</url>
-    <content><![CDATA[<h1 id="上传本地项目到Github"><a href="#上传本地项目到Github" class="headerlink" title="上传本地项目到Github"></a>上传本地项目到Github</h1><h3 id="第一步：安装Git"><a href="#第一步：安装Git" class="headerlink" title="第一步：安装Git"></a>第一步：安装Git</h3><h3 id="第二步：创建文件夹"><a href="#第二步：创建文件夹" class="headerlink" title="第二步：创建文件夹"></a>第二步：创建文件夹</h3><p>创建一个本地项目所在的文件夹</p>
-<p>然后右击<code>Git bash</code>在该文件夹目录下打开Git终端</p>
-<h3 id="第三步：git-init"><a href="#第三步：git-init" class="headerlink" title="第三步：git init"></a>第三步：git init</h3><p>在命令行中输入<code>git init</code>使得该文件夹变成一个可由git管理的仓库</p>
-<h3 id="第四步：git-add"><a href="#第四步：git-add" class="headerlink" title="第四步：git add ."></a>第四步：git add .</h3><p>在命令行中输入<code>git add .</code>将该文件夹所有的文件添加到缓存区</p>
-<h3 id="第五步：git-commit-m"><a href="#第五步：git-commit-m" class="headerlink" title="第五步：git commit -m"></a>第五步：git commit -m</h3><p>使用命令<code>git commit -m &quot;commit的备注信息&quot;</code></p>
-<h3 id="第六步：关联github与本地仓库"><a href="#第六步：关联github与本地仓库" class="headerlink" title="第六步：关联github与本地仓库"></a>第六步：关联github与本地仓库</h3><p>此步骤仅需要进行一次，输入<code>git remote add origin https://github.com/.git你自己的github网址</code></p>
-<p>首先在github创建一个空项目。复制https，即为本项目所上传到的网址</p>
-<p>如果想要免密登录需要在config里设置用户邮箱和github一致 </p>
-<p>并在gihub账户端设置ssh的公钥</p>
-<p>这两步缺一都需要输入密码才能关联</p>
-<h3 id="第七步：git-push-origin-master"><a href="#第七步：git-push-origin-master" class="headerlink" title="第七步：git push origin master"></a>第七步：git push origin master</h3><p>输入命令<code>git push origin master</code>将本地仓库推送到GitHub中</p>
-<p>第一次上传添加 -u</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>斯坦福编程范式公开课第十节：栈与函数调用</title>
-    <url>/2024/05/06/%E6%96%AF%E5%9D%A6%E7%A6%8F10/</url>
-    <content><![CDATA[<h3 id="第10节：栈与函数调用"><a href="#第10节：栈与函数调用" class="headerlink" title="第10节：栈与函数调用"></a>第10节：栈与函数调用</h3><ul>
-<li>函数传入的参数为什么还要保存到栈中呢。现代的编译器貌似并不是这么操作的</li>
-</ul>
-<p>​		riscv64-gcc是直接将参数传入a0,a1寄存器，然后调用函数，不需要再存到内存中去</p>
-<ul>
-<li>PC寄存器的值也需要保存，相当于riscv中的ra寄存器的作用&#x2F;&#x2F;不对</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数调用中栈的活动记录</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">(<span class="type">int</span> bar,<span class="type">int</span> * baz)</span>&#123;</span><br><span class="line">    <span class="type">char</span> snink[<span class="number">4</span>];</span><br><span class="line">    <span class="type">short</span> *why;</span><br><span class="line">    why=(<span class="type">short</span>*)(snink+<span class="number">2</span>);</span><br><span class="line">    *why=<span class="number">50</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>* argv)</span>&#123;</span><br><span class="line">    <span class="type">int</span> i=<span class="number">4</span>;</span><br><span class="line">    foo(i,&amp;i);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">main:</span><br><span class="line">SP=SP<span class="number">-4</span>;<span class="comment">//最开始SP指向栈顶,也就是第一个saved PC</span></span><br><span class="line">M[SP]=<span class="number">4</span>;</span><br><span class="line"><span class="comment">//Params</span></span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">R1=M[SP+<span class="number">8</span>];</span><br><span class="line">R2=SP+<span class="number">8</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">M[SP+<span class="number">4</span>]=R2;</span><br><span class="line">CALL&lt;foo&gt;;<span class="comment">//当call指令执行的时候，会自动将PC-4，并存起来，也就是第二个saved PC</span></span><br><span class="line">SP=SP+<span class="number">8</span>;</span><br><span class="line">RV=<span class="number">0</span>;</span><br><span class="line">foo:</span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">R1=SP+<span class="number">6</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">R1=M[SP];</span><br><span class="line">M[R1]=<span class="number">.2</span> <span class="number">50</span>;</span><br><span class="line">sp=sp+<span class="number">8</span>;</span><br><span class="line">RET;<span class="comment">//与call类似，执行ret的时候也会将saved PC呢块地址自动的进行一个PC+4</span></span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">┌───────────────┐</span><br><span class="line">│               │	argv</span><br><span class="line">├───────────────┤	</span><br><span class="line">│       <span class="number">2</span>       │	argc</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤</span><br><span class="line">│       <span class="number">4</span>       │	i</span><br><span class="line">├───────────────┤</span><br><span class="line">│      &amp;i       │	baz</span><br><span class="line">├───────────────┤</span><br><span class="line">│       <span class="number">4</span>       │	bar</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───┼───┼───┼───┤</span><br><span class="line">│   │   │   │   │	snink[<span class="number">0</span>,,<span class="number">3</span>]</span><br><span class="line">├───┴───┴───┴───┤</span><br><span class="line">│               │	why</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
-
-<img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/05/06/%E6%96%AF%E5%9D%A6%E7%A6%8F10/1715912901808.png"
-                      class="" width="1715912901808"
-                >
-
-<ul>
-<li>从baz以后的变量控制权都交给了foo函数<br>baz和bar是传入参数，属于caller<br>sinik[]和why属于局部变量，属于callee<br>只有调用者才知道怎样将有意义的参数值写入内存，因此必须一个空间一个空间的申请，而不是直接全部由main函数申请。</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//递归函数中栈的活动记录</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fact</span><span class="params">(<span class="type">int</span> n)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>)return1;</span><br><span class="line">    <span class="keyword">return</span> n*fact(n<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">&lt;fact&gt;:</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">BNE R1,<span class="number">0</span>,PC+<span class="number">12</span>;<span class="comment">//PC指的就是当前这条指令，在有些情况下在执行BNE这条指令时PC已经+4了，这里假设PC不变</span></span><br><span class="line">RV=<span class="number">1</span>;</span><br><span class="line">RET;</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">R1=R1<span class="number">-1</span>;</span><br><span class="line">SP=SP<span class="number">-4</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">CALL&lt;fact&gt;;</span><br><span class="line">SP=SP+<span class="number">4</span>;</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">RV=RV*R1;</span><br></pre></td></tr></table></figure>
-
-<p>call是一个占位符，在Linked其中会赋予真正的汇编代码含义。这样做的好处是不同文件一块编译的时候更加方便相对数值的计算</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>斯坦福编程范式公开课第十二节：预处理器</title>
-    <url>/2024/05/08/%E6%96%AF%E5%9D%A6%E7%A6%8F12/</url>
-    <content><![CDATA[<h3 id="第12节：预处理器"><a href="#第12节：预处理器" class="headerlink" title="第12节：预处理器"></a>第12节：预处理器</h3><p><strong>#define</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> KWidth  480</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> KHeight 720</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> KPerameter 2*(KWidth+KHeight)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Width is %d&quot;</span>, KWdith);</span><br><span class="line"><span class="type">int</span> area=KWidth*KHeight;</span><br><span class="line"></span><br><span class="line"><span class="comment">//当预处理器遇到#define，会将两个值存储到一个hashset中。以KWidth为Key，480为值。</span></span><br><span class="line"><span class="comment">//通过预处理器，代码中的KWdith会通过hashset转化为常量</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//预处理器不会进行错误检查</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//计算VectorNth 即计算第N个元素的地址</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NthElemAddr(base,elemSize,index) ((cahr*)base+index*elemSize)</span></span><br><span class="line">		</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> NDEBUG</span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> assert(cond) (void)0</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> assert(cond) (cond)?((void) 0):fprintf(stderr,<span class="string">&quot;---&quot;</span>),exit(0)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="type">void</span> *<span class="title function_">VectorNth</span><span class="params">(<span class="built_in">vector</span> *v,<span class="type">int</span> position)</span>&#123;</span><br><span class="line">    assert(position&gt;=<span class="number">0</span>);</span><br><span class="line">    assert(position&lt;v-&gt;loglength);</span><br><span class="line">    <span class="keyword">return</span> NthElemAddr(v-&gt;elems,v-&gt;elemSize,position);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在下面这些情况预处理器会有一些不足：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(a,b)   (((a)&gt;(b))?(a):(b))</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> max=MAX(fib(<span class="number">100</span>),fact(<span class="number">4000</span>));</span><br><span class="line"><span class="comment">//实际上会被展开为</span></span><br><span class="line"><span class="comment">//int max=(fib(100)&gt;fact(4000))?fib(100):fact(4000)</span></span><br><span class="line"><span class="comment">//fibnacci数列本身计算时间就非常长，使用宏会调用两次fib()，导致性能变差</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> max=MAX(m++,n++);</span><br><span class="line"><span class="comment">//int max=((m++)&gt;(n++))?(m++):(n++);</span></span><br><span class="line"><span class="comment">//较大的呢个数将会被自增两次</span></span><br></pre></td></tr></table></figure>
-
-<p>Jerry Cain：由于这些原因，我更喜欢使用static const来定义全局常量而不是#define，大家应该尽量避免预处理的这些特性。</p>
-<p><strong>#include</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;vector.h&quot;</span></span></span><br><span class="line"><span class="comment">//&lt;&gt;代表了这是一个系统头文件，由编译器提供，使用默认路径找到其位置</span></span><br><span class="line"><span class="comment">//&quot;&quot;的表示，预处理器会将vector.h中的内容写入到此文件中</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//cc.h</span></span><br><span class="line"><span class="comment">//在头文件定义的时候加入,避免同一个头文件被多次调用</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _cc_h_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _cc_h_</span></span><br><span class="line">----</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br></pre></td></tr></table></figure>
-
-<p>只能#include头文件，因为头文件只能用于声明，不能分配任何的存储空间（除非定义全局共享变量），也不并不产生相应的机器代码。</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>斯坦福编程范式公开课第十三节：编译与链接</title>
-    <url>/2024/05/09/%E6%96%AF%E5%9D%A6%E7%A6%8F13/</url>
-    <content><![CDATA[<h3 id="第13节：编译与链接"><a href="#第13节：编译与链接" class="headerlink" title="第13节：编译与链接"></a>第13节：编译与链接</h3><p><strong>complier</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span> *argv[])</span>&#123;</span><br><span class="line">    <span class="type">void</span> *memory=<span class="built_in">malloc</span>(<span class="number">400</span>);</span><br><span class="line">    assert(memory!=<span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Yes!\n&quot;</span>);</span><br><span class="line">    <span class="built_in">free</span>(memory);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>当stdio没有被include的时候，通常的编译器会报错：没有声明printf函数。但GCC不会，GCC会推测这个函数，并在编译和连接时加入。</li>
-<li>但当assert.h没有被include的时候，GCC的编译能过，但链接却过不了，因为标准库中没有assert函数</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//多传入参数的例子</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">strlen</span><span class="params">(<span class="type">char</span> *s,<span class="type">int</span> num)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> num=<span class="number">65</span>;</span><br><span class="line">    <span class="type">int</span> length=<span class="built_in">strlen</span>((<span class="type">char</span>*)&amp;num,num);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;length=%d\n&quot;</span>,length);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//尽管strlen多传入了一个参数。但是通过声明骗过了编译器，仍然可以通过编译运行。</span></span><br><span class="line"><span class="comment">//运行时，caller会将65和&amp;num当作参数传入。但对于callee，strlen函数只有一个参数，它只关注&amp;num这一个参数</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│  <span class="number">65</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>  │	num</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	length</span><br><span class="line">├───────────────┤</span><br><span class="line">│      <span class="number">65</span>       │	</span><br><span class="line">├───────────────┤   &lt;-----</span><br><span class="line">│     &amp;num      │	</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//少传入参数的例子</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">memcmp</span><span class="params">(<span class="type">void</span> *v1)</span></span>&#123;</span><br><span class="line">	<span class="type">int</span> n=<span class="number">17</span>;</span><br><span class="line">    <span class="type">int</span> m=<span class="built_in">memcmp</span>(&amp;n);</span><br><span class="line">&#125; </span><br><span class="line">C: CALL&lt;memcmp&gt;</span><br><span class="line">  </span><br><span class="line">C++: CALL&lt;memcmp_void_p&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">//memcmp的函数原型</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">memcmp</span><span class="params">(<span class="type">void</span> *v1,<span class="type">void</span> *v2,<span class="type">int</span> size)</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">C++: CALL&lt;memcmp_void_p_void_p_int&gt;</span><br><span class="line">    </span><br><span class="line"><span class="comment">//与上述例子类似，在运行时，对于caller来说，输入的只有&amp;n一个参数。</span></span><br><span class="line"><span class="comment">//但是对于callee来说，memcmp会调用三个参数，会将saved PC上面的三个4byte数据当作输入参数</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│      <span class="number">17</span>       │	n</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	m</span><br><span class="line">├───────────────┤</span><br><span class="line">│      &amp;n       │		</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
-
+    <title>解决hexo d 命令报错 Deploer not found git</title>
+    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
+    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
+<p>命令：</p>
+<p><code>npm insatll --save hexo-deployer-git</code></p>
 ]]></content>
   </entry>
   <entry>
@@ -211,6 +119,98 @@
 
 <p>类中定义static，表示该函数不需要被对象绑定，即在调用该函数的时候不需要this指针的传入。</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">fraction</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">fraction</span>(<span class="type">int</span> n,<span class="type">int</span> d<span class="number">-1</span>);</span><br><span class="line">    ---</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">reduce</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">god</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
+    <title>斯坦福编程范式公开课第一节：课程大纲</title>
+    <url>/2024/05/01/%E6%96%AF%E5%9D%A6%E7%A6%8F1/</url>
+    <content><![CDATA[<h3 id="第1节：课程大纲"><a href="#第1节：课程大纲" class="headerlink" title="第1节：课程大纲"></a>第1节：课程大纲</h3><p><strong>编程语言</strong></p>
+<ul>
+<li>C</li>
+<li>Assembly</li>
+<li>C++</li>
+<li>Concurrent Programming</li>
+<li>Scheme</li>
+<li>Python</li>
+</ul>
+<p><strong>编程思想</strong></p>
+<p>学习这些语言，更重要的是学习其背后的范式。即编程思想。 </p>
+<ul>
+<li><p>面向过程</p>
+<p>面向过程是一种以事件为中心的编程思想，编程的时候把解决问题的步骤分析出来，然后用函数把这些步骤实现，在一步一步的具体步骤中再按顺序调用函数。举个五子棋的例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">下五子棋&#123;</span><br><span class="line">开始游戏（）；</span><br><span class="line">黑子先走（）；</span><br><span class="line">绘制画面（）；</span><br><span class="line">判断输赢（）；</span><br><span class="line">轮到白子（）；</span><br><span class="line">绘制画面（）；</span><br><span class="line">判断输赢（）；</span><br><span class="line">返回到 黑子先走（）；</span><br><span class="line">输出最后结果；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>面向对象</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">下五子棋&#123;</span><br><span class="line">开始游戏（）；</span><br><span class="line">选手.黑落子（）；</span><br><span class="line">棋盘系统.绘制（）；</span><br><span class="line">规则系统.判断（）；</span><br><span class="line">选手.白落子（）；</span><br><span class="line">棋盘系统.绘制（）；</span><br><span class="line">规则系统.判断（）；</span><br><span class="line">循环到输出结果；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>并发编程</p>
+</li>
+<li><p>函数式编程</p>
+</li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>斯坦福编程范式公开课第十二节：预处理器</title>
+    <url>/2024/05/08/%E6%96%AF%E5%9D%A6%E7%A6%8F12/</url>
+    <content><![CDATA[<h3 id="第12节：预处理器"><a href="#第12节：预处理器" class="headerlink" title="第12节：预处理器"></a>第12节：预处理器</h3><p><strong>#define</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> KWidth  480</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> KHeight 720</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> KPerameter 2*(KWidth+KHeight)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Width is %d&quot;</span>, KWdith);</span><br><span class="line"><span class="type">int</span> area=KWidth*KHeight;</span><br><span class="line"></span><br><span class="line"><span class="comment">//当预处理器遇到#define，会将两个值存储到一个hashset中。以KWidth为Key，480为值。</span></span><br><span class="line"><span class="comment">//通过预处理器，代码中的KWdith会通过hashset转化为常量</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//预处理器不会进行错误检查</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//计算VectorNth 即计算第N个元素的地址</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NthElemAddr(base,elemSize,index) ((cahr*)base+index*elemSize)</span></span><br><span class="line">		</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> NDEBUG</span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> assert(cond) (void)0</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> assert(cond) (cond)?((void) 0):fprintf(stderr,<span class="string">&quot;---&quot;</span>),exit(0)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="type">void</span> *<span class="title function_">VectorNth</span><span class="params">(<span class="built_in">vector</span> *v,<span class="type">int</span> position)</span>&#123;</span><br><span class="line">    assert(position&gt;=<span class="number">0</span>);</span><br><span class="line">    assert(position&lt;v-&gt;loglength);</span><br><span class="line">    <span class="keyword">return</span> NthElemAddr(v-&gt;elems,v-&gt;elemSize,position);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在下面这些情况预处理器会有一些不足：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(a,b)   (((a)&gt;(b))?(a):(b))</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> max=MAX(fib(<span class="number">100</span>),fact(<span class="number">4000</span>));</span><br><span class="line"><span class="comment">//实际上会被展开为</span></span><br><span class="line"><span class="comment">//int max=(fib(100)&gt;fact(4000))?fib(100):fact(4000)</span></span><br><span class="line"><span class="comment">//fibnacci数列本身计算时间就非常长，使用宏会调用两次fib()，导致性能变差</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> max=MAX(m++,n++);</span><br><span class="line"><span class="comment">//int max=((m++)&gt;(n++))?(m++):(n++);</span></span><br><span class="line"><span class="comment">//较大的呢个数将会被自增两次</span></span><br></pre></td></tr></table></figure>
+
+<p>Jerry Cain：由于这些原因，我更喜欢使用static const来定义全局常量而不是#define，大家应该尽量避免预处理的这些特性。</p>
+<p><strong>#include</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;vector.h&quot;</span></span></span><br><span class="line"><span class="comment">//&lt;&gt;代表了这是一个系统头文件，由编译器提供，使用默认路径找到其位置</span></span><br><span class="line"><span class="comment">//&quot;&quot;的表示，预处理器会将vector.h中的内容写入到此文件中</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//cc.h</span></span><br><span class="line"><span class="comment">//在头文件定义的时候加入,避免同一个头文件被多次调用</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _cc_h_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _cc_h_</span></span><br><span class="line">----</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br></pre></td></tr></table></figure>
+
+<p>只能#include头文件，因为头文件只能用于声明，不能分配任何的存储空间（除非定义全局共享变量），也不并不产生相应的机器代码。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>斯坦福编程范式公开课第十节：栈与函数调用</title>
+    <url>/2024/05/06/%E6%96%AF%E5%9D%A6%E7%A6%8F10/</url>
+    <content><![CDATA[<h3 id="第10节：栈与函数调用"><a href="#第10节：栈与函数调用" class="headerlink" title="第10节：栈与函数调用"></a>第10节：栈与函数调用</h3><ul>
+<li>函数传入的参数为什么还要保存到栈中呢。现代的编译器貌似并不是这么操作的</li>
+</ul>
+<p>​		riscv64-gcc是直接将参数传入a0,a1寄存器，然后调用函数，不需要再存到内存中去</p>
+<ul>
+<li>PC寄存器的值也需要保存，相当于riscv中的ra寄存器的作用&#x2F;&#x2F;不对</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数调用中栈的活动记录</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">(<span class="type">int</span> bar,<span class="type">int</span> * baz)</span>&#123;</span><br><span class="line">    <span class="type">char</span> snink[<span class="number">4</span>];</span><br><span class="line">    <span class="type">short</span> *why;</span><br><span class="line">    why=(<span class="type">short</span>*)(snink+<span class="number">2</span>);</span><br><span class="line">    *why=<span class="number">50</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>* argv)</span>&#123;</span><br><span class="line">    <span class="type">int</span> i=<span class="number">4</span>;</span><br><span class="line">    foo(i,&amp;i);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">main:</span><br><span class="line">SP=SP<span class="number">-4</span>;<span class="comment">//最开始SP指向栈顶,也就是第一个saved PC</span></span><br><span class="line">M[SP]=<span class="number">4</span>;</span><br><span class="line"><span class="comment">//Params</span></span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">R1=M[SP+<span class="number">8</span>];</span><br><span class="line">R2=SP+<span class="number">8</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">M[SP+<span class="number">4</span>]=R2;</span><br><span class="line">CALL&lt;foo&gt;;<span class="comment">//当call指令执行的时候，会自动将PC-4，并存起来，也就是第二个saved PC</span></span><br><span class="line">SP=SP+<span class="number">8</span>;</span><br><span class="line">RV=<span class="number">0</span>;</span><br><span class="line">foo:</span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">R1=SP+<span class="number">6</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">R1=M[SP];</span><br><span class="line">M[R1]=<span class="number">.2</span> <span class="number">50</span>;</span><br><span class="line">sp=sp+<span class="number">8</span>;</span><br><span class="line">RET;<span class="comment">//与call类似，执行ret的时候也会将saved PC呢块地址自动的进行一个PC+4</span></span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">┌───────────────┐</span><br><span class="line">│               │	argv</span><br><span class="line">├───────────────┤	</span><br><span class="line">│       <span class="number">2</span>       │	argc</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤</span><br><span class="line">│       <span class="number">4</span>       │	i</span><br><span class="line">├───────────────┤</span><br><span class="line">│      &amp;i       │	baz</span><br><span class="line">├───────────────┤</span><br><span class="line">│       <span class="number">4</span>       │	bar</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───┼───┼───┼───┤</span><br><span class="line">│   │   │   │   │	snink[<span class="number">0</span>,,<span class="number">3</span>]</span><br><span class="line">├───┴───┴───┴───┤</span><br><span class="line">│               │	why</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
+
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/05/06/%E6%96%AF%E5%9D%A6%E7%A6%8F10/1715912901808.png"
+                      class="" width="1715912901808"
+                >
+
+<ul>
+<li>从baz以后的变量控制权都交给了foo函数<br>baz和bar是传入参数，属于caller<br>sinik[]和why属于局部变量，属于callee<br>只有调用者才知道怎样将有意义的参数值写入内存，因此必须一个空间一个空间的申请，而不是直接全部由main函数申请。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//递归函数中栈的活动记录</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fact</span><span class="params">(<span class="type">int</span> n)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>)return1;</span><br><span class="line">    <span class="keyword">return</span> n*fact(n<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">&lt;fact&gt;:</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">BNE R1,<span class="number">0</span>,PC+<span class="number">12</span>;<span class="comment">//PC指的就是当前这条指令，在有些情况下在执行BNE这条指令时PC已经+4了，这里假设PC不变</span></span><br><span class="line">RV=<span class="number">1</span>;</span><br><span class="line">RET;</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">R1=R1<span class="number">-1</span>;</span><br><span class="line">SP=SP<span class="number">-4</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">CALL&lt;fact&gt;;</span><br><span class="line">SP=SP+<span class="number">4</span>;</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">RV=RV*R1;</span><br></pre></td></tr></table></figure>
+
+<p>call是一个占位符，在Linked其中会赋予真正的汇编代码含义。这样做的好处是不同文件一块编译的时候更加方便相对数值的计算</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>斯坦福编程范式公开课第十三节：编译与链接</title>
+    <url>/2024/05/09/%E6%96%AF%E5%9D%A6%E7%A6%8F13/</url>
+    <content><![CDATA[<h3 id="第13节：编译与链接"><a href="#第13节：编译与链接" class="headerlink" title="第13节：编译与链接"></a>第13节：编译与链接</h3><p><strong>complier</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span> *argv[])</span>&#123;</span><br><span class="line">    <span class="type">void</span> *memory=<span class="built_in">malloc</span>(<span class="number">400</span>);</span><br><span class="line">    assert(memory!=<span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Yes!\n&quot;</span>);</span><br><span class="line">    <span class="built_in">free</span>(memory);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>当stdio没有被include的时候，通常的编译器会报错：没有声明printf函数。但GCC不会，GCC会推测这个函数，并在编译和连接时加入。</li>
+<li>但当assert.h没有被include的时候，GCC的编译能过，但链接却过不了，因为标准库中没有assert函数</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//多传入参数的例子</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">strlen</span><span class="params">(<span class="type">char</span> *s,<span class="type">int</span> num)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> num=<span class="number">65</span>;</span><br><span class="line">    <span class="type">int</span> length=<span class="built_in">strlen</span>((<span class="type">char</span>*)&amp;num,num);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;length=%d\n&quot;</span>,length);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//尽管strlen多传入了一个参数。但是通过声明骗过了编译器，仍然可以通过编译运行。</span></span><br><span class="line"><span class="comment">//运行时，caller会将65和&amp;num当作参数传入。但对于callee，strlen函数只有一个参数，它只关注&amp;num这一个参数</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│  <span class="number">65</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>  │	num</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	length</span><br><span class="line">├───────────────┤</span><br><span class="line">│      <span class="number">65</span>       │	</span><br><span class="line">├───────────────┤   &lt;-----</span><br><span class="line">│     &amp;num      │	</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//少传入参数的例子</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">memcmp</span><span class="params">(<span class="type">void</span> *v1)</span></span>&#123;</span><br><span class="line">	<span class="type">int</span> n=<span class="number">17</span>;</span><br><span class="line">    <span class="type">int</span> m=<span class="built_in">memcmp</span>(&amp;n);</span><br><span class="line">&#125; </span><br><span class="line">C: CALL&lt;memcmp&gt;</span><br><span class="line">  </span><br><span class="line">C++: CALL&lt;memcmp_void_p&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">//memcmp的函数原型</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">memcmp</span><span class="params">(<span class="type">void</span> *v1,<span class="type">void</span> *v2,<span class="type">int</span> size)</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">C++: CALL&lt;memcmp_void_p_void_p_int&gt;</span><br><span class="line">    </span><br><span class="line"><span class="comment">//与上述例子类似，在运行时，对于caller来说，输入的只有&amp;n一个参数。</span></span><br><span class="line"><span class="comment">//但是对于callee来说，memcmp会调用三个参数，会将saved PC上面的三个4byte数据当作输入参数</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│      <span class="number">17</span>       │	n</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	m</span><br><span class="line">├───────────────┤</span><br><span class="line">│      &amp;n       │		</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
 
 ]]></content>
   </entry>
@@ -437,53 +437,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>斯坦福编程范式公开课第八，九节：堆栈的内存分配</title>
-    <url>/2024/05/05/%E6%96%AF%E5%9D%A6%E7%A6%8F8,9/</url>
-    <content><![CDATA[<h3 id="第8-9节：堆栈内存分配"><a href="#第8-9节：堆栈内存分配" class="headerlink" title="第8,9节：堆栈内存分配"></a>第8,9节：堆栈内存分配</h3><p>（这节将的都是最一些远古时期计算机管理内存的方法，现代计算机肯定有更好更复杂的方法，只学分配的机制和其中的思想就够了，不用纠结他写的伪代码和具体方案）</p>
-<ul>
-<li>堆的分配</li>
-</ul>
-<img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/05/05/%E6%96%AF%E5%9D%A6%E7%A6%8F8,9/1714204618085.png"
-                      class="" width="1714204618085"
-                >
-
-<p>​	每个被分配出去的内存块都有一个头部，记录了内存块的大小，某些还会记录后面的内存块是否空闲</p>
-<p>​	使用链表来记录堆内的空闲空间。该链表由堆的开头和结尾组成，中间节点记录了当前空闲空间的头地址，并且指向了下一个空闲空间的地址。当调用mallco时就会遍历这个链表来寻址合适的空间来分配。当调用free的时候就相当于在链表插入新的节点，当有连续的空闲空间时，节点有时候也会合并{这个链表应该也会记录空间空间的大小}</p>
-<ul>
-<li><p>堆内存压缩</p>
-<p>​	mallco函数必须分配连续的内存空间，但频繁的mallco和free内存会导致堆内存中存在大量的分散小内存碎片。堆内存压缩的目标是通过整理堆内存中的内存块，将分散的小块内存合并成更大的连续内存块，从而减少碎片化。这样做的好处是可以提高内存的利用率，避免由于碎片化导致无法满足大内存分配请求的情况。</p>
-<p>​	Mac OS 7.6通过handle来对堆内存进行压缩，即通过二级指针。如图所示，操作系统返回给用户的实际是一个指针，指向列表中指针的地址，而这个表中的指针又真正指向内存中的一片区域</p>
-<p>​	这样做的好处在于，当需要对堆内存进行压缩的时候，只需要修改列表中指针的指向就可以了，而不需要去修改用户端获取的指针。</p>
-<img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/05/05/%E6%96%AF%E5%9D%A6%E7%A6%8F8,9/1714294645239.png"
-                      class="" width="1714294645239"
-                ></li>
-</ul>
-<p>​			在操作时，有时候不希望操作系统进行压缩可以使用Handlelock来保护这块内存，类似于线程锁（见并发编程）</p>
-<ul>
-<li><p>汇编语言  </p>
-<ul>
-<li>for循环例子</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="built_in">array</span>[<span class="number">4</span>];</span><br><span class="line"><span class="type">int</span> i;</span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)&#123;</span><br><span class="line">	<span class="built_in">array</span>[i]=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">i--;</span><br><span class="line">---------------------</span><br><span class="line"><span class="comment">//伪汇编表达</span></span><br><span class="line"><span class="number">0</span>:M[R1]=<span class="number">0</span></span><br><span class="line">    <span class="comment">//i=0</span></span><br><span class="line"><span class="number">1</span>:R2=M[R1]</span><br><span class="line"><span class="number">2</span>:BGE R2,<span class="number">4</span>,PC+<span class="number">40</span></span><br><span class="line">    <span class="comment">//i&lt;4</span></span><br><span class="line"><span class="number">3</span>:R3=M[R1]</span><br><span class="line"><span class="number">4</span>:R4=R3*<span class="number">4</span></span><br><span class="line"><span class="number">5</span>:R5=R1+<span class="number">4</span></span><br><span class="line"><span class="number">6</span>:R6=R4+R5</span><br><span class="line"><span class="number">7</span>:M[R6]=<span class="number">0</span></span><br><span class="line">    <span class="comment">//array[i]=0</span></span><br><span class="line"><span class="number">8</span>:R2=M[R1]*</span><br><span class="line"><span class="number">9</span>:R2=R2+<span class="number">1</span></span><br><span class="line"><span class="number">10</span>:M[R1]=R2</span><br><span class="line">    <span class="comment">//i++</span></span><br><span class="line"><span class="number">11</span>:JMP PC<span class="number">-40</span></span><br><span class="line">    [] <span class="comment">//i-- 课程没有给出，大概就是R2=M[R1],R2=R2-1,M[R1]=R2</span></span><br><span class="line">   </span><br><span class="line">    <span class="comment">//学生提问：为什么要跳回到10行代码之前,即第1行</span></span><br><span class="line">    <span class="comment">//回答：养成写上下文无关代码的习惯，虽然这里的R2恰好是i的值，这也是for循环的统一规律，但为了保证更复杂的情况，还是需要养成习惯。</span></span><br><span class="line">    <span class="comment">//think：现代的编译器应该会对这些进行优化，不过自己写的时候这样更能避免出错</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>结构体例子</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fraction</span>&#123;</span></span><br><span class="line">    <span class="type">int</span> num;</span><br><span class="line">    <span class="type">int</span> denom;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fraction</span> <span class="title">pi</span>;</span><span class="comment">//R1存储了指向结构体低地址的一个指针</span></span><br><span class="line">pi.num=<span class="number">22</span>;	<span class="comment">//M[R1]=22</span></span><br><span class="line">pi.denom=<span class="number">7</span>;	<span class="comment">//M[R1+4]=7</span></span><br><span class="line"></span><br><span class="line">((<span class="keyword">struct</span> fraction)&amp;pi.denom)-&gt;denom=<span class="number">451</span>;	<span class="comment">//M[R1+8]=451</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//这个例子表明了对于机器以及汇编级别来说，并不关心数据的类型，只关心数据本身以及数据的地址和大小</span></span><br><span class="line">	<span class="comment">//强制类型转换只是针对编译器来设计的伎俩</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//这里是在栈上申请空间，mallco是在堆上，不过存储形式没有什么区别，只是位置不同</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>指令编码</p>
-<p>讲的并不详细，直接去看riscv的编码格式就可以</p>
-</li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
     <title>编程语言中符号的英文读法</title>
     <url>/2024/06/26/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%AC%A6%E5%8F%B7%E7%9A%84%E8%8B%B1%E6%96%87%E8%AF%BB%E6%B3%95/</url>
     <content><![CDATA[<table>
@@ -600,6 +553,53 @@
 <td>逗号</td>
 </tr>
 </tbody></table>
+]]></content>
+  </entry>
+  <entry>
+    <title>斯坦福编程范式公开课第八，九节：堆栈的内存分配</title>
+    <url>/2024/05/05/%E6%96%AF%E5%9D%A6%E7%A6%8F8,9/</url>
+    <content><![CDATA[<h3 id="第8-9节：堆栈内存分配"><a href="#第8-9节：堆栈内存分配" class="headerlink" title="第8,9节：堆栈内存分配"></a>第8,9节：堆栈内存分配</h3><p>（这节将的都是最一些远古时期计算机管理内存的方法，现代计算机肯定有更好更复杂的方法，只学分配的机制和其中的思想就够了，不用纠结他写的伪代码和具体方案）</p>
+<ul>
+<li>堆的分配</li>
+</ul>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/05/05/%E6%96%AF%E5%9D%A6%E7%A6%8F8,9/1714204618085.png"
+                      class="" width="1714204618085"
+                >
+
+<p>​	每个被分配出去的内存块都有一个头部，记录了内存块的大小，某些还会记录后面的内存块是否空闲</p>
+<p>​	使用链表来记录堆内的空闲空间。该链表由堆的开头和结尾组成，中间节点记录了当前空闲空间的头地址，并且指向了下一个空闲空间的地址。当调用mallco时就会遍历这个链表来寻址合适的空间来分配。当调用free的时候就相当于在链表插入新的节点，当有连续的空闲空间时，节点有时候也会合并{这个链表应该也会记录空间空间的大小}</p>
+<ul>
+<li><p>堆内存压缩</p>
+<p>​	mallco函数必须分配连续的内存空间，但频繁的mallco和free内存会导致堆内存中存在大量的分散小内存碎片。堆内存压缩的目标是通过整理堆内存中的内存块，将分散的小块内存合并成更大的连续内存块，从而减少碎片化。这样做的好处是可以提高内存的利用率，避免由于碎片化导致无法满足大内存分配请求的情况。</p>
+<p>​	Mac OS 7.6通过handle来对堆内存进行压缩，即通过二级指针。如图所示，操作系统返回给用户的实际是一个指针，指向列表中指针的地址，而这个表中的指针又真正指向内存中的一片区域</p>
+<p>​	这样做的好处在于，当需要对堆内存进行压缩的时候，只需要修改列表中指针的指向就可以了，而不需要去修改用户端获取的指针。</p>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/05/05/%E6%96%AF%E5%9D%A6%E7%A6%8F8,9/1714294645239.png"
+                      class="" width="1714294645239"
+                ></li>
+</ul>
+<p>​			在操作时，有时候不希望操作系统进行压缩可以使用Handlelock来保护这块内存，类似于线程锁（见并发编程）</p>
+<ul>
+<li><p>汇编语言  </p>
+<ul>
+<li>for循环例子</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="built_in">array</span>[<span class="number">4</span>];</span><br><span class="line"><span class="type">int</span> i;</span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)&#123;</span><br><span class="line">	<span class="built_in">array</span>[i]=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">i--;</span><br><span class="line">---------------------</span><br><span class="line"><span class="comment">//伪汇编表达</span></span><br><span class="line"><span class="number">0</span>:M[R1]=<span class="number">0</span></span><br><span class="line">    <span class="comment">//i=0</span></span><br><span class="line"><span class="number">1</span>:R2=M[R1]</span><br><span class="line"><span class="number">2</span>:BGE R2,<span class="number">4</span>,PC+<span class="number">40</span></span><br><span class="line">    <span class="comment">//i&lt;4</span></span><br><span class="line"><span class="number">3</span>:R3=M[R1]</span><br><span class="line"><span class="number">4</span>:R4=R3*<span class="number">4</span></span><br><span class="line"><span class="number">5</span>:R5=R1+<span class="number">4</span></span><br><span class="line"><span class="number">6</span>:R6=R4+R5</span><br><span class="line"><span class="number">7</span>:M[R6]=<span class="number">0</span></span><br><span class="line">    <span class="comment">//array[i]=0</span></span><br><span class="line"><span class="number">8</span>:R2=M[R1]*</span><br><span class="line"><span class="number">9</span>:R2=R2+<span class="number">1</span></span><br><span class="line"><span class="number">10</span>:M[R1]=R2</span><br><span class="line">    <span class="comment">//i++</span></span><br><span class="line"><span class="number">11</span>:JMP PC<span class="number">-40</span></span><br><span class="line">    [] <span class="comment">//i-- 课程没有给出，大概就是R2=M[R1],R2=R2-1,M[R1]=R2</span></span><br><span class="line">   </span><br><span class="line">    <span class="comment">//学生提问：为什么要跳回到10行代码之前,即第1行</span></span><br><span class="line">    <span class="comment">//回答：养成写上下文无关代码的习惯，虽然这里的R2恰好是i的值，这也是for循环的统一规律，但为了保证更复杂的情况，还是需要养成习惯。</span></span><br><span class="line">    <span class="comment">//think：现代的编译器应该会对这些进行优化，不过自己写的时候这样更能避免出错</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>结构体例子</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fraction</span>&#123;</span></span><br><span class="line">    <span class="type">int</span> num;</span><br><span class="line">    <span class="type">int</span> denom;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fraction</span> <span class="title">pi</span>;</span><span class="comment">//R1存储了指向结构体低地址的一个指针</span></span><br><span class="line">pi.num=<span class="number">22</span>;	<span class="comment">//M[R1]=22</span></span><br><span class="line">pi.denom=<span class="number">7</span>;	<span class="comment">//M[R1+4]=7</span></span><br><span class="line"></span><br><span class="line">((<span class="keyword">struct</span> fraction)&amp;pi.denom)-&gt;denom=<span class="number">451</span>;	<span class="comment">//M[R1+8]=451</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//这个例子表明了对于机器以及汇编级别来说，并不关心数据的类型，只关心数据本身以及数据的地址和大小</span></span><br><span class="line">	<span class="comment">//强制类型转换只是针对编译器来设计的伎俩</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//这里是在栈上申请空间，mallco是在堆上，不过存储形式没有什么区别，只是位置不同</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指令编码</p>
+<p>讲的并不详细，直接去看riscv的编码格式就可以</p>
+</li>
+</ul>
 ]]></content>
   </entry>
 </search>
