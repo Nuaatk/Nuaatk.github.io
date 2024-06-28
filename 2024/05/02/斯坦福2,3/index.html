@@ -187,7 +187,7 @@
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2024-06-28 12:08:52</span>
+        <span class="pc">2024-06-28 16:17:10</span>
     </span>
     
     
@@ -196,12 +196,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>456 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>946 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>2 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>3 分钟</span>
         </span>
     
     
@@ -219,8 +219,7 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <h3 id="第2-3节：数据存储格式"><a href="#第2-3节：数据存储格式" class="headerlink" title="第2,3节：数据存储格式"></a>第2,3节：数据存储格式</h3><p>c&#x2F;c++<strong>的数据类型</strong></p>
-<table>
+                <h3 id="第2-3节：数据存储格式"><a href="#第2-3节：数据存储格式" class="headerlink" title="第2,3节：数据存储格式"></a>第2,3节：数据存储格式</h3><h4 id="c-c-的数据类型"><a href="#c-c-的数据类型" class="headerlink" title="c&#x2F;c++的数据类型"></a>c&#x2F;c++的数据类型</h4><table>
 <thead>
 <tr>
 <th>bool</th>
@@ -279,11 +278,9 @@
 <p>0.9999998807907104<em>（2</em>*-126） &#x3D; 1.1754942e-38</p>
 </li>
 </ul>
-<p><strong>浮点数与整型的转化</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> i = <span class="number">5</span>;</span><br><span class="line"><span class="type">float</span> f =i;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%f\n&quot;</span>,f);<span class="comment">//f =5.000000</span></span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; f &lt;&lt;<span class="built_in">endl</span>; <span class="comment">//f =5</span></span><br><span class="line"></span><br><span class="line"><span class="type">float</span> p = *(<span class="type">float</span>*)&amp;o; <span class="comment">//p =7.00649e-45=1/(2**149)+1/(2**147)</span></span><br><span class="line"><span class="comment">//int类型在内存中的数据应为0x00000005=0b0 00000000 00000000000000000000101（小端模式）</span></span><br><span class="line"><span class="comment">//转化为浮点数格式 1.0 * 2exp-117</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//7.00649e-45 = 1/(2**149)+1/(2**147) 即变为二进制为 1.01 * (2**-147)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//0b0 00000000 00000000000000000000101 当exp等于0时 尾数首位不为1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="浮点数与整型的转化"><a href="#浮点数与整型的转化" class="headerlink" title="浮点数与整型的转化"></a><strong>浮点数与整型的转化</strong></h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> i = <span class="number">5</span>;</span><br><span class="line"><span class="type">float</span> f =i;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%f\n&quot;</span>,f);<span class="comment">//f =5.000000</span></span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; f &lt;&lt;<span class="built_in">endl</span>; <span class="comment">//f =5</span></span><br><span class="line"></span><br><span class="line"><span class="type">float</span> p = *(<span class="type">float</span>*)&amp;o; <span class="comment">//p =7.00649e-45=1/(2**149)+1/(2**147)</span></span><br><span class="line"><span class="comment">//int类型在内存中的数据应为0x00000005=0b0 00000000 00000000000000000000101（小端模式）</span></span><br><span class="line"><span class="comment">//转化为浮点数格式 1.0 * 2exp-117</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//7.00649e-45 = 1/(2**149)+1/(2**147) 即变为二进制为 1.01 * (2**-147)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//0b0 00000000 00000000000000000000101 当exp等于0时 尾数首位不为1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p><strong>大小端区别</strong></p>
-<img  
+<h4 id="大小端区别"><a href="#大小端区别" class="headerlink" title="大小端区别"></a><strong>大小端区别</strong></h4><img  
                      lazyload
                      alt="image"
                      data-src="/2024/05/02/%E6%96%AF%E5%9D%A6%E7%A6%8F2,3/07b36950f6f5fc8bc8096f071aafd003.png"
@@ -309,7 +306,30 @@
 </tbody></table>
 <p>​	进行float强制转换的时候，也会先进行小端读取，0 00000000 00000000000000000000101，再进行位划分</p>
 <p>​	也就是浮点数也是按照小端格式存储的（转换再转换，负负得正了）</p>
-<p>结构体的存储格式：</p>
+<h4 id="函数参数与结构体变量的内存存储布局："><a href="#函数参数与结构体变量的内存存储布局：" class="headerlink" title="函数参数与结构体变量的内存存储布局："></a><strong>函数参数与结构体变量的内存存储布局：</strong></h4><p> printf函数：</p>
+<p>参数是无限制的，从右到左压栈（最右边参数位于最高地址，先入栈）</p>
+<p>struct：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">base</span>&#123;</span></span><br><span class="line">	<span class="type">int</span> code;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">type_one</span>&#123;</span></span><br><span class="line">	<span class="type">int</span> code;	<span class="comment">//值都是1</span></span><br><span class="line">    ---</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">type_two</span>&#123;</span></span><br><span class="line">    <span class="type">int</span> code;	<span class="comment">//值都是2</span></span><br><span class="line">    ---</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//规定一个指向结构体base的指针，该指针指向结构体中第一个变量地址即base，只能是1or2</span></span><br><span class="line"><span class="comment">//然后就可以根据code的值来进行强制类型转化，变为type_one或者type_two</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">base</span>* <span class="title">ptr</span>;</span></span><br><span class="line">ptr = ;</span><br><span class="line"><span class="keyword">if</span>(*(<span class="type">int</span>*)ptr==<span class="number">1</span>)&#123;(<span class="keyword">struct</span> type_one*)a&#125;<span class="comment">//则可以将ptr作为struct type_one*类型的指针</span></span><br><span class="line"><span class="keyword">else</span>(*(<span class="type">int</span>*)ptr==<span class="number">2</span>)&#123;(<span class="keyword">struct</span> type_two*)a&#125;<span class="comment">//则可以将ptr作为struct type_two*类型的指针</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//IPv4和IPv6的区分就是这样做的</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>为什么函数的第一个参数和结构体的第一个变量，都是低地址：</li>
+</ul>
+<p>因为结构体变量的基地址就是低位，第一个参数与基地址的偏移量为0，其实就是结构体的基地址。</p>
+<p>如上图（1）所示，结构体的第一个变量位于低地址，既可以利用基地址来判断结构体类型，从而对不同的ptr进行类型转换来区分type。</p>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/05/02/%E6%96%AF%E5%9D%A6%E7%A6%8F2,3/%E7%BB%93%E6%9E%84%E4%BD%93%E5%BC%BA%E5%88%B6%E8%BD%AC%E6%8D%A2.png"
+                      class="" title="结构体强制转换"
+                >
+
+<p>如果第一个参数的地址位于高位，那么就无从知晓这部分与整个结构体变量的基地址的距离了。</p>
+<p>如图（2）所示，如果code变量位于高地址，由于base，type_one，type_two的成员不同，导致不同结构体中code变量地址与基地址的距离不相同，没办法对比code，即便强行知道地址对比了code，转换也无法进行（其余变量  没对齐）</p>
+<p>因此就可以做上述的强制类型转换</p>
+<ul>
+<li>为什么结构体变量指向结构体的低地址：</li>
+</ul>
+<p>只是一个规定，这样所有偏移都是正的。也可也反过来，类似于电路中的正负极（个人理解）</p>
 
             </div>
 
@@ -388,7 +408,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC2-3%E8%8A%82%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">第2,3节：数据存储格式</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC2-3%E8%8A%82%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">第2,3节：数据存储格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#c-c-%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">c&#x2F;c++的数据类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0%E4%B8%8E%E6%95%B4%E5%9E%8B%E7%9A%84%E8%BD%AC%E5%8C%96"><span class="nav-number">1.2.</span> <span class="nav-text">浮点数与整型的转化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%A7%E5%B0%8F%E7%AB%AF%E5%8C%BA%E5%88%AB"><span class="nav-number">1.3.</span> <span class="nav-text">大小端区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E4%B8%8E%E7%BB%93%E6%9E%84%E4%BD%93%E5%8F%98%E9%87%8F%E7%9A%84%E5%86%85%E5%AD%98%E5%AD%98%E5%82%A8%E5%B8%83%E5%B1%80%EF%BC%9A"><span class="nav-number">1.4.</span> <span class="nav-text">函数参数与结构体变量的内存存储布局：</span></a></li></ol></li></ol>
     </div>
 </div>
 
