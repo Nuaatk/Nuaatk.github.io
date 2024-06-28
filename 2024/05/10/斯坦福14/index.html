@@ -187,7 +187,7 @@
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2024-06-27 11:48:41</span>
+        <span class="pc">2024-06-28 16:11:51</span>
     </span>
     
     
@@ -196,12 +196,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>564 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>1k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>2 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>4 分钟</span>
         </span>
     
     
@@ -238,6 +238,28 @@
 
 <p> <strong>数组访问溢出:</strong></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//例1</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="type">short</span> arr[<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=<span class="number">4</span>;i++)&#123;</span><br><span class="line">        arr[i]=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//访问arr[0]-arr[3]正常，但当i=4，访问的是arr[4]也就是i变量所在地址</span></span><br><span class="line"><span class="comment">//如果是大端系统，那么会将i赋值为0</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│ <span class="number">0</span>   <span class="number">0</span>   <span class="number">0</span>   <span class="number">4</span> │	i</span><br><span class="line">├───┼───┼───┼───┤</span><br><span class="line">│ <span class="number">0</span> │ <span class="number">0</span> │ <span class="number">0</span> │ <span class="number">0</span> │	arr[<span class="number">3</span>,<span class="number">0</span>]</span><br><span class="line">├───┴───┴───┴───┤</span><br><span class="line">│               │	why</span><br><span class="line">└───┴───┴───┴───┘</span><br><span class="line"><span class="comment">//例2</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="built_in">array</span>[<span class="number">4</span>];</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=<span class="number">4</span>;i++)&#123;</span><br><span class="line">    <span class="built_in">array</span>[i]-=<span class="number">4</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//访问arr[0]-arr[3]正常，但当i=4，访问的是arr[4]也就是saved PC所在地址</span></span><br><span class="line"><span class="comment">//saved PC会-4，saved PC本来应该指向CALL &lt;foo&gt;函数后面的第一条指令</span></span><br><span class="line"><span class="comment">//-4之后却又指向了CALL &lt;foo&gt;造成了无限递归</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">3</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">2</span>]	</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">1</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">0</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	i</span><br><span class="line">└───┴───┴───┴───┘</span><br><span class="line"></span><br><span class="line"><span class="comment">//这些只会在比较古老的版本中发生，现代的编译器会通过__stack_chk_guard来保护数组避免溢出</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p> printf函数：</p>
+<p>参数是无限制的，从右到左压栈（最右边参数位于最高地址，先入栈）</p>
+<p>struct：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">base</span>&#123;</span></span><br><span class="line">	<span class="type">int</span> code;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">type_one</span>&#123;</span></span><br><span class="line">	<span class="type">int</span> code;	<span class="comment">//值都是1</span></span><br><span class="line">    ---</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">type_two</span>&#123;</span></span><br><span class="line">    <span class="type">int</span> code;	<span class="comment">//值都是2</span></span><br><span class="line">    ---</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//规定一个指向结构体base的指针，该指针指向结构体中第一个变量地址即base，只能是1or2</span></span><br><span class="line"><span class="comment">//然后就可以根据code的值来进行强制类型转化，变为type_one或者type_two</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">base</span>* <span class="title">ptr</span>;</span></span><br><span class="line">ptr = ;</span><br><span class="line"><span class="keyword">if</span>(*(<span class="type">int</span>*)ptr==<span class="number">1</span>)&#123;(<span class="keyword">struct</span> type_one*)a&#125;<span class="comment">//则可以将ptr作为struct type_one*类型的指针</span></span><br><span class="line"><span class="keyword">else</span>(*(<span class="type">int</span>*)ptr==<span class="number">2</span>)&#123;(<span class="keyword">struct</span> type_two*)a&#125;<span class="comment">//则可以将ptr作为struct type_two*类型的指针</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//IPv4和IPv6的区分就是这样做的</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>为什么函数的第一个参数和结构体的第一个变量，都是低地址：</li>
+</ul>
+<p>因为结构体变量的基地址就是低位，第一个参数与基地址的偏移量为0，其实就是结构体的基地址。</p>
+<p>如上图（1）所示，结构体的第一个变量位于低地址，既可以利用基地址来判断结构体类型，从而对不同的ptr进行类型转换来区分type。</p>
+
+
+<p>如果第一个参数的地址位于高位，那么就无从知晓这部分与整个结构体变量的基地址的距离了。</p>
+<p>如图（2）所示，如果code变量位于高地址，由于base，type_one，type_two的成员不同，导致不同结构体中code变量地址与基地址的距离不相同，没办法对比code，即便强行知道地址对比了code，转换也无法进行（其余变量  没对齐）</p>
+<p>因此就可以做上述的强制类型转换</p>
+<ul>
+<li>为什么结构体变量指向结构体的低地址：</li>
+</ul>
+<p>只是一个规定，这样所有偏移都是正的。也可也反过来，类似于电路中的正负极（个人理解）</p>
 
             </div>
 
