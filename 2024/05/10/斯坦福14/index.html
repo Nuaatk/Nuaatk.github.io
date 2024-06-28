@@ -187,7 +187,7 @@
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2024-06-28 16:11:51</span>
+        <span class="pc">2024-06-28 16:14:33</span>
     </span>
     
     
@@ -251,7 +251,12 @@
 </ul>
 <p>因为结构体变量的基地址就是低位，第一个参数与基地址的偏移量为0，其实就是结构体的基地址。</p>
 <p>如上图（1）所示，结构体的第一个变量位于低地址，既可以利用基地址来判断结构体类型，从而对不同的ptr进行类型转换来区分type。</p>
-
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/05/10/%E6%96%AF%E5%9D%A6%E7%A6%8F14/%E7%BB%93%E6%9E%84%E4%BD%93%E5%BC%BA%E5%88%B6%E8%BD%AC%E6%8D%A2.png"
+                      class="" title="结构体强制转换"
+                >
 
 <p>如果第一个参数的地址位于高位，那么就无从知晓这部分与整个结构体变量的基地址的距离了。</p>
 <p>如图（2）所示，如果code变量位于高地址，由于base，type_one，type_two的成员不同，导致不同结构体中code变量地址与基地址的距离不相同，没办法对比code，即便强行知道地址对比了code，转换也无法进行（其余变量  没对齐）</p>
