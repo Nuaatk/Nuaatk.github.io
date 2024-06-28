@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>如何上传本地项目到GitHub</title>
+    <url>/2023/06/17/github%E4%B8%8A%E4%BC%A0/</url>
+    <content><![CDATA[<h1 id="上传本地项目到Github"><a href="#上传本地项目到Github" class="headerlink" title="上传本地项目到Github"></a>上传本地项目到Github</h1><h3 id="第一步：安装Git"><a href="#第一步：安装Git" class="headerlink" title="第一步：安装Git"></a>第一步：安装Git</h3><h3 id="第二步：创建文件夹"><a href="#第二步：创建文件夹" class="headerlink" title="第二步：创建文件夹"></a>第二步：创建文件夹</h3><p>创建一个本地项目所在的文件夹</p>
+<p>然后右击<code>Git bash</code>在该文件夹目录下打开Git终端</p>
+<h3 id="第三步：git-init"><a href="#第三步：git-init" class="headerlink" title="第三步：git init"></a>第三步：git init</h3><p>在命令行中输入<code>git init</code>使得该文件夹变成一个可由git管理的仓库</p>
+<h3 id="第四步：git-add"><a href="#第四步：git-add" class="headerlink" title="第四步：git add ."></a>第四步：git add .</h3><p>在命令行中输入<code>git add .</code>将该文件夹所有的文件添加到缓存区</p>
+<h3 id="第五步：git-commit-m"><a href="#第五步：git-commit-m" class="headerlink" title="第五步：git commit -m"></a>第五步：git commit -m</h3><p>使用命令<code>git commit -m &quot;commit的备注信息&quot;</code></p>
+<h3 id="第六步：关联github与本地仓库"><a href="#第六步：关联github与本地仓库" class="headerlink" title="第六步：关联github与本地仓库"></a>第六步：关联github与本地仓库</h3><p>此步骤仅需要进行一次，输入<code>git remote add origin https://github.com/.git你自己的github网址</code></p>
+<p>首先在github创建一个空项目。复制https，即为本项目所上传到的网址</p>
+<p>如果想要免密登录需要在config里设置用户邮箱和github一致 </p>
+<p>并在gihub账户端设置ssh的公钥</p>
+<p>这两步缺一都需要输入密码才能关联</p>
+<h3 id="第七步：git-push-origin-master"><a href="#第七步：git-push-origin-master" class="headerlink" title="第七步：git push origin master"></a>第七步：git push origin master</h3><p>输入命令<code>git push origin master</code>将本地仓库推送到GitHub中</p>
+<p>第一次上传添加 -u</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>解决hexo d 命令报错 Deploer not found git</title>
+    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
+    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
+<p>命令：</p>
+<p><code>npm insatll --save hexo-deployer-git</code></p>
+]]></content>
+  </entry>
+  <entry>
     <title>DDR重要时序参数</title>
     <url>/2023/06/17/DDR%E9%87%8D%E8%A6%81%E6%97%B6%E5%BA%8F%E5%8F%82%E6%95%B0/</url>
     <content><![CDATA[<h1 id="DRAM时序"><a href="#DRAM时序" class="headerlink" title="DRAM时序"></a>DRAM时序</h1><img  
@@ -64,31 +89,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>如何上传本地项目到GitHub</title>
-    <url>/2023/06/17/github%E4%B8%8A%E4%BC%A0/</url>
-    <content><![CDATA[<h1 id="上传本地项目到Github"><a href="#上传本地项目到Github" class="headerlink" title="上传本地项目到Github"></a>上传本地项目到Github</h1><h3 id="第一步：安装Git"><a href="#第一步：安装Git" class="headerlink" title="第一步：安装Git"></a>第一步：安装Git</h3><h3 id="第二步：创建文件夹"><a href="#第二步：创建文件夹" class="headerlink" title="第二步：创建文件夹"></a>第二步：创建文件夹</h3><p>创建一个本地项目所在的文件夹</p>
-<p>然后右击<code>Git bash</code>在该文件夹目录下打开Git终端</p>
-<h3 id="第三步：git-init"><a href="#第三步：git-init" class="headerlink" title="第三步：git init"></a>第三步：git init</h3><p>在命令行中输入<code>git init</code>使得该文件夹变成一个可由git管理的仓库</p>
-<h3 id="第四步：git-add"><a href="#第四步：git-add" class="headerlink" title="第四步：git add ."></a>第四步：git add .</h3><p>在命令行中输入<code>git add .</code>将该文件夹所有的文件添加到缓存区</p>
-<h3 id="第五步：git-commit-m"><a href="#第五步：git-commit-m" class="headerlink" title="第五步：git commit -m"></a>第五步：git commit -m</h3><p>使用命令<code>git commit -m &quot;commit的备注信息&quot;</code></p>
-<h3 id="第六步：关联github与本地仓库"><a href="#第六步：关联github与本地仓库" class="headerlink" title="第六步：关联github与本地仓库"></a>第六步：关联github与本地仓库</h3><p>此步骤仅需要进行一次，输入<code>git remote add origin https://github.com/.git你自己的github网址</code></p>
-<p>首先在github创建一个空项目。复制https，即为本项目所上传到的网址</p>
-<p>如果想要免密登录需要在config里设置用户邮箱和github一致 </p>
-<p>并在gihub账户端设置ssh的公钥</p>
-<p>这两步缺一都需要输入密码才能关联</p>
-<h3 id="第七步：git-push-origin-master"><a href="#第七步：git-push-origin-master" class="headerlink" title="第七步：git push origin master"></a>第七步：git push origin master</h3><p>输入命令<code>git push origin master</code>将本地仓库推送到GitHub中</p>
-<p>第一次上传添加 -u</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>解决hexo d 命令报错 Deploer not found git</title>
-    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
-    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
-<p>命令：</p>
-<p><code>npm insatll --save hexo-deployer-git</code></p>
-]]></content>
-  </entry>
-  <entry>
     <title>斯坦福编程范式公开课第一节：课程大纲</title>
     <url>/2024/05/01/%E6%96%AF%E5%9D%A6%E7%A6%8F1/</url>
     <content><![CDATA[<h3 id="第1节：课程大纲"><a href="#第1节：课程大纲" class="headerlink" title="第1节：课程大纲"></a>第1节：课程大纲</h3><p><strong>编程语言</strong></p>
@@ -148,6 +148,26 @@
 ]]></content>
   </entry>
   <entry>
+    <title>斯坦福编程范式公开课第十二节：预处理器</title>
+    <url>/2024/05/08/%E6%96%AF%E5%9D%A6%E7%A6%8F12/</url>
+    <content><![CDATA[<h3 id="第12节：预处理器"><a href="#第12节：预处理器" class="headerlink" title="第12节：预处理器"></a>第12节：预处理器</h3><p><strong>#define</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> KWidth  480</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> KHeight 720</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> KPerameter 2*(KWidth+KHeight)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Width is %d&quot;</span>, KWdith);</span><br><span class="line"><span class="type">int</span> area=KWidth*KHeight;</span><br><span class="line"></span><br><span class="line"><span class="comment">//当预处理器遇到#define，会将两个值存储到一个hashset中。以KWidth为Key，480为值。</span></span><br><span class="line"><span class="comment">//通过预处理器，代码中的KWdith会通过hashset转化为常量</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//预处理器不会进行错误检查</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//计算VectorNth 即计算第N个元素的地址</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NthElemAddr(base,elemSize,index) ((cahr*)base+index*elemSize)</span></span><br><span class="line">		</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> NDEBUG</span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> assert(cond) (void)0</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> assert(cond) (cond)?((void) 0):fprintf(stderr,<span class="string">&quot;---&quot;</span>),exit(0)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="type">void</span> *<span class="title function_">VectorNth</span><span class="params">(<span class="built_in">vector</span> *v,<span class="type">int</span> position)</span>&#123;</span><br><span class="line">    assert(position&gt;=<span class="number">0</span>);</span><br><span class="line">    assert(position&lt;v-&gt;loglength);</span><br><span class="line">    <span class="keyword">return</span> NthElemAddr(v-&gt;elems,v-&gt;elemSize,position);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在下面这些情况预处理器会有一些不足：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(a,b)   (((a)&gt;(b))?(a):(b))</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> max=MAX(fib(<span class="number">100</span>),fact(<span class="number">4000</span>));</span><br><span class="line"><span class="comment">//实际上会被展开为</span></span><br><span class="line"><span class="comment">//int max=(fib(100)&gt;fact(4000))?fib(100):fact(4000)</span></span><br><span class="line"><span class="comment">//fibnacci数列本身计算时间就非常长，使用宏会调用两次fib()，导致性能变差</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> max=MAX(m++,n++);</span><br><span class="line"><span class="comment">//int max=((m++)&gt;(n++))?(m++):(n++);</span></span><br><span class="line"><span class="comment">//较大的呢个数将会被自增两次</span></span><br></pre></td></tr></table></figure>
+
+<p>Jerry Cain：由于这些原因，我更喜欢使用static const来定义全局常量而不是#define，大家应该尽量避免预处理的这些特性。</p>
+<p><strong>#include</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;vector.h&quot;</span></span></span><br><span class="line"><span class="comment">//&lt;&gt;代表了这是一个系统头文件，由编译器提供，使用默认路径找到其位置</span></span><br><span class="line"><span class="comment">//&quot;&quot;的表示，预处理器会将vector.h中的内容写入到此文件中</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//cc.h</span></span><br><span class="line"><span class="comment">//在头文件定义的时候加入,避免同一个头文件被多次调用</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _cc_h_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _cc_h_</span></span><br><span class="line">----</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br></pre></td></tr></table></figure>
+
+<p>只能#include头文件，因为头文件只能用于声明，不能分配任何的存储空间（除非定义全局共享变量），也不并不产生相应的机器代码。</p>
+]]></content>
+  </entry>
+  <entry>
     <title>斯坦福编程范式公开课第十一节：指针与引用</title>
     <url>/2024/05/07/%E6%96%AF%E5%9D%A6%E7%A6%8F11/</url>
     <content><![CDATA[<h3 id="第11节：指针与引用"><a href="#第11节：指针与引用" class="headerlink" title="第11节：指针与引用"></a>第11节：指针与引用</h3><p><strong>swap的c和c++版本，来讲述指针如何在内存中实现。</strong></p>
@@ -179,26 +199,6 @@
 <p>类中定义static，表示该函数不需要被对象绑定，即在调用该函数的时候不需要this指针的传入。</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">fraction</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">fraction</span>(<span class="type">int</span> n,<span class="type">int</span> d<span class="number">-1</span>);</span><br><span class="line">    ---</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">reduce</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">god</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-]]></content>
-  </entry>
-  <entry>
-    <title>斯坦福编程范式公开课第十二节：预处理器</title>
-    <url>/2024/05/08/%E6%96%AF%E5%9D%A6%E7%A6%8F12/</url>
-    <content><![CDATA[<h3 id="第12节：预处理器"><a href="#第12节：预处理器" class="headerlink" title="第12节：预处理器"></a>第12节：预处理器</h3><p><strong>#define</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> KWidth  480</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> KHeight 720</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> KPerameter 2*(KWidth+KHeight)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Width is %d&quot;</span>, KWdith);</span><br><span class="line"><span class="type">int</span> area=KWidth*KHeight;</span><br><span class="line"></span><br><span class="line"><span class="comment">//当预处理器遇到#define，会将两个值存储到一个hashset中。以KWidth为Key，480为值。</span></span><br><span class="line"><span class="comment">//通过预处理器，代码中的KWdith会通过hashset转化为常量</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//预处理器不会进行错误检查</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//计算VectorNth 即计算第N个元素的地址</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NthElemAddr(base,elemSize,index) ((cahr*)base+index*elemSize)</span></span><br><span class="line">		</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> NDEBUG</span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> assert(cond) (void)0</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> assert(cond) (cond)?((void) 0):fprintf(stderr,<span class="string">&quot;---&quot;</span>),exit(0)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="type">void</span> *<span class="title function_">VectorNth</span><span class="params">(<span class="built_in">vector</span> *v,<span class="type">int</span> position)</span>&#123;</span><br><span class="line">    assert(position&gt;=<span class="number">0</span>);</span><br><span class="line">    assert(position&lt;v-&gt;loglength);</span><br><span class="line">    <span class="keyword">return</span> NthElemAddr(v-&gt;elems,v-&gt;elemSize,position);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在下面这些情况预处理器会有一些不足：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(a,b)   (((a)&gt;(b))?(a):(b))</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> max=MAX(fib(<span class="number">100</span>),fact(<span class="number">4000</span>));</span><br><span class="line"><span class="comment">//实际上会被展开为</span></span><br><span class="line"><span class="comment">//int max=(fib(100)&gt;fact(4000))?fib(100):fact(4000)</span></span><br><span class="line"><span class="comment">//fibnacci数列本身计算时间就非常长，使用宏会调用两次fib()，导致性能变差</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> max=MAX(m++,n++);</span><br><span class="line"><span class="comment">//int max=((m++)&gt;(n++))?(m++):(n++);</span></span><br><span class="line"><span class="comment">//较大的呢个数将会被自增两次</span></span><br></pre></td></tr></table></figure>
-
-<p>Jerry Cain：由于这些原因，我更喜欢使用static const来定义全局常量而不是#define，大家应该尽量避免预处理的这些特性。</p>
-<p><strong>#include</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;vector.h&quot;</span></span></span><br><span class="line"><span class="comment">//&lt;&gt;代表了这是一个系统头文件，由编译器提供，使用默认路径找到其位置</span></span><br><span class="line"><span class="comment">//&quot;&quot;的表示，预处理器会将vector.h中的内容写入到此文件中</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//cc.h</span></span><br><span class="line"><span class="comment">//在头文件定义的时候加入,避免同一个头文件被多次调用</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _cc_h_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _cc_h_</span></span><br><span class="line">----</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br></pre></td></tr></table></figure>
-
-<p>只能#include头文件，因为头文件只能用于声明，不能分配任何的存储空间（除非定义全局共享变量），也不并不产生相应的机器代码。</p>
 ]]></content>
   </entry>
   <entry>
