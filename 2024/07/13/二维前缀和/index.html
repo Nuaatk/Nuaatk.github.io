@@ -9,7 +9,7 @@
     
     <title>
         
-            斯坦福编程范式公开课第十一节：指针与引用 |
+            二维前缀和与应哟个 |
         
         TK&#39;s blog
     </title>
@@ -159,7 +159,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">斯坦福编程范式公开课第十一节：指针与引用</span>
+                <span class="title-hover-animation">二维前缀和与应哟个</span>
             </div>
 
             
@@ -181,13 +181,13 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2024-05-07 00:00:00</span>
-        <span class="mobile">2024-05-07 00:00</span>
+        <span class="pc">2024-07-13 14:13:23</span>
+        <span class="mobile">2024-07-13 14:13</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2024-06-28 16:53:08</span>
+        <span class="pc">2024-07-13 20:25:51</span>
     </span>
     
     
@@ -197,7 +197,7 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/%E6%96%AF%E5%9D%A6%E7%A6%8F%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F/">斯坦福编程范式</a>&nbsp;
+                        <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>&nbsp;
                     </li>
                 
             </ul>
@@ -207,12 +207,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>591 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>658 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>2 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>3 分钟</span>
         </span>
     
     
@@ -230,35 +230,79 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <h3 id="第11节：指针与引用"><a href="#第11节：指针与引用" class="headerlink" title="第11节：指针与引用"></a>第11节：指针与引用</h3><p><strong>swap的c和c++版本，来讲述指针如何在内存中实现。</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line">    <span class="type">int</span> y;</span><br><span class="line">    x=<span class="number">11</span>;</span><br><span class="line">    y=<span class="number">17</span>;</span><br><span class="line">    swap(&amp;x,&amp;y);<span class="comment">//swap(&amp;x,&amp;y); in c++</span></span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">M[SP+<span class="number">4</span>]=<span class="number">11</span>;</span><br><span class="line">M[SP]=<span class="number">17</span>;</span><br><span class="line">R1=SP;   <span class="comment">//&amp;y</span></span><br><span class="line">R2=SP+<span class="number">4</span>; <span class="comment">//&amp;x</span></span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">M[SP]=R2;</span><br><span class="line">M[SP+<span class="number">4</span>]=R1;</span><br><span class="line">CALL &lt;swap&gt;;</span><br><span class="line">SP=SP+<span class="number">8</span>;</span><br><span class="line">RET;</span><br></pre></td></tr></table></figure>
+                <h2 id="二维前缀和定义"><a href="#二维前缀和定义" class="headerlink" title="二维前缀和定义"></a>二维前缀和定义</h2><img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/1.png"
+                      class="" width="1"
+                >
 
-<ul>
-<li>c语言版本的SWAP</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">int</span> *ap,<span class="type">int</span> *bp)</span>&#123;</span><br><span class="line">    <span class="type">int</span> temp=*ap;</span><br><span class="line">    *ap=*bp;</span><br><span class="line">    *bp=temp;</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">&lt;swap&gt;:</span><br><span class="line">SP=SP<span class="number">-4</span>;</span><br><span class="line">R1=M[SP+<span class="number">8</span>];</span><br><span class="line">R2=M[R1];</span><br><span class="line">M[SP]=R2;   <span class="comment">//temp=*ap</span></span><br><span class="line">R1=M[SP+<span class="number">12</span>];</span><br><span class="line">R2=M[R1];</span><br><span class="line">R3=M[SP+<span class="number">8</span>]; </span><br><span class="line">M[R3]=R2;   <span class="comment">//*ap=*bp</span></span><br><span class="line">R1=M[SP];</span><br><span class="line">R2=M[SP+<span class="number">12</span>];</span><br><span class="line">M[R2]=R1;   <span class="comment">//*bp=temp</span></span><br><span class="line">SP=SP+<span class="number">4</span>;</span><br><span class="line">RET;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">┌───────────────┐</span><br><span class="line">│               │	bp</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	ap</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	temp</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
+<p>红色区域所有数的和即为(i,j)的二维前缀和</p>
+<h5 id="预处理："><a href="#预处理：" class="headerlink" title="预处理："></a>预处理：</h5><p>​	即让矩阵上所有位置上的数都变成二维前缀和</p>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/2.png"
+                      class="" width="2"
+                >
 
-<ul>
-<li>C++版本的SWAP</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">swap</span><span class="params">(<span class="type">int</span> &amp;a,<span class="type">int</span> &amp;b)</span></span>&#123;</span><br><span class="line">    <span class="type">int</span> temp=a;</span><br><span class="line">    a=b;</span><br><span class="line">    b=temp;</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line"><span class="comment">//在swap例子中，c++的引用与c语言使用指针在汇编级别没有任何区别，引用只是在编译器中自动对指针进行解引。</span></span><br></pre></td></tr></table></figure>
-
-<p>引用一旦赋值就不能随便改变指向的变量。例如int x&#x3D;10; int y&#x3D;15; int &amp;z&#x3D;y; 一旦z与y绑定了之后，就不能再让其与x绑定。</p>
-<p>而指针可以，所以想要实现链表仍然需要指针。这就是为什么C++中指针仍然有很重要的地位</p>
-<p><strong>this指针和对象在内存的存储</strong></p>
-<p>C++中结构体和类的唯一区别在于类默认为praite，结构体是public</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">binky</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    	<span class="function"><span class="type">int</span> <span class="title">dunky</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">    	<span class="function"><span class="type">char</span> *<span class="title">minky</span><span class="params">(<span class="type">int</span> *z)</span></span>&#123;</span><br><span class="line">            <span class="type">int</span> w=*z;</span><br><span class="line">            <span class="keyword">return</span> slinky+<span class="built_in">dunky</span>(winky,winky);</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    	<span class="type">int</span> winky;</span><br><span class="line">    	<span class="type">char</span> *binky;</span><br><span class="line">    	<span class="type">char</span> slinky;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> n=<span class="number">17</span>;</span><br><span class="line">binky b;</span><br><span class="line">b.<span class="built_in">minky</span>(&amp;n);</span><br><span class="line"><span class="comment">//binky::minky(&amp;b,&amp;n)实际上汇编代码级别的调用</span></span><br><span class="line"><span class="comment">//如下图所示，传入的This=&amp;b实际上是一个指针，指向类存储的一片区域。</span></span><br><span class="line"><span class="comment">//当在minky函数中调用dunky函数时，默认是使用this-&gt;dunky，即还调用该对象的函数</span></span><br><span class="line"><span class="comment">//也可将binky改为下面这样，那么就意味着minky函数会调用传入对象的dunky函数</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">binky</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    	<span class="function"><span class="type">int</span> <span class="title">dunky</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">    	<span class="function"><span class="type">char</span> *<span class="title">minky</span><span class="params">(<span class="type">int</span> *z，binky&amp; d)</span></span>&#123;</span><br><span class="line">            <span class="type">int</span> w=*z;</span><br><span class="line">            <span class="keyword">return</span> slinky+d.<span class="built_in">dunky</span>(winky,winky);</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    	<span class="type">int</span> winky;</span><br><span class="line">    	<span class="type">char</span> *binky;</span><br><span class="line">    	<span class="type">char</span> slinky;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于每一个位置(i,j)的需要加起来的如图所示</p>
+<p>如果遍历每个值相加，复杂度太高了</p>
+<p>因此可以使用<code>Map[i][j] += Map[i - 1][j] + Map[i][j - 1] - Map[i - 1][j - 1];</code></p>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/3.png"
+                      class="" width="3"
+                >
 
 <img  
                      lazyload
                      alt="image"
-                     data-src="/2024/05/07/%E6%96%AF%E5%9D%A6%E7%A6%8F11/1716983234574.png"
-                      class="" width="1716983234574"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/4.png"
+                      class="" width="4"
                 >
 
-<p>类中定义static，表示该函数不需要被对象绑定，即在调用该函数的时候不需要this指针的传入。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">fraction</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">fraction</span>(<span class="type">int</span> n,<span class="type">int</span> d<span class="number">-1</span>);</span><br><span class="line">    ---</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">reduce</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">god</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/5.png"
+                      class="" width="5"
+                >
 
+<p>即使用之前的值来迭代出下一个值。</p>
+<h5 id="查询："><a href="#查询：" class="headerlink" title="查询："></a>查询：</h5><img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/6.png"
+                      class="" width="6"
+                >
+
+<p>如果想要求和两个坐标：（x1,y1）和（x2，y2）之间的所有值的和</p>
+<p>就可以使用<code>Map[x2][y2] - Map[x1 - 1][y2] - Map[x2][y1 - 1] + Map[x1 - 1][y1 - 1];</code></p>
+<p>这里要使用y1-1的原因是求和的点不包括y1-1和x1-1这两条边界。如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>&#125;,</span><br><span class="line">&#123;<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>&#125;,</span><br><span class="line">&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>&#125;,</span><br><span class="line">&#123;<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//设左上顶点为（0，0），如果要求（1，1）与（3，3）之间的和。</span></span><br><span class="line"><span class="comment">//那么要算M[3][3]-M[0][3]-M[3][0]+M[0][0]</span></span><br><span class="line"><span class="comment">//如果使用（1，1）那么第1列上所有的元素就被减去了</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="应用："><a href="#应用：" class="headerlink" title="应用："></a>应用：</h5><p>小美的平衡矩阵</p>
+<p>小美拿到了一个𝑛∗𝑛<em>n</em>∗<em>n</em>的矩阵，其中每个元素是 0 或者 1。<br>小美认为一个矩形区域是完美的，当且仅当该区域内 0 的数量恰好等于 1 的数量。<br>现在，小美希望你回答有多少个𝑖∗𝑖<em>i</em>∗<em>i</em>的完美矩形区域。你需要回答1≤𝑖≤𝑛1≤<em>i</em>≤<em>n</em>的所有答案。</p>
+<p>输入例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">4</span><br><span class="line">1010</span><br><span class="line">0101</span><br><span class="line">1100</span><br><span class="line">0011</span><br></pre></td></tr></table></figure>
+
+<p>输出例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line">7</span><br><span class="line">0</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">210</span>;</span><br><span class="line"><span class="type">char</span> g[N][N];</span><br><span class="line"><span class="type">int</span> s[N][N], ans[N], n;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">solve</span><span class="params">(<span class="type">int</span> x1, <span class="type">int</span> y1, <span class="type">int</span> x2, <span class="type">int</span> y2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> s[x2][y2] - s[x1 - <span class="number">1</span>][y2] - s[x2][y1 - <span class="number">1</span>] + s[x1 - <span class="number">1</span>][y1 - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; ++ j) &#123;</span><br><span class="line">            cin &gt;&gt; g[i][j];</span><br><span class="line">            s[i][j] = g[i][j] - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; ++ j)</span><br><span class="line">            s[i][j] += s[i - <span class="number">1</span>][j] + s[i][j - <span class="number">1</span>] - s[i - <span class="number">1</span>][j - <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; ++ j) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">1</span>; k &lt;= n; ++ k) &#123;</span><br><span class="line">                <span class="keyword">if</span> (i + k - <span class="number">1</span> &lt;= n &amp;&amp; j + k - <span class="number">1</span> &lt;= n) &#123;</span><br><span class="line">                    <span class="type">int</span> x = <span class="built_in">solve</span>(i, j, i + k - <span class="number">1</span>, j + k - <span class="number">1</span>);</span><br><span class="line">                    <span class="keyword">if</span> (x * <span class="number">2</span> == k * k) ++ ans[k];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i)   <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans[i]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用二维前缀和，可以有效的避免计算矩阵和的时候遍历次数过多</span></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>参考文章：</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/My-flurry/p/11461640.html" >二维前缀和详解 - HEOI-动动 - 博客园 (cnblogs.com)<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/question/382522778/answer/3424577630" >https://www.zhihu.com/question/382522778/answer/3424577630<i class="fas fa-external-link-alt"></i></a></p>
+</blockquote>
 
             </div>
 
@@ -268,16 +312,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">斯坦福编程范式公开课第十一节：指针与引用</span>
+            <span class="type">本文标题</span>：<span class="content">二维前缀和与应哟个</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">TKCC</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2024-05-07 00:00:00</span>
+            <span class="type">创建时间</span>：<span class="content">2024-07-13 14:13:23</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2024/05/07/斯坦福11/</span>
+            <span class="type">本文链接</span>：<span class="content">2024/07/13/二维前缀和/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -295,7 +339,7 @@
                 <ul class="post-tags-box">
                     
                         <li class="tag-item">
-                            <a href="/tags/%E6%96%AF%E5%9D%A6%E7%A6%8F%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F/">#斯坦福编程范式</a>&nbsp;
+                            <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>&nbsp;
                         </li>
                     
                 </ul>
@@ -307,13 +351,13 @@
                         <div class="article-prev">
                             <a class="prev"
                                rel="prev"
-                               href="/2024/05/08/%E6%96%AF%E5%9D%A6%E7%A6%8F12/"
+                               href="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"
                             >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
                                 <span class="title flex-center">
-                                <span class="post-nav-title-item">斯坦福编程范式公开课第十二节：预处理器</span>
+                                <span class="post-nav-title-item">MMU虚拟内存管理</span>
                                 <span class="post-nav-item">上一篇</span>
                             </span>
                             </a>
@@ -323,10 +367,10 @@
                         <div class="article-next">
                             <a class="next"
                                rel="next"
-                               href="/2024/05/06/%E6%96%AF%E5%9D%A6%E7%A6%8F10/"
+                               href="/2024/06/26/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%AC%A6%E5%8F%B7%E7%9A%84%E8%8B%B1%E6%96%87%E8%AF%BB%E6%B3%95/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">斯坦福编程范式公开课第十节：栈与函数调用</span>
+                                <span class="post-nav-title-item">编程语言中符号的英文读法</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
@@ -345,7 +389,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC11%E8%8A%82%EF%BC%9A%E6%8C%87%E9%92%88%E4%B8%8E%E5%BC%95%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">第11节：指针与引用</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">二维前缀和定义</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%A2%84%E5%A4%84%E7%90%86%EF%BC%9A"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">预处理：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%EF%BC%9A"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">查询：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%EF%BC%9A"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">应用：</span></a></li></ol></li></ol></li></ol></li></ol>
     </div>
 </div>
 

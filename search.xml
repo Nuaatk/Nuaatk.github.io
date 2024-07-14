@@ -67,14 +67,50 @@
       </tags>
   </entry>
   <entry>
-    <title>解决hexo d 命令报错 Deploer not found git</title>
-    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
-    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
-<p>命令：</p>
-<p><code>npm insatll --save hexo-deployer-git</code></p>
+    <title>MMU虚拟内存管理</title>
+    <url>/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<h5 id="为什么需要虚拟内存"><a href="#为什么需要虚拟内存" class="headerlink" title="为什么需要虚拟内存"></a>为什么需要虚拟内存</h5><p>（1）进程之间的内存隔离性</p>
+<p>（2）实现了抽象性，为了对内存进行更好的管理</p>
+<h2 id="TLB和Page-Table"><a href="#TLB和Page-Table" class="headerlink" title="TLB和Page Table"></a>TLB和Page Table</h2><ul>
+<li><p>TLB和Page Table walks是一个电路结构，而Page Table只是一个数据结构，位于内存当中。</p>
+</li>
+<li><p>TLB是Page Table的缓存</p>
+</li>
+<li><p>不同的进程拥有不同的PageTable，由satp寄存器进行切换，satp寄存器中存储的是指向页表的指针</p>
+</li>
+<li><p>大多数RISC-V中的物理内存地址是56bit，虚拟地址是39bit（sv39）</p>
+</li>
+<li><p>一个虚拟地址的组成由index+offset组成，一个物理地址由PPN+offset组成。offset固定是12位，对应Page的4096Byte大小。index&#x3D;56-12&#x3D;27。PPN&#x3D;offset-12&#x3D;44 。</p>
+</li>
+<li><p>pagedirectory中的一个条目称为PTE（page table entry），是64bit（寄存器大小）。PTE由三部分组成（10+44+10），前10bit是保留字段；中间44bit是PPN，也就是物理page号，指向了一个page（或pagetable）的物理地址；最后10bit是flag，标志着指向的物理page的属性（读、写、有效…）。</p>
+<p>一个directory是4096Bytes也就是一个page的大小，一个directory有512个entry。</p>
+</li>
+</ul>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/1.png"
+                      class="" width="1"
+                >
+
+<h4 id="为什么要分多级页表："><a href="#为什么要分多级页表：" class="headerlink" title="为什么要分多级页表："></a>为什么要分多级页表：</h4><p>​	如果不分页，一个页表会有2^27个entry(页表项)(index的长度为27)，每个进程一个页表，很快就会将内存占满。所以实际上页表是由多级组成，虚拟地址中的index的27bit实际上分为三层索引(L2,L1,L0)，每层9bit，也被称为3个page directory</p>
+<p>​	但实际上这种方法仍然最大可以拥有2^27个entry(页表项)</p>
+<p>​	这种方式的主要优点是，如果地址空间中大部分地址都没有使用，你不必为每一个index准备一个entry。举个例子，如果你的地址空间只使用了一个page，4096Bytes。</p>
+<p>​	在最高级，你需要一个page directory。在这个page directory中，你需要一个数字是0的PTE，指向中间级page directory。所以在中间级，你也需要一个page directory，里面也是一个数字0的PTE，指向最低级page directory。所以这里总共需要3个page directory（也就是3 * 512个entry）。</p>
+<p>​	但是在一级页表中，需要2^27个entry。</p>
+<p>​	减少了由于没使用带来的内存占用，</p>
+<p>ps：如果多级页表全部占满的情况下占多少entry的大小：</p>
+<p>​		512（一级）+512x512（二级）+512x512x512（三级）&#x3D;2^9+2^18+2^27</p>
+<h4 id="Page-Table-walk："><a href="#Page-Table-walk：" class="headerlink" title="Page Table walk："></a>Page Table walk：</h4><h2 id="分页和分段"><a href="#分页和分段" class="headerlink" title="分页和分段"></a>分页和分段</h2><p>Page Table Entry(PTE)</p>
+<p>Physical Page Number(PPN)</p>
+<blockquote>
+<p>参考文章：</p>
+<p><a class="link"   href="https://zhuanlan.zhihu.com/p/270577411" >https://zhuanlan.zhihu.com/p/270577411<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   href="https://www.cnblogs.com/MiaoMiaoGarden/p/15655962.html" >MIT6.S081 LAB3 pagetable &amp; virtual memory - 妙妙园 - 博客园 (cnblogs.com)<i class="fas fa-external-link-alt"></i></a></p>
+</blockquote>
 ]]></content>
       <tags>
-        <tag>Other</tag>
+        <tag>体系结构</tag>
       </tags>
   </entry>
   <entry>
@@ -92,6 +128,98 @@
 <p>这两步缺一都需要输入密码才能关联</p>
 <h3 id="第七步：git-push-origin-master"><a href="#第七步：git-push-origin-master" class="headerlink" title="第七步：git push origin master"></a>第七步：git push origin master</h3><p>输入命令<code>git push origin master</code>将本地仓库推送到GitHub中</p>
 <p>第一次上传添加 -u</p>
+]]></content>
+      <tags>
+        <tag>Other</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>二维前缀和与应哟个</title>
+    <url>/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/</url>
+    <content><![CDATA[<h2 id="二维前缀和定义"><a href="#二维前缀和定义" class="headerlink" title="二维前缀和定义"></a>二维前缀和定义</h2><img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/1.png"
+                      class="" width="1"
+                >
+
+<p>红色区域所有数的和即为(i,j)的二维前缀和</p>
+<h5 id="预处理："><a href="#预处理：" class="headerlink" title="预处理："></a>预处理：</h5><p>​	即让矩阵上所有位置上的数都变成二维前缀和</p>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/2.png"
+                      class="" width="2"
+                >
+
+<p>对于每一个位置(i,j)的需要加起来的如图所示</p>
+<p>如果遍历每个值相加，复杂度太高了</p>
+<p>因此可以使用<code>Map[i][j] += Map[i - 1][j] + Map[i][j - 1] - Map[i - 1][j - 1];</code></p>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/3.png"
+                      class="" width="3"
+                >
+
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/4.png"
+                      class="" width="4"
+                >
+
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/5.png"
+                      class="" width="5"
+                >
+
+<p>即使用之前的值来迭代出下一个值。</p>
+<h5 id="查询："><a href="#查询：" class="headerlink" title="查询："></a>查询：</h5><img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/6.png"
+                      class="" width="6"
+                >
+
+<p>如果想要求和两个坐标：（x1,y1）和（x2，y2）之间的所有值的和</p>
+<p>就可以使用<code>Map[x2][y2] - Map[x1 - 1][y2] - Map[x2][y1 - 1] + Map[x1 - 1][y1 - 1];</code></p>
+<p>这里要使用y1-1的原因是求和的点不包括y1-1和x1-1这两条边界。如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>&#125;,</span><br><span class="line">&#123;<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>&#125;,</span><br><span class="line">&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>&#125;,</span><br><span class="line">&#123;<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//设左上顶点为（0，0），如果要求（1，1）与（3，3）之间的和。</span></span><br><span class="line"><span class="comment">//那么要算M[3][3]-M[0][3]-M[3][0]+M[0][0]</span></span><br><span class="line"><span class="comment">//如果使用（1，1）那么第1列上所有的元素就被减去了</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="应用："><a href="#应用：" class="headerlink" title="应用："></a>应用：</h5><p>小美的平衡矩阵</p>
+<p>小美拿到了一个𝑛∗𝑛<em>n</em>∗<em>n</em>的矩阵，其中每个元素是 0 或者 1。<br>小美认为一个矩形区域是完美的，当且仅当该区域内 0 的数量恰好等于 1 的数量。<br>现在，小美希望你回答有多少个𝑖∗𝑖<em>i</em>∗<em>i</em>的完美矩形区域。你需要回答1≤𝑖≤𝑛1≤<em>i</em>≤<em>n</em>的所有答案。</p>
+<p>输入例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br><span class="line">1010</span><br><span class="line">0101</span><br><span class="line">1100</span><br><span class="line">0011</span><br></pre></td></tr></table></figure>
+
+<p>输出例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0</span><br><span class="line">7</span><br><span class="line">0</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">210</span>;</span><br><span class="line"><span class="type">char</span> g[N][N];</span><br><span class="line"><span class="type">int</span> s[N][N], ans[N], n;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">solve</span><span class="params">(<span class="type">int</span> x1, <span class="type">int</span> y1, <span class="type">int</span> x2, <span class="type">int</span> y2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> s[x2][y2] - s[x1 - <span class="number">1</span>][y2] - s[x2][y1 - <span class="number">1</span>] + s[x1 - <span class="number">1</span>][y1 - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; ++ j) &#123;</span><br><span class="line">            cin &gt;&gt; g[i][j];</span><br><span class="line">            s[i][j] = g[i][j] - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; ++ j)</span><br><span class="line">            s[i][j] += s[i - <span class="number">1</span>][j] + s[i][j - <span class="number">1</span>] - s[i - <span class="number">1</span>][j - <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; ++ j) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">1</span>; k &lt;= n; ++ k) &#123;</span><br><span class="line">                <span class="keyword">if</span> (i + k - <span class="number">1</span> &lt;= n &amp;&amp; j + k - <span class="number">1</span> &lt;= n) &#123;</span><br><span class="line">                    <span class="type">int</span> x = <span class="built_in">solve</span>(i, j, i + k - <span class="number">1</span>, j + k - <span class="number">1</span>);</span><br><span class="line">                    <span class="keyword">if</span> (x * <span class="number">2</span> == k * k) ++ ans[k];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i)   <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans[i]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用二维前缀和，可以有效的避免计算矩阵和的时候遍历次数过多</span></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>参考文章：</p>
+<p><a class="link"   href="https://www.cnblogs.com/My-flurry/p/11461640.html" >二维前缀和详解 - HEOI-动动 - 博客园 (cnblogs.com)<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   href="https://www.zhihu.com/question/382522778/answer/3424577630" >https://www.zhihu.com/question/382522778/answer/3424577630<i class="fas fa-external-link-alt"></i></a></p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决hexo d 命令报错 Deploer not found git</title>
+    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
+    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
+<p>命令：</p>
+<p><code>npm insatll --save hexo-deployer-git</code></p>
 ]]></content>
       <tags>
         <tag>Other</tag>
@@ -128,6 +256,11 @@
       <tags>
         <tag>斯坦福编程范式</tag>
       </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2024/07/13/%E5%B8%B8%E8%A7%81%E6%80%BB%E7%BA%BF/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>斯坦福编程范式公开课第十节：栈与函数调用</title>
@@ -197,25 +330,6 @@
       </tags>
   </entry>
   <entry>
-    <title>斯坦福编程范式公开课第十三节：编译与链接</title>
-    <url>/2024/05/09/%E6%96%AF%E5%9D%A6%E7%A6%8F13/</url>
-    <content><![CDATA[<h3 id="第13节：编译与链接"><a href="#第13节：编译与链接" class="headerlink" title="第13节：编译与链接"></a>第13节：编译与链接</h3><p><strong>complier</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span> *argv[])</span>&#123;</span><br><span class="line">    <span class="type">void</span> *memory=<span class="built_in">malloc</span>(<span class="number">400</span>);</span><br><span class="line">    assert(memory!=<span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Yes!\n&quot;</span>);</span><br><span class="line">    <span class="built_in">free</span>(memory);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>当stdio没有被include的时候，通常的编译器会报错：没有声明printf函数。但GCC不会，GCC会推测这个函数，并在编译和连接时加入。</li>
-<li>但当assert.h没有被include的时候，GCC的编译能过，但链接却过不了，因为标准库中没有assert函数</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//多传入参数的例子</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">strlen</span><span class="params">(<span class="type">char</span> *s,<span class="type">int</span> num)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> num=<span class="number">65</span>;</span><br><span class="line">    <span class="type">int</span> length=<span class="built_in">strlen</span>((<span class="type">char</span>*)&amp;num,num);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;length=%d\n&quot;</span>,length);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//尽管strlen多传入了一个参数。但是通过声明骗过了编译器，仍然可以通过编译运行。</span></span><br><span class="line"><span class="comment">//运行时，caller会将65和&amp;num当作参数传入。但对于callee，strlen函数只有一个参数，它只关注&amp;num这一个参数</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│  <span class="number">65</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>  │	num</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	length</span><br><span class="line">├───────────────┤</span><br><span class="line">│      <span class="number">65</span>       │	</span><br><span class="line">├───────────────┤   &lt;-----</span><br><span class="line">│     &amp;num      │	</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//少传入参数的例子</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">memcmp</span><span class="params">(<span class="type">void</span> *v1)</span></span>&#123;</span><br><span class="line">	<span class="type">int</span> n=<span class="number">17</span>;</span><br><span class="line">    <span class="type">int</span> m=<span class="built_in">memcmp</span>(&amp;n);</span><br><span class="line">&#125; </span><br><span class="line">C: CALL&lt;memcmp&gt;</span><br><span class="line">  </span><br><span class="line">C++: CALL&lt;memcmp_void_p&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">//memcmp的函数原型</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">memcmp</span><span class="params">(<span class="type">void</span> *v1,<span class="type">void</span> *v2,<span class="type">int</span> size)</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">C++: CALL&lt;memcmp_void_p_void_p_int&gt;</span><br><span class="line">    </span><br><span class="line"><span class="comment">//与上述例子类似，在运行时，对于caller来说，输入的只有&amp;n一个参数。</span></span><br><span class="line"><span class="comment">//但是对于callee来说，memcmp会调用三个参数，会将saved PC上面的三个4byte数据当作输入参数</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│      <span class="number">17</span>       │	n</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	m</span><br><span class="line">├───────────────┤</span><br><span class="line">│      &amp;n       │		</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>斯坦福编程范式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>斯坦福编程范式公开课第十二节：预处理器</title>
     <url>/2024/05/08/%E6%96%AF%E5%9D%A6%E7%A6%8F12/</url>
     <content><![CDATA[<h3 id="第12节：预处理器"><a href="#第12节：预处理器" class="headerlink" title="第12节：预处理器"></a>第12节：预处理器</h3><p><strong>#define</strong></p>
@@ -233,6 +347,25 @@
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//cc.h</span></span><br><span class="line"><span class="comment">//在头文件定义的时候加入,避免同一个头文件被多次调用</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _cc_h_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _cc_h_</span></span><br><span class="line">----</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br></pre></td></tr></table></figure>
 
 <p>只能#include头文件，因为头文件只能用于声明，不能分配任何的存储空间（除非定义全局共享变量），也不并不产生相应的机器代码。</p>
+]]></content>
+      <tags>
+        <tag>斯坦福编程范式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>斯坦福编程范式公开课第十三节：编译与链接</title>
+    <url>/2024/05/09/%E6%96%AF%E5%9D%A6%E7%A6%8F13/</url>
+    <content><![CDATA[<h3 id="第13节：编译与链接"><a href="#第13节：编译与链接" class="headerlink" title="第13节：编译与链接"></a>第13节：编译与链接</h3><p><strong>complier</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span> *argv[])</span>&#123;</span><br><span class="line">    <span class="type">void</span> *memory=<span class="built_in">malloc</span>(<span class="number">400</span>);</span><br><span class="line">    assert(memory!=<span class="literal">NULL</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Yes!\n&quot;</span>);</span><br><span class="line">    <span class="built_in">free</span>(memory);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>当stdio没有被include的时候，通常的编译器会报错：没有声明printf函数。但GCC不会，GCC会推测这个函数，并在编译和连接时加入。</li>
+<li>但当assert.h没有被include的时候，GCC的编译能过，但链接却过不了，因为标准库中没有assert函数</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//多传入参数的例子</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">strlen</span><span class="params">(<span class="type">char</span> *s,<span class="type">int</span> num)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> num=<span class="number">65</span>;</span><br><span class="line">    <span class="type">int</span> length=<span class="built_in">strlen</span>((<span class="type">char</span>*)&amp;num,num);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;length=%d\n&quot;</span>,length);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//尽管strlen多传入了一个参数。但是通过声明骗过了编译器，仍然可以通过编译运行。</span></span><br><span class="line"><span class="comment">//运行时，caller会将65和&amp;num当作参数传入。但对于callee，strlen函数只有一个参数，它只关注&amp;num这一个参数</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│  <span class="number">65</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>  │	num</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	length</span><br><span class="line">├───────────────┤</span><br><span class="line">│      <span class="number">65</span>       │	</span><br><span class="line">├───────────────┤   &lt;-----</span><br><span class="line">│     &amp;num      │	</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//少传入参数的例子</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">memcmp</span><span class="params">(<span class="type">void</span> *v1)</span></span>&#123;</span><br><span class="line">	<span class="type">int</span> n=<span class="number">17</span>;</span><br><span class="line">    <span class="type">int</span> m=<span class="built_in">memcmp</span>(&amp;n);</span><br><span class="line">&#125; </span><br><span class="line">C: CALL&lt;memcmp&gt;</span><br><span class="line">  </span><br><span class="line">C++: CALL&lt;memcmp_void_p&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">//memcmp的函数原型</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">memcmp</span><span class="params">(<span class="type">void</span> *v1,<span class="type">void</span> *v2,<span class="type">int</span> size)</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">C++: CALL&lt;memcmp_void_p_void_p_int&gt;</span><br><span class="line">    </span><br><span class="line"><span class="comment">//与上述例子类似，在运行时，对于caller来说，输入的只有&amp;n一个参数。</span></span><br><span class="line"><span class="comment">//但是对于callee来说，memcmp会调用三个参数，会将saved PC上面的三个4byte数据当作输入参数</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│      <span class="number">17</span>       │	n</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	m</span><br><span class="line">├───────────────┤</span><br><span class="line">│      &amp;n       │		</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <tags>
         <tag>斯坦福编程范式</tag>
@@ -643,5 +776,8 @@
 </tr>
 </tbody></table>
 ]]></content>
+      <tags>
+        <tag>Other</tag>
+      </tags>
   </entry>
 </search>
