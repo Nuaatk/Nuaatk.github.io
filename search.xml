@@ -1,6 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>MMU虚拟内存管理</title>
+    <url>/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<h5 id="为什么需要虚拟内存"><a href="#为什么需要虚拟内存" class="headerlink" title="为什么需要虚拟内存"></a>为什么需要虚拟内存</h5><p>（1）进程之间的内存隔离性</p>
+<p>（2）实现了抽象性，为了对内存进行更好的管理</p>
+<h2 id="TLB和Page-Table的含义"><a href="#TLB和Page-Table的含义" class="headerlink" title="TLB和Page Table的含义"></a>TLB和Page Table的含义</h2><ul>
+<li>Translation lookaside Buffer（TLB）和Table walks units（TWU）是一个电路结构，而Page Table只是一个数据结构，位于内存当中。</li>
+</ul>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E8%99%9A%E6%8B%9F%E8%BD%AC%E7%89%A9%E7%90%86.png"
+                      class="" title="虚拟转物理"
+                >
+
+<ul>
+<li><p>TLB是Page Table的缓存</p>
+</li>
+<li><p>不同的进程拥有不同的PageTable，由satp寄存器进行切换，satp寄存器中存储的是指向页表的指针</p>
+</li>
+<li><p>大多数RISC-V中的物理内存地址是56bit，虚拟地址是39bit（sv39）</p>
+</li>
+<li><p>一个虚拟地址的组成由index+offset组成，一个物理地址由PPN+offset组成。offset固定是12位，对应Page的4096Byte大小。index&#x3D;56-12&#x3D;27。PPN&#x3D;offset-12&#x3D;44 。</p>
+</li>
+<li><p>pagedirectory中的一个条目称为PTE（page table entry），是64bit（寄存器大小）。PTE由三部分组成（10+44+10），前10bit是保留字段；中间44bit是PPN，也就是物理page号，指向了一个page（或pagetable）的物理地址；最后10bit是flag，标志着指向的物理page的属性（读、写、有效…）。</p>
+<p>一个directory是4096Bytes也就是一个page的大小，一个directory有512个entry</p>
+</li>
+</ul>
+<h4 id="为什么要分多级页表："><a href="#为什么要分多级页表：" class="headerlink" title="为什么要分多级页表："></a>为什么要分多级页表：</h4><img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%A4%9A%E7%BA%A7%E9%A1%B5%E8%A1%A8.png"
+                      class="" title="多级页表"
+                >
+
+<p>​	如果不分页，一个页表会有2^27个entry(页表项)(index的长度为27)，每个进程一个页表，很快就会将内存占满。所以实际上页表是由多级组成，虚拟地址中的index的27bit实际上分为三层索引(L2,L1,L0)，每层9bit，也被称为3个page directory</p>
+<p>​	但实际上这种方法仍然最大可以拥有2^27个entry(页表项)</p>
+<p>​	这种方式的主要优点是，如果地址空间中大部分地址都没有使用，你不必为每一个index准备一个entry。举个例子，如果你的地址空间只使用了一个page，4096Bytes。</p>
+<p>​	在最高级，你需要一个page directory。在这个page directory中，你需要一个数字是0的PTE，指向中间级page directory。所以在中间级，你也需要一个page directory，里面也是一个数字0的PTE，指向最低级page directory。所以这里总共需要3个page directory（也就是3 * 512个entry）。</p>
+<p>​	但是在一级页表中，需要2^27个entry。</p>
+<p>​	减少了由于没使用带来的内存占用，</p>
+<p>ps：如果多级页表全部占满的情况下占多少entry的大小：</p>
+<p>​		512（一级）+512x512（二级）+512x512x512（三级）&#x3D;2^9+2^18+2^27</p>
+<h4 id="Page-Table-walk（这里不考虑TLB）："><a href="#Page-Table-walk（这里不考虑TLB）：" class="headerlink" title="Page Table walk（这里不考虑TLB）："></a>Page Table walk（这里不考虑TLB）：</h4><p>​	访问流程（page hit）：</p>
+<p>​	</p>
+<p>​	访问流程（page miss）：</p>
+<h2 id="分页和分段"><a href="#分页和分段" class="headerlink" title="分页和分段"></a>分页和分段</h2><p>Page Table Entry(PTE)</p>
+<p>Physical Page Number(PPN)</p>
+<blockquote>
+<p>参考文章：</p>
+<p><a class="link"   href="https://zhuanlan.zhihu.com/p/270577411" >https://zhuanlan.zhihu.com/p/270577411<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   href="https://www.cnblogs.com/MiaoMiaoGarden/p/15655962.html" >MIT6.S081 LAB3 pagetable &amp; virtual memory - 妙妙园 - 博客园 (cnblogs.com)<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   href="https://zhuanlan.zhihu.com/p/559740388" >csapp L21 - 虚拟内存：基础 - 知乎 (zhihu.com)<i class="fas fa-external-link-alt"></i></a></p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>体系结构</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>DDR重要时序参数</title>
     <url>/2023/06/17/DDR%E9%87%8D%E8%A6%81%E6%97%B6%E5%BA%8F%E5%8F%82%E6%95%B0/</url>
     <content><![CDATA[<h1 id="DRAM时序"><a href="#DRAM时序" class="headerlink" title="DRAM时序"></a>DRAM时序</h1><img  
@@ -84,65 +143,6 @@
 ]]></content>
       <tags>
         <tag>Other</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MMU虚拟内存管理</title>
-    <url>/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<h5 id="为什么需要虚拟内存"><a href="#为什么需要虚拟内存" class="headerlink" title="为什么需要虚拟内存"></a>为什么需要虚拟内存</h5><p>（1）进程之间的内存隔离性</p>
-<p>（2）实现了抽象性，为了对内存进行更好的管理</p>
-<h2 id="TLB和Page-Table的含义"><a href="#TLB和Page-Table的含义" class="headerlink" title="TLB和Page Table的含义"></a>TLB和Page Table的含义</h2><ul>
-<li>Translation lookaside Buffer（TLB）和Table walks units（TWU）是一个电路结构，而Page Table只是一个数据结构，位于内存当中。</li>
-</ul>
-<img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E8%99%9A%E6%8B%9F%E8%BD%AC%E7%89%A9%E7%90%86.png"
-                      class="" title="虚拟转物理"
-                >
-
-<ul>
-<li><p>TLB是Page Table的缓存</p>
-</li>
-<li><p>不同的进程拥有不同的PageTable，由satp寄存器进行切换，satp寄存器中存储的是指向页表的指针</p>
-</li>
-<li><p>大多数RISC-V中的物理内存地址是56bit，虚拟地址是39bit（sv39）</p>
-</li>
-<li><p>一个虚拟地址的组成由index+offset组成，一个物理地址由PPN+offset组成。offset固定是12位，对应Page的4096Byte大小。index&#x3D;56-12&#x3D;27。PPN&#x3D;offset-12&#x3D;44 。</p>
-</li>
-<li><p>pagedirectory中的一个条目称为PTE（page table entry），是64bit（寄存器大小）。PTE由三部分组成（10+44+10），前10bit是保留字段；中间44bit是PPN，也就是物理page号，指向了一个page（或pagetable）的物理地址；最后10bit是flag，标志着指向的物理page的属性（读、写、有效…）。</p>
-<p>一个directory是4096Bytes也就是一个page的大小，一个directory有512个entry</p>
-</li>
-</ul>
-<h4 id="为什么要分多级页表："><a href="#为什么要分多级页表：" class="headerlink" title="为什么要分多级页表："></a>为什么要分多级页表：</h4><img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%A4%9A%E7%BA%A7%E9%A1%B5%E8%A1%A8.png"
-                      class="" title="多级页表"
-                >
-
-<p>​	如果不分页，一个页表会有2^27个entry(页表项)(index的长度为27)，每个进程一个页表，很快就会将内存占满。所以实际上页表是由多级组成，虚拟地址中的index的27bit实际上分为三层索引(L2,L1,L0)，每层9bit，也被称为3个page directory</p>
-<p>​	但实际上这种方法仍然最大可以拥有2^27个entry(页表项)</p>
-<p>​	这种方式的主要优点是，如果地址空间中大部分地址都没有使用，你不必为每一个index准备一个entry。举个例子，如果你的地址空间只使用了一个page，4096Bytes。</p>
-<p>​	在最高级，你需要一个page directory。在这个page directory中，你需要一个数字是0的PTE，指向中间级page directory。所以在中间级，你也需要一个page directory，里面也是一个数字0的PTE，指向最低级page directory。所以这里总共需要3个page directory（也就是3 * 512个entry）。</p>
-<p>​	但是在一级页表中，需要2^27个entry。</p>
-<p>​	减少了由于没使用带来的内存占用，</p>
-<p>ps：如果多级页表全部占满的情况下占多少entry的大小：</p>
-<p>​		512（一级）+512x512（二级）+512x512x512（三级）&#x3D;2^9+2^18+2^27</p>
-<h4 id="Page-Table-walk（这里不考虑TLB）："><a href="#Page-Table-walk（这里不考虑TLB）：" class="headerlink" title="Page Table walk（这里不考虑TLB）："></a>Page Table walk（这里不考虑TLB）：</h4><p>​	访问流程（page hit）：</p>
-<p>​	</p>
-<p>​	访问流程（page miss）：</p>
-<h2 id="分页和分段"><a href="#分页和分段" class="headerlink" title="分页和分段"></a>分页和分段</h2><p>Page Table Entry(PTE)</p>
-<p>Physical Page Number(PPN)</p>
-<blockquote>
-<p>参考文章：</p>
-<p><a class="link"   href="https://zhuanlan.zhihu.com/p/270577411" >https://zhuanlan.zhihu.com/p/270577411<i class="fas fa-external-link-alt"></i></a></p>
-<p><a class="link"   href="https://www.cnblogs.com/MiaoMiaoGarden/p/15655962.html" >MIT6.S081 LAB3 pagetable &amp; virtual memory - 妙妙园 - 博客园 (cnblogs.com)<i class="fas fa-external-link-alt"></i></a></p>
-<p><a class="link"   href="https://zhuanlan.zhihu.com/p/559740388" >csapp L21 - 虚拟内存：基础 - 知乎 (zhihu.com)<i class="fas fa-external-link-alt"></i></a></p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>体系结构</tag>
       </tags>
   </entry>
   <entry>
@@ -238,36 +238,6 @@
       </tags>
   </entry>
   <entry>
-    <title>斯坦福编程范式公开课第十节：栈与函数调用</title>
-    <url>/2024/05/06/%E6%96%AF%E5%9D%A6%E7%A6%8F10/</url>
-    <content><![CDATA[<h3 id="第10节：栈与函数调用"><a href="#第10节：栈与函数调用" class="headerlink" title="第10节：栈与函数调用"></a>第10节：栈与函数调用</h3><ul>
-<li>函数传入的参数为什么还要保存到栈中呢。现代的编译器貌似并不是这么操作的</li>
-</ul>
-<p>​		riscv64-gcc是直接将参数传入a0,a1寄存器，然后调用函数，不需要再存到内存中去</p>
-<ul>
-<li>PC寄存器的值也需要保存，相当于riscv中的ra寄存器的作用&#x2F;&#x2F;不对</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数调用中栈的活动记录</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">(<span class="type">int</span> bar,<span class="type">int</span> * baz)</span>&#123;</span><br><span class="line">    <span class="type">char</span> snink[<span class="number">4</span>];</span><br><span class="line">    <span class="type">short</span> *why;</span><br><span class="line">    why=(<span class="type">short</span>*)(snink+<span class="number">2</span>);</span><br><span class="line">    *why=<span class="number">50</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>* argv)</span>&#123;</span><br><span class="line">    <span class="type">int</span> i=<span class="number">4</span>;</span><br><span class="line">    foo(i,&amp;i);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">main:</span><br><span class="line">SP=SP<span class="number">-4</span>;<span class="comment">//最开始SP指向栈顶,也就是第一个saved PC</span></span><br><span class="line">M[SP]=<span class="number">4</span>;</span><br><span class="line"><span class="comment">//Params</span></span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">R1=M[SP+<span class="number">8</span>];</span><br><span class="line">R2=SP+<span class="number">8</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">M[SP+<span class="number">4</span>]=R2;</span><br><span class="line">CALL&lt;foo&gt;;<span class="comment">//当call指令执行的时候，会自动将PC-4，并存起来，也就是第二个saved PC</span></span><br><span class="line">SP=SP+<span class="number">8</span>;</span><br><span class="line">RV=<span class="number">0</span>;</span><br><span class="line">foo:</span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">R1=SP+<span class="number">6</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">R1=M[SP];</span><br><span class="line">M[R1]=<span class="number">.2</span> <span class="number">50</span>;</span><br><span class="line">sp=sp+<span class="number">8</span>;</span><br><span class="line">RET;<span class="comment">//与call类似，执行ret的时候也会将saved PC呢块地址自动的进行一个PC+4</span></span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">┌───────────────┐</span><br><span class="line">│               │	argv</span><br><span class="line">├───────────────┤	</span><br><span class="line">│       <span class="number">2</span>       │	argc</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤</span><br><span class="line">│       <span class="number">4</span>       │	i</span><br><span class="line">├───────────────┤</span><br><span class="line">│      &amp;i       │	baz</span><br><span class="line">├───────────────┤</span><br><span class="line">│       <span class="number">4</span>       │	bar</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───┼───┼───┼───┤</span><br><span class="line">│   │   │   │   │	snink[<span class="number">0</span>,,<span class="number">3</span>]</span><br><span class="line">├───┴───┴───┴───┤</span><br><span class="line">│               │	why</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
-
-<img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/05/06/%E6%96%AF%E5%9D%A6%E7%A6%8F10/1715912901808.png"
-                      class="" width="1715912901808"
-                >
-
-<ul>
-<li>从baz以后的变量控制权都交给了foo函数<br>baz和bar是传入参数，属于caller<br>sinik[]和why属于局部变量，属于callee<br>只有调用者才知道怎样将有意义的参数值写入内存，因此必须一个空间一个空间的申请，而不是直接全部由main函数申请。</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//递归函数中栈的活动记录</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fact</span><span class="params">(<span class="type">int</span> n)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>)return1;</span><br><span class="line">    <span class="keyword">return</span> n*fact(n<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">&lt;fact&gt;:</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">BNE R1,<span class="number">0</span>,PC+<span class="number">12</span>;<span class="comment">//PC指的就是当前这条指令，在有些情况下在执行BNE这条指令时PC已经+4了，这里假设PC不变</span></span><br><span class="line">RV=<span class="number">1</span>;</span><br><span class="line">RET;</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">R1=R1<span class="number">-1</span>;</span><br><span class="line">SP=SP<span class="number">-4</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">CALL&lt;fact&gt;;</span><br><span class="line">SP=SP+<span class="number">4</span>;</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">RV=RV*R1;</span><br></pre></td></tr></table></figure>
-
-<p>call是一个占位符，在Linked其中会赋予真正的汇编代码含义。这样做的好处是不同文件一块编译的时候更加方便相对数值的计算</p>
-]]></content>
-      <tags>
-        <tag>斯坦福编程范式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>斯坦福编程范式公开课第一节：课程大纲</title>
     <url>/2024/05/01/%E6%96%AF%E5%9D%A6%E7%A6%8F1/</url>
     <content><![CDATA[<h3 id="第1节：课程大纲"><a href="#第1节：课程大纲" class="headerlink" title="第1节：课程大纲"></a>第1节：课程大纲</h3><p><strong>编程语言</strong></p>
@@ -300,9 +270,34 @@
       </tags>
   </entry>
   <entry>
-    <title></title>
-    <url>/2024/07/13/%E5%B8%B8%E8%A7%81%E6%80%BB%E7%BA%BF/</url>
-    <content><![CDATA[]]></content>
+    <title>斯坦福编程范式公开课第十节：栈与函数调用</title>
+    <url>/2024/05/06/%E6%96%AF%E5%9D%A6%E7%A6%8F10/</url>
+    <content><![CDATA[<h3 id="第10节：栈与函数调用"><a href="#第10节：栈与函数调用" class="headerlink" title="第10节：栈与函数调用"></a>第10节：栈与函数调用</h3><ul>
+<li>函数传入的参数为什么还要保存到栈中呢。现代的编译器貌似并不是这么操作的</li>
+</ul>
+<p>​		riscv64-gcc是直接将参数传入a0,a1寄存器，然后调用函数，不需要再存到内存中去</p>
+<ul>
+<li>PC寄存器的值也需要保存，相当于riscv中的ra寄存器的作用&#x2F;&#x2F;不对</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//函数调用中栈的活动记录</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">(<span class="type">int</span> bar,<span class="type">int</span> * baz)</span>&#123;</span><br><span class="line">    <span class="type">char</span> snink[<span class="number">4</span>];</span><br><span class="line">    <span class="type">short</span> *why;</span><br><span class="line">    why=(<span class="type">short</span>*)(snink+<span class="number">2</span>);</span><br><span class="line">    *why=<span class="number">50</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>* argv)</span>&#123;</span><br><span class="line">    <span class="type">int</span> i=<span class="number">4</span>;</span><br><span class="line">    foo(i,&amp;i);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">main:</span><br><span class="line">SP=SP<span class="number">-4</span>;<span class="comment">//最开始SP指向栈顶,也就是第一个saved PC</span></span><br><span class="line">M[SP]=<span class="number">4</span>;</span><br><span class="line"><span class="comment">//Params</span></span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">R1=M[SP+<span class="number">8</span>];</span><br><span class="line">R2=SP+<span class="number">8</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">M[SP+<span class="number">4</span>]=R2;</span><br><span class="line">CALL&lt;foo&gt;;<span class="comment">//当call指令执行的时候，会自动将PC-4，并存起来，也就是第二个saved PC</span></span><br><span class="line">SP=SP+<span class="number">8</span>;</span><br><span class="line">RV=<span class="number">0</span>;</span><br><span class="line">foo:</span><br><span class="line">SP=SP<span class="number">-8</span>;</span><br><span class="line">R1=SP+<span class="number">6</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">R1=M[SP];</span><br><span class="line">M[R1]=<span class="number">.2</span> <span class="number">50</span>;</span><br><span class="line">sp=sp+<span class="number">8</span>;</span><br><span class="line">RET;<span class="comment">//与call类似，执行ret的时候也会将saved PC呢块地址自动的进行一个PC+4</span></span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">┌───────────────┐</span><br><span class="line">│               │	argv</span><br><span class="line">├───────────────┤	</span><br><span class="line">│       <span class="number">2</span>       │	argc</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤</span><br><span class="line">│       <span class="number">4</span>       │	i</span><br><span class="line">├───────────────┤</span><br><span class="line">│      &amp;i       │	baz</span><br><span class="line">├───────────────┤</span><br><span class="line">│       <span class="number">4</span>       │	bar</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───┼───┼───┼───┤</span><br><span class="line">│   │   │   │   │	snink[<span class="number">0</span>,,<span class="number">3</span>]</span><br><span class="line">├───┴───┴───┴───┤</span><br><span class="line">│               │	why</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
+
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/05/06/%E6%96%AF%E5%9D%A6%E7%A6%8F10/1715912901808.png"
+                      class="" width="1715912901808"
+                >
+
+<ul>
+<li>从baz以后的变量控制权都交给了foo函数<br>baz和bar是传入参数，属于caller<br>sinik[]和why属于局部变量，属于callee<br>只有调用者才知道怎样将有意义的参数值写入内存，因此必须一个空间一个空间的申请，而不是直接全部由main函数申请。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//递归函数中栈的活动记录</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fact</span><span class="params">(<span class="type">int</span> n)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">0</span>)return1;</span><br><span class="line">    <span class="keyword">return</span> n*fact(n<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line">&lt;fact&gt;:</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">BNE R1,<span class="number">0</span>,PC+<span class="number">12</span>;<span class="comment">//PC指的就是当前这条指令，在有些情况下在执行BNE这条指令时PC已经+4了，这里假设PC不变</span></span><br><span class="line">RV=<span class="number">1</span>;</span><br><span class="line">RET;</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">R1=R1<span class="number">-1</span>;</span><br><span class="line">SP=SP<span class="number">-4</span>;</span><br><span class="line">M[SP]=R1;</span><br><span class="line">CALL&lt;fact&gt;;</span><br><span class="line">SP=SP+<span class="number">4</span>;</span><br><span class="line">R1=M[SP+<span class="number">4</span>];</span><br><span class="line">RV=RV*R1;</span><br></pre></td></tr></table></figure>
+
+<p>call是一个占位符，在Linked其中会赋予真正的汇编代码含义。这样做的好处是不同文件一块编译的时候更加方便相对数值的计算</p>
+]]></content>
+      <tags>
+        <tag>斯坦福编程范式</tag>
+      </tags>
   </entry>
   <entry>
     <title>斯坦福编程范式公开课第十一节：指针与引用</title>
@@ -340,6 +335,11 @@
       <tags>
         <tag>斯坦福编程范式</tag>
       </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2024/07/13/%E5%B8%B8%E8%A7%81%E6%80%BB%E7%BA%BF/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>斯坦福编程范式公开课第十二节：预处理器</title>
@@ -405,6 +405,21 @@
 
 <p> <strong>数组访问溢出:</strong></p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//例1</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="type">short</span> arr[<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=<span class="number">4</span>;i++)&#123;</span><br><span class="line">        arr[i]=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//访问arr[0]-arr[3]正常，但当i=4，访问的是arr[4]也就是i变量所在地址</span></span><br><span class="line"><span class="comment">//如果是大端系统，那么会将i赋值为0</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│ <span class="number">0</span>   <span class="number">0</span>   <span class="number">0</span>   <span class="number">4</span> │	i</span><br><span class="line">├───┼───┼───┼───┤</span><br><span class="line">│ <span class="number">0</span> │ <span class="number">0</span> │ <span class="number">0</span> │ <span class="number">0</span> │	arr[<span class="number">3</span>,<span class="number">0</span>]</span><br><span class="line">├───┴───┴───┴───┤</span><br><span class="line">│               │	why</span><br><span class="line">└───┴───┴───┴───┘</span><br><span class="line"><span class="comment">//例2</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="built_in">array</span>[<span class="number">4</span>];</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=<span class="number">4</span>;i++)&#123;</span><br><span class="line">    <span class="built_in">array</span>[i]-=<span class="number">4</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//访问arr[0]-arr[3]正常，但当i=4，访问的是arr[4]也就是saved PC所在地址</span></span><br><span class="line"><span class="comment">//saved PC会-4，saved PC本来应该指向CALL &lt;foo&gt;函数后面的第一条指令</span></span><br><span class="line"><span class="comment">//-4之后却又指向了CALL &lt;foo&gt;造成了无限递归</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">3</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">2</span>]	</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">1</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">0</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	i</span><br><span class="line">└───┴───┴───┴───┘</span><br><span class="line"></span><br><span class="line"><span class="comment">//这些只会在比较古老的版本中发生，现代的编译器会通过__stack_chk_guard来保护数组避免溢出</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>斯坦福编程范式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>斯坦福编程范式公开课第十五节：并发编程</title>
+    <url>/2024/05/11/%E6%96%AF%E5%9D%A6%E7%A6%8F15/</url>
+    <content><![CDATA[<h3 id="第15节：并发编程"><a href="#第15节：并发编程" class="headerlink" title="第15节：并发编程"></a>第15节：并发编程</h3><p>这里的并发性更多是让程序在执行时具有并发性，对于服务器以及UI界面等应用，可以让用户有更好的体验。</p>
+<p>而不是针对于多核cpu的并行计算（并行和并发的区别），并行需要物理上拥有多核CPU。 </p>
+<p><strong>进程切换：</strong></p>
+<p>多线程实例：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//10个代理，每人卖15张票</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        SellTickets(agent,numTickets/numAgents);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agentID,<span class="type">int</span> numTicketToSell)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>(numTicketsToSell&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        numTicketToSell--;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;</span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//使用Thread包来进行并发</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    InitThreadPackage(<span class="literal">false</span>);<span class="comment">//false代表不打印调试信息</span></span><br><span class="line"> 	<span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        <span class="type">char</span> name[<span class="number">32</span>];</span><br><span class="line">        <span class="built_in">sprintf</span>(name,<span class="string">&quot;Agent%d Thread&quot;</span>,agent);</span><br><span class="line">        ThreadNew(name,SellTickets,<span class="number">2</span>,agent,numTickets/numAgents);<span class="comment">//将函数加入各个线程</span></span><br><span class="line">    &#125;</span><br><span class="line">    RunAllThread();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agentID,<span class="type">int</span> numTicketToSell)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>(numTicketsToSell&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        numTicketToSell--;</span><br><span class="line">        <span class="keyword">if</span>(RandomChance(<span class="number">0.1</span>))ThreadSleep(<span class="number">1000</span>);<span class="comment">//10分之一的概率该线程停止1s</span></span><br><span class="line">    &#125; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;<span class="comment">//这里的thread相关函数貌似并不是现实中c标准库中的函数，可运行的代码在tk/stanford/thread</span></span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//十个代理共享150张票</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agent,<span class="type">int</span> *numTicketp)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span>(*numTicketsp&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        *numTicketp--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;<span class="comment">//会导致最后一张票被十个人卖，也就是一共卖了159张票</span></span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//加入信号量来控制线程的访问</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    Semaphore lock = SemaphoreNOW(<span class="number">-1</span>,<span class="number">1</span>);</span><br><span class="line">    InitThreadPackage(<span class="literal">false</span>);<span class="comment">//false代表不打印调试信息</span></span><br><span class="line"> 	<span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        <span class="type">char</span> name[<span class="number">32</span>];</span><br><span class="line">        <span class="built_in">sprintf</span>(name,<span class="string">&quot;Agent%d Thread&quot;</span>,agent);</span><br><span class="line">        ThreadNew(name,SellTickets,<span class="number">3</span>,agent,&amp;numTickets,lock);<span class="comment">//将函数加入各个线程</span></span><br><span class="line">    &#125;</span><br><span class="line">    RunAllThread();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agent,<span class="type">int</span> *numTicketp,Semaphore lock)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        SemaphoreWait(lock);</span><br><span class="line">        <span class="keyword">if</span>(*numTicketp==<span class="number">0</span>)<span class="keyword">break</span>;</span><br><span class="line">        (*numTicketp)--;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        SemaphoreSignal(lock);</span><br><span class="line">    &#125;</span><br><span class="line">	SemaphoreSignal(lock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>时间片(time slice)：</p>
 ]]></content>
       <tags>
         <tag>斯坦福编程范式</tag>
@@ -566,21 +581,6 @@
 </ul>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> *<span class="title function_">bsearch</span><span class="params">(<span class="type">void</span> *key,<span class="type">void</span> *base,<span class="type">int</span> n,<span class="type">int</span> elemSize,<span class="type">int</span>(*cmpfn)(<span class="type">void</span> *,<span class="type">void</span> *))</span></span><br></pre></td></tr></table></figure>
 
-]]></content>
-      <tags>
-        <tag>斯坦福编程范式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>斯坦福编程范式公开课第十五节：并发编程</title>
-    <url>/2024/05/11/%E6%96%AF%E5%9D%A6%E7%A6%8F15/</url>
-    <content><![CDATA[<h3 id="第15节：并发编程"><a href="#第15节：并发编程" class="headerlink" title="第15节：并发编程"></a>第15节：并发编程</h3><p>这里的并发性更多是让程序在执行时具有并发性，对于服务器以及UI界面等应用，可以让用户有更好的体验。</p>
-<p>而不是针对于多核cpu的并行计算（并行和并发的区别），并行需要物理上拥有多核CPU。 </p>
-<p><strong>进程切换：</strong></p>
-<p>多线程实例：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//10个代理，每人卖15张票</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        SellTickets(agent,numTickets/numAgents);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agentID,<span class="type">int</span> numTicketToSell)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>(numTicketsToSell&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        numTicketToSell--;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;</span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//使用Thread包来进行并发</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    InitThreadPackage(<span class="literal">false</span>);<span class="comment">//false代表不打印调试信息</span></span><br><span class="line"> 	<span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        <span class="type">char</span> name[<span class="number">32</span>];</span><br><span class="line">        <span class="built_in">sprintf</span>(name,<span class="string">&quot;Agent%d Thread&quot;</span>,agent);</span><br><span class="line">        ThreadNew(name,SellTickets,<span class="number">2</span>,agent,numTickets/numAgents);<span class="comment">//将函数加入各个线程</span></span><br><span class="line">    &#125;</span><br><span class="line">    RunAllThread();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agentID,<span class="type">int</span> numTicketToSell)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>(numTicketsToSell&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        numTicketToSell--;</span><br><span class="line">        <span class="keyword">if</span>(RandomChance(<span class="number">0.1</span>))ThreadSleep(<span class="number">1000</span>);<span class="comment">//10分之一的概率该线程停止1s</span></span><br><span class="line">    &#125; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;<span class="comment">//这里的thread相关函数貌似并不是现实中c标准库中的函数，可运行的代码在tk/stanford/thread</span></span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//十个代理共享150张票</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agent,<span class="type">int</span> *numTicketp)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span>(*numTicketsp&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        *numTicketp--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;<span class="comment">//会导致最后一张票被十个人卖，也就是一共卖了159张票</span></span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//加入信号量来控制线程的访问</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    Semaphore lock = SemaphoreNOW(<span class="number">-1</span>,<span class="number">1</span>);</span><br><span class="line">    InitThreadPackage(<span class="literal">false</span>);<span class="comment">//false代表不打印调试信息</span></span><br><span class="line"> 	<span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        <span class="type">char</span> name[<span class="number">32</span>];</span><br><span class="line">        <span class="built_in">sprintf</span>(name,<span class="string">&quot;Agent%d Thread&quot;</span>,agent);</span><br><span class="line">        ThreadNew(name,SellTickets,<span class="number">3</span>,agent,&amp;numTickets,lock);<span class="comment">//将函数加入各个线程</span></span><br><span class="line">    &#125;</span><br><span class="line">    RunAllThread();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agent,<span class="type">int</span> *numTicketp,Semaphore lock)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        SemaphoreWait(lock);</span><br><span class="line">        <span class="keyword">if</span>(*numTicketp==<span class="number">0</span>)<span class="keyword">break</span>;</span><br><span class="line">        (*numTicketp)--;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        SemaphoreSignal(lock);</span><br><span class="line">    &#125;</span><br><span class="line">	SemaphoreSignal(lock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>时间片(time slice)：</p>
 ]]></content>
       <tags>
         <tag>斯坦福编程范式</tag>
