@@ -187,7 +187,7 @@
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2024-07-13 20:26:05</span>
+        <span class="pc">2024-07-14 17:08:15</span>
     </span>
     
     
@@ -207,7 +207,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>639 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>677 字</span>
         </span>
     
     
@@ -232,9 +232,19 @@
 
                 <h5 id="为什么需要虚拟内存"><a href="#为什么需要虚拟内存" class="headerlink" title="为什么需要虚拟内存"></a>为什么需要虚拟内存</h5><p>（1）进程之间的内存隔离性</p>
 <p>（2）实现了抽象性，为了对内存进行更好的管理</p>
-<h2 id="TLB和Page-Table"><a href="#TLB和Page-Table" class="headerlink" title="TLB和Page Table"></a>TLB和Page Table</h2><ul>
-<li><p>TLB和Page Table walks是一个电路结构，而Page Table只是一个数据结构，位于内存当中。</p>
-</li>
+<h2 id="TLB和Page-Table的含义"><a href="#TLB和Page-Table的含义" class="headerlink" title="TLB和Page Table的含义"></a>TLB和Page Table的含义</h2><ul>
+<li>Translation lookaside Buffer（TLB）和Table walks units（TWU）是一个电路结构，而Page Table只是一个数据结构，位于内存当中。</li>
+</ul>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/2.png"
+                      class="" width="2"
+                >
+
+
+
+<ul>
 <li><p>TLB是Page Table的缓存</p>
 </li>
 <li><p>不同的进程拥有不同的PageTable，由satp寄存器进行切换，satp寄存器中存储的是指向页表的指针</p>
@@ -254,6 +264,8 @@
                       class="" width="1"
                 >
 
+
+
 <h4 id="为什么要分多级页表："><a href="#为什么要分多级页表：" class="headerlink" title="为什么要分多级页表："></a>为什么要分多级页表：</h4><p>​	如果不分页，一个页表会有2^27个entry(页表项)(index的长度为27)，每个进程一个页表，很快就会将内存占满。所以实际上页表是由多级组成，虚拟地址中的index的27bit实际上分为三层索引(L2,L1,L0)，每层9bit，也被称为3个page directory</p>
 <p>​	但实际上这种方法仍然最大可以拥有2^27个entry(页表项)</p>
 <p>​	这种方式的主要优点是，如果地址空间中大部分地址都没有使用，你不必为每一个index准备一个entry。举个例子，如果你的地址空间只使用了一个page，4096Bytes。</p>
@@ -262,12 +274,16 @@
 <p>​	减少了由于没使用带来的内存占用，</p>
 <p>ps：如果多级页表全部占满的情况下占多少entry的大小：</p>
 <p>​		512（一级）+512x512（二级）+512x512x512（三级）&#x3D;2^9+2^18+2^27</p>
-<h4 id="Page-Table-walk："><a href="#Page-Table-walk：" class="headerlink" title="Page Table walk："></a>Page Table walk：</h4><h2 id="分页和分段"><a href="#分页和分段" class="headerlink" title="分页和分段"></a>分页和分段</h2><p>Page Table Entry(PTE)</p>
+<h4 id="Page-Table-walk（这里不考虑TLB）："><a href="#Page-Table-walk（这里不考虑TLB）：" class="headerlink" title="Page Table walk（这里不考虑TLB）："></a>Page Table walk（这里不考虑TLB）：</h4><p>​	访问流程（page hit）：</p>
+<p>​	</p>
+<p>​	访问流程（page miss）：</p>
+<h2 id="分页和分段"><a href="#分页和分段" class="headerlink" title="分页和分段"></a>分页和分段</h2><p>Page Table Entry(PTE)</p>
 <p>Physical Page Number(PPN)</p>
 <blockquote>
 <p>参考文章：</p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/270577411" >https://zhuanlan.zhihu.com/p/270577411<i class="fas fa-external-link-alt"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/MiaoMiaoGarden/p/15655962.html" >MIT6.S081 LAB3 pagetable &amp; virtual memory - 妙妙园 - 博客园 (cnblogs.com)<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/559740388" >csapp L21 - 虚拟内存：基础 - 知乎 (zhihu.com)<i class="fas fa-external-link-alt"></i></a></p>
 </blockquote>
 
             </div>
@@ -336,7 +352,7 @@
                                href="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">二维前缀和与应哟个</span>
+                                <span class="post-nav-title-item">二维前缀和与应用</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
@@ -355,7 +371,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="nav-number">1.</span> <span class="nav-text">为什么需要虚拟内存</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TLB%E5%92%8CPage-Table"><span class="nav-number"></span> <span class="nav-text">TLB和Page Table</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%88%86%E5%A4%9A%E7%BA%A7%E9%A1%B5%E8%A1%A8%EF%BC%9A"><span class="nav-number"></span> <span class="nav-text">为什么要分多级页表：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Page-Table-walk%EF%BC%9A"><span class="nav-number"></span> <span class="nav-text">Page Table walk：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E9%A1%B5%E5%92%8C%E5%88%86%E6%AE%B5"><span class="nav-number"></span> <span class="nav-text">分页和分段</span></a>
+        <ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="nav-number">1.</span> <span class="nav-text">为什么需要虚拟内存</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TLB%E5%92%8CPage-Table%E7%9A%84%E5%90%AB%E4%B9%89"><span class="nav-number"></span> <span class="nav-text">TLB和Page Table的含义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%88%86%E5%A4%9A%E7%BA%A7%E9%A1%B5%E8%A1%A8%EF%BC%9A"><span class="nav-number"></span> <span class="nav-text">为什么要分多级页表：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Page-Table-walk%EF%BC%88%E8%BF%99%E9%87%8C%E4%B8%8D%E8%80%83%E8%99%91TLB%EF%BC%89%EF%BC%9A"><span class="nav-number"></span> <span class="nav-text">Page Table walk（这里不考虑TLB）：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E9%A1%B5%E5%92%8C%E5%88%86%E6%AE%B5"><span class="nav-number"></span> <span class="nav-text">分页和分段</span></a>
     </div>
 </div>
 
