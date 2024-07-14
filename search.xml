@@ -73,15 +73,19 @@
 <p>（2）实现了抽象性，为了对内存进行更好的管理</p>
 <h2 id="TLB和Page-Table的含义"><a href="#TLB和Page-Table的含义" class="headerlink" title="TLB和Page Table的含义"></a>TLB和Page Table的含义</h2><ul>
 <li>Translation lookaside Buffer（TLB）和Table walks units（TWU）是一个电路结构，而Page Table只是一个数据结构，位于内存当中。</li>
+<li><img  
+                     lazyload
+                     alt="image"
+                     data-src="E:\Hexo\hexo-theme-keep-starter\source_posts\MMU虚拟内存管理\虚拟转物理.png"
+                      alt="虚拟转物理"
+                ></li>
 </ul>
 <img  
                      lazyload
                      alt="image"
-                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/2.png"
-                      class="" width="2"
+                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E8%99%9A%E6%8B%9F%E8%BD%AC%E7%89%A9%E7%90%86.png"
+                      class="" title="虚拟转物理"
                 >
-
-
 
 <ul>
 <li><p>TLB是Page Table的缓存</p>
@@ -93,19 +97,17 @@
 <li><p>一个虚拟地址的组成由index+offset组成，一个物理地址由PPN+offset组成。offset固定是12位，对应Page的4096Byte大小。index&#x3D;56-12&#x3D;27。PPN&#x3D;offset-12&#x3D;44 。</p>
 </li>
 <li><p>pagedirectory中的一个条目称为PTE（page table entry），是64bit（寄存器大小）。PTE由三部分组成（10+44+10），前10bit是保留字段；中间44bit是PPN，也就是物理page号，指向了一个page（或pagetable）的物理地址；最后10bit是flag，标志着指向的物理page的属性（读、写、有效…）。</p>
-<p>一个directory是4096Bytes也就是一个page的大小，一个directory有512个entry。</p>
+<p>一个directory是4096Bytes也就是一个page的大小，一个directory有512个entry</p>
 </li>
 </ul>
-<img  
+<h4 id="为什么要分多级页表："><a href="#为什么要分多级页表：" class="headerlink" title="为什么要分多级页表："></a>为什么要分多级页表：</h4><img  
                      lazyload
                      alt="image"
-                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/1.png"
-                      class="" width="1"
+                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%A4%9A%E7%BA%A7%E9%A1%B5%E8%A1%A8.png"
+                      class="" title="多级页表"
                 >
 
-
-
-<h4 id="为什么要分多级页表："><a href="#为什么要分多级页表：" class="headerlink" title="为什么要分多级页表："></a>为什么要分多级页表：</h4><p>​	如果不分页，一个页表会有2^27个entry(页表项)(index的长度为27)，每个进程一个页表，很快就会将内存占满。所以实际上页表是由多级组成，虚拟地址中的index的27bit实际上分为三层索引(L2,L1,L0)，每层9bit，也被称为3个page directory</p>
+<p>​	如果不分页，一个页表会有2^27个entry(页表项)(index的长度为27)，每个进程一个页表，很快就会将内存占满。所以实际上页表是由多级组成，虚拟地址中的index的27bit实际上分为三层索引(L2,L1,L0)，每层9bit，也被称为3个page directory</p>
 <p>​	但实际上这种方法仍然最大可以拥有2^27个entry(页表项)</p>
 <p>​	这种方式的主要优点是，如果地址空间中大部分地址都没有使用，你不必为每一个index准备一个entry。举个例子，如果你的地址空间只使用了一个page，4096Bytes。</p>
 <p>​	在最高级，你需要一个page directory。在这个page directory中，你需要一个数字是0的PTE，指向中间级page directory。所以在中间级，你也需要一个page directory，里面也是一个数字0的PTE，指向最低级page directory。所以这里总共需要3个page directory（也就是3 * 512个entry）。</p>
@@ -130,6 +132,17 @@
       </tags>
   </entry>
   <entry>
+    <title>解决hexo d 命令报错 Deploer not found git</title>
+    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
+    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
+<p>命令：</p>
+<p><code>npm insatll --save hexo-deployer-git</code></p>
+]]></content>
+      <tags>
+        <tag>Other</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>如何上传本地项目到GitHub</title>
     <url>/2023/06/17/github%E4%B8%8A%E4%BC%A0/</url>
     <content><![CDATA[<h1 id="上传本地项目到Github"><a href="#上传本地项目到Github" class="headerlink" title="上传本地项目到Github"></a>上传本地项目到Github</h1><h3 id="第一步：安装Git"><a href="#第一步：安装Git" class="headerlink" title="第一步：安装Git"></a>第一步：安装Git</h3><h3 id="第二步：创建文件夹"><a href="#第二步：创建文件夹" class="headerlink" title="第二步：创建文件夹"></a>第二步：创建文件夹</h3><p>创建一个本地项目所在的文件夹</p>
@@ -150,15 +163,9 @@
       </tags>
   </entry>
   <entry>
-    <title>解决hexo d 命令报错 Deploer not found git</title>
-    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
-    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
-<p>命令：</p>
-<p><code>npm insatll --save hexo-deployer-git</code></p>
-]]></content>
-      <tags>
-        <tag>Other</tag>
-      </tags>
+    <title></title>
+    <url>/2024/07/13/%E5%B8%B8%E8%A7%81%E6%80%BB%E7%BA%BF/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>二维前缀和与应用</title>
@@ -239,6 +246,38 @@
 ]]></content>
       <tags>
         <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>斯坦福编程范式公开课第一节：课程大纲</title>
+    <url>/2024/05/01/%E6%96%AF%E5%9D%A6%E7%A6%8F1/</url>
+    <content><![CDATA[<h3 id="第1节：课程大纲"><a href="#第1节：课程大纲" class="headerlink" title="第1节：课程大纲"></a>第1节：课程大纲</h3><p><strong>编程语言</strong></p>
+<ul>
+<li>C</li>
+<li>Assembly</li>
+<li>C++</li>
+<li>Concurrent Programming</li>
+<li>Scheme</li>
+<li>Python</li>
+</ul>
+<p><strong>编程思想</strong></p>
+<p>学习这些语言，更重要的是学习其背后的范式。即编程思想。 </p>
+<ul>
+<li><p>面向过程</p>
+<p>面向过程是一种以事件为中心的编程思想，编程的时候把解决问题的步骤分析出来，然后用函数把这些步骤实现，在一步一步的具体步骤中再按顺序调用函数。举个五子棋的例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">下五子棋&#123;</span><br><span class="line">开始游戏（）；</span><br><span class="line">黑子先走（）；</span><br><span class="line">绘制画面（）；</span><br><span class="line">判断输赢（）；</span><br><span class="line">轮到白子（）；</span><br><span class="line">绘制画面（）；</span><br><span class="line">判断输赢（）；</span><br><span class="line">返回到 黑子先走（）；</span><br><span class="line">输出最后结果；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>面向对象</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">下五子棋&#123;</span><br><span class="line">开始游戏（）；</span><br><span class="line">选手.黑落子（）；</span><br><span class="line">棋盘系统.绘制（）；</span><br><span class="line">规则系统.判断（）；</span><br><span class="line">选手.白落子（）；</span><br><span class="line">棋盘系统.绘制（）；</span><br><span class="line">规则系统.判断（）；</span><br><span class="line">循环到输出结果；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>并发编程</p>
+</li>
+<li><p>函数式编程</p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>斯坦福编程范式</tag>
       </tags>
   </entry>
   <entry>
@@ -332,38 +371,6 @@
       </tags>
   </entry>
   <entry>
-    <title>斯坦福编程范式公开课第一节：课程大纲</title>
-    <url>/2024/05/01/%E6%96%AF%E5%9D%A6%E7%A6%8F1/</url>
-    <content><![CDATA[<h3 id="第1节：课程大纲"><a href="#第1节：课程大纲" class="headerlink" title="第1节：课程大纲"></a>第1节：课程大纲</h3><p><strong>编程语言</strong></p>
-<ul>
-<li>C</li>
-<li>Assembly</li>
-<li>C++</li>
-<li>Concurrent Programming</li>
-<li>Scheme</li>
-<li>Python</li>
-</ul>
-<p><strong>编程思想</strong></p>
-<p>学习这些语言，更重要的是学习其背后的范式。即编程思想。 </p>
-<ul>
-<li><p>面向过程</p>
-<p>面向过程是一种以事件为中心的编程思想，编程的时候把解决问题的步骤分析出来，然后用函数把这些步骤实现，在一步一步的具体步骤中再按顺序调用函数。举个五子棋的例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">下五子棋&#123;</span><br><span class="line">开始游戏（）；</span><br><span class="line">黑子先走（）；</span><br><span class="line">绘制画面（）；</span><br><span class="line">判断输赢（）；</span><br><span class="line">轮到白子（）；</span><br><span class="line">绘制画面（）；</span><br><span class="line">判断输赢（）；</span><br><span class="line">返回到 黑子先走（）；</span><br><span class="line">输出最后结果；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>面向对象</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">下五子棋&#123;</span><br><span class="line">开始游戏（）；</span><br><span class="line">选手.黑落子（）；</span><br><span class="line">棋盘系统.绘制（）；</span><br><span class="line">规则系统.判断（）；</span><br><span class="line">选手.白落子（）；</span><br><span class="line">棋盘系统.绘制（）；</span><br><span class="line">规则系统.判断（）；</span><br><span class="line">循环到输出结果；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>并发编程</p>
-</li>
-<li><p>函数式编程</p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>斯坦福编程范式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>斯坦福编程范式公开课第十三节：编译与链接</title>
     <url>/2024/05/09/%E6%96%AF%E5%9D%A6%E7%A6%8F13/</url>
     <content><![CDATA[<h3 id="第13节：编译与链接"><a href="#第13节：编译与链接" class="headerlink" title="第13节：编译与链接"></a>第13节：编译与链接</h3><p><strong>complier</strong></p>
@@ -377,6 +384,48 @@
 
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//少传入参数的例子</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">memcmp</span><span class="params">(<span class="type">void</span> *v1)</span></span>&#123;</span><br><span class="line">	<span class="type">int</span> n=<span class="number">17</span>;</span><br><span class="line">    <span class="type">int</span> m=<span class="built_in">memcmp</span>(&amp;n);</span><br><span class="line">&#125; </span><br><span class="line">C: CALL&lt;memcmp&gt;</span><br><span class="line">  </span><br><span class="line">C++: CALL&lt;memcmp_void_p&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">//memcmp的函数原型</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">memcmp</span><span class="params">(<span class="type">void</span> *v1,<span class="type">void</span> *v2,<span class="type">int</span> size)</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">C++: CALL&lt;memcmp_void_p_void_p_int&gt;</span><br><span class="line">    </span><br><span class="line"><span class="comment">//与上述例子类似，在运行时，对于caller来说，输入的只有&amp;n一个参数。</span></span><br><span class="line"><span class="comment">//但是对于callee来说，memcmp会调用三个参数，会将saved PC上面的三个4byte数据当作输入参数</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│      <span class="number">17</span>       │	n</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	m</span><br><span class="line">├───────────────┤</span><br><span class="line">│      &amp;n       │		</span><br><span class="line">├───────────────┤</span><br><span class="line">│    saved PC   │	</span><br><span class="line">└───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
 
+]]></content>
+      <tags>
+        <tag>斯坦福编程范式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>斯坦福编程范式公开课第十四节：程序调试错误</title>
+    <url>/2024/05/10/%E6%96%AF%E5%9D%A6%E7%A6%8F14/</url>
+    <content><![CDATA[<h3 id="第14节：程序调试错误"><a href="#第14节：程序调试错误" class="headerlink" title="第14节：程序调试错误"></a>第14节：程序调试错误</h3><p><strong>Segmentation  faul :</strong>  </p>
+<p>访问程序内存地址之外的地址,通常由于访问了一个空地址造成，即*(NULL)</p>
+<p><strong>Bus errors:</strong> </p>
+<p>由于未对齐的读或写引起的。之所以被称为总线错误，是因为出现未对齐的内存访问请求时，被堵塞的组件就是地址总线。</p>
+<p>内存对齐是由于内存电路的特性决定的，比如DRAM一次输出64Byte到Cache，而Cache一次输出4Byte到32位CPU的寄存器中。也就是对于32位CPU而言内存访问的最小粒度为4Byte，也就是访问0x001和0x003都是访问同一个地址即[0x000-0x003].</p>
+<p>为了适应内存这一特点，减少CPU的访存次数。因此提出了内存对齐存放。</p>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/05/10/%E6%96%AF%E5%9D%A6%E7%A6%8F14/%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90.jpg"
+                      class="" title="内存对齐"
+                >
+
+<p>如图所示，定义a,b两个char类型变量和c一个int类型变量。</p>
+<p>如果不进行内存对齐，变量c会存储在两个内存访问块中，读取或写入c都需要进行两次操作，并且还可能会与a，b产生冲突。如果进行内存对齐那么只需要一次读写。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//访问未对齐地址的例子，对于某些机器会产生bus errors，但在目前通用的处理器上不会，只会导致访问效率变低</span></span><br><span class="line"><span class="type">void</span> *vp=---;</span><br><span class="line">*(<span class="type">short</span> *)vp=<span class="number">7</span>;</span><br><span class="line">*(<span class="type">int</span> *)vp=<span class="number">55</span>;</span><br></pre></td></tr></table></figure>
+
+<p> <strong>数组访问溢出:</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//例1</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="type">short</span> arr[<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=<span class="number">4</span>;i++)&#123;</span><br><span class="line">        arr[i]=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//访问arr[0]-arr[3]正常，但当i=4，访问的是arr[4]也就是i变量所在地址</span></span><br><span class="line"><span class="comment">//如果是大端系统，那么会将i赋值为0</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│ <span class="number">0</span>   <span class="number">0</span>   <span class="number">0</span>   <span class="number">4</span> │	i</span><br><span class="line">├───┼───┼───┼───┤</span><br><span class="line">│ <span class="number">0</span> │ <span class="number">0</span> │ <span class="number">0</span> │ <span class="number">0</span> │	arr[<span class="number">3</span>,<span class="number">0</span>]</span><br><span class="line">├───┴───┴───┴───┤</span><br><span class="line">│               │	why</span><br><span class="line">└───┴───┴───┴───┘</span><br><span class="line"><span class="comment">//例2</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="built_in">array</span>[<span class="number">4</span>];</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=<span class="number">4</span>;i++)&#123;</span><br><span class="line">    <span class="built_in">array</span>[i]-=<span class="number">4</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//访问arr[0]-arr[3]正常，但当i=4，访问的是arr[4]也就是saved PC所在地址</span></span><br><span class="line"><span class="comment">//saved PC会-4，saved PC本来应该指向CALL &lt;foo&gt;函数后面的第一条指令</span></span><br><span class="line"><span class="comment">//-4之后却又指向了CALL &lt;foo&gt;造成了无限递归</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">3</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">2</span>]	</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">1</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">0</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	i</span><br><span class="line">└───┴───┴───┴───┘</span><br><span class="line"></span><br><span class="line"><span class="comment">//这些只会在比较古老的版本中发生，现代的编译器会通过__stack_chk_guard来保护数组避免溢出</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>斯坦福编程范式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>斯坦福编程范式公开课第十五节：并发编程</title>
+    <url>/2024/05/11/%E6%96%AF%E5%9D%A6%E7%A6%8F15/</url>
+    <content><![CDATA[<h3 id="第15节：并发编程"><a href="#第15节：并发编程" class="headerlink" title="第15节：并发编程"></a>第15节：并发编程</h3><p>这里的并发性更多是让程序在执行时具有并发性，对于服务器以及UI界面等应用，可以让用户有更好的体验。</p>
+<p>而不是针对于多核cpu的并行计算（并行和并发的区别），并行需要物理上拥有多核CPU。 </p>
+<p><strong>进程切换：</strong></p>
+<p>多线程实例：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//10个代理，每人卖15张票</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        SellTickets(agent,numTickets/numAgents);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agentID,<span class="type">int</span> numTicketToSell)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>(numTicketsToSell&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        numTicketToSell--;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;</span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//使用Thread包来进行并发</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    InitThreadPackage(<span class="literal">false</span>);<span class="comment">//false代表不打印调试信息</span></span><br><span class="line"> 	<span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        <span class="type">char</span> name[<span class="number">32</span>];</span><br><span class="line">        <span class="built_in">sprintf</span>(name,<span class="string">&quot;Agent%d Thread&quot;</span>,agent);</span><br><span class="line">        ThreadNew(name,SellTickets,<span class="number">2</span>,agent,numTickets/numAgents);<span class="comment">//将函数加入各个线程</span></span><br><span class="line">    &#125;</span><br><span class="line">    RunAllThread();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agentID,<span class="type">int</span> numTicketToSell)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>(numTicketsToSell&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        numTicketToSell--;</span><br><span class="line">        <span class="keyword">if</span>(RandomChance(<span class="number">0.1</span>))ThreadSleep(<span class="number">1000</span>);<span class="comment">//10分之一的概率该线程停止1s</span></span><br><span class="line">    &#125; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;<span class="comment">//这里的thread相关函数貌似并不是现实中c标准库中的函数，可运行的代码在tk/stanford/thread</span></span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//十个代理共享150张票</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agent,<span class="type">int</span> *numTicketp)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span>(*numTicketsp&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        *numTicketp--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;<span class="comment">//会导致最后一张票被十个人卖，也就是一共卖了159张票</span></span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//加入信号量来控制线程的访问</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    Semaphore lock = SemaphoreNOW(<span class="number">-1</span>,<span class="number">1</span>);</span><br><span class="line">    InitThreadPackage(<span class="literal">false</span>);<span class="comment">//false代表不打印调试信息</span></span><br><span class="line"> 	<span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        <span class="type">char</span> name[<span class="number">32</span>];</span><br><span class="line">        <span class="built_in">sprintf</span>(name,<span class="string">&quot;Agent%d Thread&quot;</span>,agent);</span><br><span class="line">        ThreadNew(name,SellTickets,<span class="number">3</span>,agent,&amp;numTickets,lock);<span class="comment">//将函数加入各个线程</span></span><br><span class="line">    &#125;</span><br><span class="line">    RunAllThread();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agent,<span class="type">int</span> *numTicketp,Semaphore lock)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        SemaphoreWait(lock);</span><br><span class="line">        <span class="keyword">if</span>(*numTicketp==<span class="number">0</span>)<span class="keyword">break</span>;</span><br><span class="line">        (*numTicketp)--;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        SemaphoreSignal(lock);</span><br><span class="line">    &#125;</span><br><span class="line">	SemaphoreSignal(lock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>时间片(time slice)：</p>
 ]]></content>
       <tags>
         <tag>斯坦福编程范式</tag>
@@ -502,53 +551,6 @@
       </tags>
   </entry>
   <entry>
-    <title>斯坦福编程范式公开课第十五节：并发编程</title>
-    <url>/2024/05/11/%E6%96%AF%E5%9D%A6%E7%A6%8F15/</url>
-    <content><![CDATA[<h3 id="第15节：并发编程"><a href="#第15节：并发编程" class="headerlink" title="第15节：并发编程"></a>第15节：并发编程</h3><p>这里的并发性更多是让程序在执行时具有并发性，对于服务器以及UI界面等应用，可以让用户有更好的体验。</p>
-<p>而不是针对于多核cpu的并行计算（并行和并发的区别），并行需要物理上拥有多核CPU。 </p>
-<p><strong>进程切换：</strong></p>
-<p>多线程实例：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//10个代理，每人卖15张票</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        SellTickets(agent,numTickets/numAgents);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agentID,<span class="type">int</span> numTicketToSell)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>(numTicketsToSell&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        numTicketToSell--;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;</span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//使用Thread包来进行并发</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    InitThreadPackage(<span class="literal">false</span>);<span class="comment">//false代表不打印调试信息</span></span><br><span class="line"> 	<span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        <span class="type">char</span> name[<span class="number">32</span>];</span><br><span class="line">        <span class="built_in">sprintf</span>(name,<span class="string">&quot;Agent%d Thread&quot;</span>,agent);</span><br><span class="line">        ThreadNew(name,SellTickets,<span class="number">2</span>,agent,numTickets/numAgents);<span class="comment">//将函数加入各个线程</span></span><br><span class="line">    &#125;</span><br><span class="line">    RunAllThread();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agentID,<span class="type">int</span> numTicketToSell)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>(numTicketsToSell&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        numTicketToSell--;</span><br><span class="line">        <span class="keyword">if</span>(RandomChance(<span class="number">0.1</span>))ThreadSleep(<span class="number">1000</span>);<span class="comment">//10分之一的概率该线程停止1s</span></span><br><span class="line">    &#125; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;<span class="comment">//这里的thread相关函数貌似并不是现实中c标准库中的函数，可运行的代码在tk/stanford/thread</span></span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//十个代理共享150张票</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agent,<span class="type">int</span> *numTicketp)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span>(*numTicketsp&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        *numTicketp--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;<span class="comment">//会导致最后一张票被十个人卖，也就是一共卖了159张票</span></span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//加入信号量来控制线程的访问</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    Semaphore lock = SemaphoreNOW(<span class="number">-1</span>,<span class="number">1</span>);</span><br><span class="line">    InitThreadPackage(<span class="literal">false</span>);<span class="comment">//false代表不打印调试信息</span></span><br><span class="line"> 	<span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        <span class="type">char</span> name[<span class="number">32</span>];</span><br><span class="line">        <span class="built_in">sprintf</span>(name,<span class="string">&quot;Agent%d Thread&quot;</span>,agent);</span><br><span class="line">        ThreadNew(name,SellTickets,<span class="number">3</span>,agent,&amp;numTickets,lock);<span class="comment">//将函数加入各个线程</span></span><br><span class="line">    &#125;</span><br><span class="line">    RunAllThread();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agent,<span class="type">int</span> *numTicketp,Semaphore lock)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        SemaphoreWait(lock);</span><br><span class="line">        <span class="keyword">if</span>(*numTicketp==<span class="number">0</span>)<span class="keyword">break</span>;</span><br><span class="line">        (*numTicketp)--;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        SemaphoreSignal(lock);</span><br><span class="line">    &#125;</span><br><span class="line">	SemaphoreSignal(lock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>时间片(time slice)：</p>
-]]></content>
-      <tags>
-        <tag>斯坦福编程范式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title></title>
-    <url>/2024/07/13/%E5%B8%B8%E8%A7%81%E6%80%BB%E7%BA%BF/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>斯坦福编程范式公开课第十四节：程序调试错误</title>
-    <url>/2024/05/10/%E6%96%AF%E5%9D%A6%E7%A6%8F14/</url>
-    <content><![CDATA[<h3 id="第14节：程序调试错误"><a href="#第14节：程序调试错误" class="headerlink" title="第14节：程序调试错误"></a>第14节：程序调试错误</h3><p><strong>Segmentation  faul :</strong>  </p>
-<p>访问程序内存地址之外的地址,通常由于访问了一个空地址造成，即*(NULL)</p>
-<p><strong>Bus errors:</strong> </p>
-<p>由于未对齐的读或写引起的。之所以被称为总线错误，是因为出现未对齐的内存访问请求时，被堵塞的组件就是地址总线。</p>
-<p>内存对齐是由于内存电路的特性决定的，比如DRAM一次输出64Byte到Cache，而Cache一次输出4Byte到32位CPU的寄存器中。也就是对于32位CPU而言内存访问的最小粒度为4Byte，也就是访问0x001和0x003都是访问同一个地址即[0x000-0x003].</p>
-<p>为了适应内存这一特点，减少CPU的访存次数。因此提出了内存对齐存放。</p>
-<img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/05/10/%E6%96%AF%E5%9D%A6%E7%A6%8F14/%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90.jpg"
-                      class="" title="内存对齐"
-                >
-
-<p>如图所示，定义a,b两个char类型变量和c一个int类型变量。</p>
-<p>如果不进行内存对齐，变量c会存储在两个内存访问块中，读取或写入c都需要进行两次操作，并且还可能会与a，b产生冲突。如果进行内存对齐那么只需要一次读写。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//访问未对齐地址的例子，对于某些机器会产生bus errors，但在目前通用的处理器上不会，只会导致访问效率变低</span></span><br><span class="line"><span class="type">void</span> *vp=---;</span><br><span class="line">*(<span class="type">short</span> *)vp=<span class="number">7</span>;</span><br><span class="line">*(<span class="type">int</span> *)vp=<span class="number">55</span>;</span><br></pre></td></tr></table></figure>
-
-<p> <strong>数组访问溢出:</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//例1</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="type">short</span> arr[<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=<span class="number">4</span>;i++)&#123;</span><br><span class="line">        arr[i]=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//访问arr[0]-arr[3]正常，但当i=4，访问的是arr[4]也就是i变量所在地址</span></span><br><span class="line"><span class="comment">//如果是大端系统，那么会将i赋值为0</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│ <span class="number">0</span>   <span class="number">0</span>   <span class="number">0</span>   <span class="number">4</span> │	i</span><br><span class="line">├───┼───┼───┼───┤</span><br><span class="line">│ <span class="number">0</span> │ <span class="number">0</span> │ <span class="number">0</span> │ <span class="number">0</span> │	arr[<span class="number">3</span>,<span class="number">0</span>]</span><br><span class="line">├───┴───┴───┴───┤</span><br><span class="line">│               │	why</span><br><span class="line">└───┴───┴───┴───┘</span><br><span class="line"><span class="comment">//例2</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="built_in">array</span>[<span class="number">4</span>];</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=<span class="number">4</span>;i++)&#123;</span><br><span class="line">    <span class="built_in">array</span>[i]-=<span class="number">4</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//访问arr[0]-arr[3]正常，但当i=4，访问的是arr[4]也就是saved PC所在地址</span></span><br><span class="line"><span class="comment">//saved PC会-4，saved PC本来应该指向CALL &lt;foo&gt;函数后面的第一条指令</span></span><br><span class="line"><span class="comment">//-4之后却又指向了CALL &lt;foo&gt;造成了无限递归</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">3</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">2</span>]	</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">1</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">0</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	i</span><br><span class="line">└───┴───┴───┴───┘</span><br><span class="line"></span><br><span class="line"><span class="comment">//这些只会在比较古老的版本中发生，现代的编译器会通过__stack_chk_guard来保护数组避免溢出</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>斯坦福编程范式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>斯坦福编程范式公开课第四，五节：“函数”泛化</title>
     <url>/2024/05/03/%E6%96%AF%E5%9D%A6%E7%A6%8F4,5/</url>
     <content><![CDATA[<h3 id="第4-5节：函数泛化"><a href="#第4-5节：函数泛化" class="headerlink" title="第4,5节：函数泛化"></a>第4,5节：函数泛化</h3><p><strong>泛型指针</strong></p>
@@ -617,6 +619,56 @@
 <p>动态：MyClass* obj2 &#x3D; new MyClass(10);</p>
 </li>
 </ul>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>斯坦福编程范式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>斯坦福编程范式公开课第八，九节：堆栈的内存分配</title>
+    <url>/2024/05/05/%E6%96%AF%E5%9D%A6%E7%A6%8F8,9/</url>
+    <content><![CDATA[<h3 id="第8-9节：堆栈内存分配"><a href="#第8-9节：堆栈内存分配" class="headerlink" title="第8,9节：堆栈内存分配"></a>第8,9节：堆栈内存分配</h3><p>（这节将的都是最一些远古时期计算机管理内存的方法，现代计算机肯定有更好更复杂的方法，只学分配的机制和其中的思想就够了，不用纠结他写的伪代码和具体方案）</p>
+<ul>
+<li>堆的分配</li>
+</ul>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/05/05/%E6%96%AF%E5%9D%A6%E7%A6%8F8,9/1714204618085.png"
+                      class="" width="1714204618085"
+                >
+
+<p>​	每个被分配出去的内存块都有一个头部，记录了内存块的大小，某些还会记录后面的内存块是否空闲</p>
+<p>​	使用链表来记录堆内的空闲空间。该链表由堆的开头和结尾组成，中间节点记录了当前空闲空间的头地址，并且指向了下一个空闲空间的地址。当调用mallco时就会遍历这个链表来寻址合适的空间来分配。当调用free的时候就相当于在链表插入新的节点，当有连续的空闲空间时，节点有时候也会合并{这个链表应该也会记录空间空间的大小}</p>
+<ul>
+<li><p>堆内存压缩</p>
+<p>​	mallco函数必须分配连续的内存空间，但频繁的mallco和free内存会导致堆内存中存在大量的分散小内存碎片。堆内存压缩的目标是通过整理堆内存中的内存块，将分散的小块内存合并成更大的连续内存块，从而减少碎片化。这样做的好处是可以提高内存的利用率，避免由于碎片化导致无法满足大内存分配请求的情况。</p>
+<p>​	Mac OS 7.6通过handle来对堆内存进行压缩，即通过二级指针。如图所示，操作系统返回给用户的实际是一个指针，指向列表中指针的地址，而这个表中的指针又真正指向内存中的一片区域</p>
+<p>​	这样做的好处在于，当需要对堆内存进行压缩的时候，只需要修改列表中指针的指向就可以了，而不需要去修改用户端获取的指针。</p>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/05/05/%E6%96%AF%E5%9D%A6%E7%A6%8F8,9/1714294645239.png"
+                      class="" width="1714294645239"
+                ></li>
+</ul>
+<p>​			在操作时，有时候不希望操作系统进行压缩可以使用Handlelock来保护这块内存，类似于线程锁（见并发编程）</p>
+<ul>
+<li><p>汇编语言  </p>
+<ul>
+<li>for循环例子</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="built_in">array</span>[<span class="number">4</span>];</span><br><span class="line"><span class="type">int</span> i;</span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)&#123;</span><br><span class="line">	<span class="built_in">array</span>[i]=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">i--;</span><br><span class="line">---------------------</span><br><span class="line"><span class="comment">//伪汇编表达</span></span><br><span class="line"><span class="number">0</span>:M[R1]=<span class="number">0</span></span><br><span class="line">    <span class="comment">//i=0</span></span><br><span class="line"><span class="number">1</span>:R2=M[R1]</span><br><span class="line"><span class="number">2</span>:BGE R2,<span class="number">4</span>,PC+<span class="number">40</span></span><br><span class="line">    <span class="comment">//i&lt;4</span></span><br><span class="line"><span class="number">3</span>:R3=M[R1]</span><br><span class="line"><span class="number">4</span>:R4=R3*<span class="number">4</span></span><br><span class="line"><span class="number">5</span>:R5=R1+<span class="number">4</span></span><br><span class="line"><span class="number">6</span>:R6=R4+R5</span><br><span class="line"><span class="number">7</span>:M[R6]=<span class="number">0</span></span><br><span class="line">    <span class="comment">//array[i]=0</span></span><br><span class="line"><span class="number">8</span>:R2=M[R1]*</span><br><span class="line"><span class="number">9</span>:R2=R2+<span class="number">1</span></span><br><span class="line"><span class="number">10</span>:M[R1]=R2</span><br><span class="line">    <span class="comment">//i++</span></span><br><span class="line"><span class="number">11</span>:JMP PC<span class="number">-40</span></span><br><span class="line">    [] <span class="comment">//i-- 课程没有给出，大概就是R2=M[R1],R2=R2-1,M[R1]=R2</span></span><br><span class="line">   </span><br><span class="line">    <span class="comment">//学生提问：为什么要跳回到10行代码之前,即第1行</span></span><br><span class="line">    <span class="comment">//回答：养成写上下文无关代码的习惯，虽然这里的R2恰好是i的值，这也是for循环的统一规律，但为了保证更复杂的情况，还是需要养成习惯。</span></span><br><span class="line">    <span class="comment">//think：现代的编译器应该会对这些进行优化，不过自己写的时候这样更能避免出错</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>结构体例子</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fraction</span>&#123;</span></span><br><span class="line">    <span class="type">int</span> num;</span><br><span class="line">    <span class="type">int</span> denom;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fraction</span> <span class="title">pi</span>;</span><span class="comment">//R1存储了指向结构体低地址的一个指针</span></span><br><span class="line">pi.num=<span class="number">22</span>;	<span class="comment">//M[R1]=22</span></span><br><span class="line">pi.denom=<span class="number">7</span>;	<span class="comment">//M[R1+4]=7</span></span><br><span class="line"></span><br><span class="line">((<span class="keyword">struct</span> fraction)&amp;pi.denom)-&gt;denom=<span class="number">451</span>;	<span class="comment">//M[R1+8]=451</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//这个例子表明了对于机器以及汇编级别来说，并不关心数据的类型，只关心数据本身以及数据的地址和大小</span></span><br><span class="line">	<span class="comment">//强制类型转换只是针对编译器来设计的伎俩</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//这里是在栈上申请空间，mallco是在堆上，不过存储形式没有什么区别，只是位置不同</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指令编码</p>
+<p>讲的并不详细，直接去看riscv的编码格式就可以</p>
 </li>
 </ul>
 ]]></content>
@@ -744,56 +796,6 @@
 ]]></content>
       <tags>
         <tag>Other</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>斯坦福编程范式公开课第八，九节：堆栈的内存分配</title>
-    <url>/2024/05/05/%E6%96%AF%E5%9D%A6%E7%A6%8F8,9/</url>
-    <content><![CDATA[<h3 id="第8-9节：堆栈内存分配"><a href="#第8-9节：堆栈内存分配" class="headerlink" title="第8,9节：堆栈内存分配"></a>第8,9节：堆栈内存分配</h3><p>（这节将的都是最一些远古时期计算机管理内存的方法，现代计算机肯定有更好更复杂的方法，只学分配的机制和其中的思想就够了，不用纠结他写的伪代码和具体方案）</p>
-<ul>
-<li>堆的分配</li>
-</ul>
-<img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/05/05/%E6%96%AF%E5%9D%A6%E7%A6%8F8,9/1714204618085.png"
-                      class="" width="1714204618085"
-                >
-
-<p>​	每个被分配出去的内存块都有一个头部，记录了内存块的大小，某些还会记录后面的内存块是否空闲</p>
-<p>​	使用链表来记录堆内的空闲空间。该链表由堆的开头和结尾组成，中间节点记录了当前空闲空间的头地址，并且指向了下一个空闲空间的地址。当调用mallco时就会遍历这个链表来寻址合适的空间来分配。当调用free的时候就相当于在链表插入新的节点，当有连续的空闲空间时，节点有时候也会合并{这个链表应该也会记录空间空间的大小}</p>
-<ul>
-<li><p>堆内存压缩</p>
-<p>​	mallco函数必须分配连续的内存空间，但频繁的mallco和free内存会导致堆内存中存在大量的分散小内存碎片。堆内存压缩的目标是通过整理堆内存中的内存块，将分散的小块内存合并成更大的连续内存块，从而减少碎片化。这样做的好处是可以提高内存的利用率，避免由于碎片化导致无法满足大内存分配请求的情况。</p>
-<p>​	Mac OS 7.6通过handle来对堆内存进行压缩，即通过二级指针。如图所示，操作系统返回给用户的实际是一个指针，指向列表中指针的地址，而这个表中的指针又真正指向内存中的一片区域</p>
-<p>​	这样做的好处在于，当需要对堆内存进行压缩的时候，只需要修改列表中指针的指向就可以了，而不需要去修改用户端获取的指针。</p>
-<img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/05/05/%E6%96%AF%E5%9D%A6%E7%A6%8F8,9/1714294645239.png"
-                      class="" width="1714294645239"
-                ></li>
-</ul>
-<p>​			在操作时，有时候不希望操作系统进行压缩可以使用Handlelock来保护这块内存，类似于线程锁（见并发编程）</p>
-<ul>
-<li><p>汇编语言  </p>
-<ul>
-<li>for循环例子</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="built_in">array</span>[<span class="number">4</span>];</span><br><span class="line"><span class="type">int</span> i;</span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)&#123;</span><br><span class="line">	<span class="built_in">array</span>[i]=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">i--;</span><br><span class="line">---------------------</span><br><span class="line"><span class="comment">//伪汇编表达</span></span><br><span class="line"><span class="number">0</span>:M[R1]=<span class="number">0</span></span><br><span class="line">    <span class="comment">//i=0</span></span><br><span class="line"><span class="number">1</span>:R2=M[R1]</span><br><span class="line"><span class="number">2</span>:BGE R2,<span class="number">4</span>,PC+<span class="number">40</span></span><br><span class="line">    <span class="comment">//i&lt;4</span></span><br><span class="line"><span class="number">3</span>:R3=M[R1]</span><br><span class="line"><span class="number">4</span>:R4=R3*<span class="number">4</span></span><br><span class="line"><span class="number">5</span>:R5=R1+<span class="number">4</span></span><br><span class="line"><span class="number">6</span>:R6=R4+R5</span><br><span class="line"><span class="number">7</span>:M[R6]=<span class="number">0</span></span><br><span class="line">    <span class="comment">//array[i]=0</span></span><br><span class="line"><span class="number">8</span>:R2=M[R1]*</span><br><span class="line"><span class="number">9</span>:R2=R2+<span class="number">1</span></span><br><span class="line"><span class="number">10</span>:M[R1]=R2</span><br><span class="line">    <span class="comment">//i++</span></span><br><span class="line"><span class="number">11</span>:JMP PC<span class="number">-40</span></span><br><span class="line">    [] <span class="comment">//i-- 课程没有给出，大概就是R2=M[R1],R2=R2-1,M[R1]=R2</span></span><br><span class="line">   </span><br><span class="line">    <span class="comment">//学生提问：为什么要跳回到10行代码之前,即第1行</span></span><br><span class="line">    <span class="comment">//回答：养成写上下文无关代码的习惯，虽然这里的R2恰好是i的值，这也是for循环的统一规律，但为了保证更复杂的情况，还是需要养成习惯。</span></span><br><span class="line">    <span class="comment">//think：现代的编译器应该会对这些进行优化，不过自己写的时候这样更能避免出错</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>结构体例子</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fraction</span>&#123;</span></span><br><span class="line">    <span class="type">int</span> num;</span><br><span class="line">    <span class="type">int</span> denom;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fraction</span> <span class="title">pi</span>;</span><span class="comment">//R1存储了指向结构体低地址的一个指针</span></span><br><span class="line">pi.num=<span class="number">22</span>;	<span class="comment">//M[R1]=22</span></span><br><span class="line">pi.denom=<span class="number">7</span>;	<span class="comment">//M[R1+4]=7</span></span><br><span class="line"></span><br><span class="line">((<span class="keyword">struct</span> fraction)&amp;pi.denom)-&gt;denom=<span class="number">451</span>;	<span class="comment">//M[R1+8]=451</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//这个例子表明了对于机器以及汇编级别来说，并不关心数据的类型，只关心数据本身以及数据的地址和大小</span></span><br><span class="line">	<span class="comment">//强制类型转换只是针对编译器来设计的伎俩</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//这里是在栈上申请空间，mallco是在堆上，不过存储形式没有什么区别，只是位置不同</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>指令编码</p>
-<p>讲的并不详细，直接去看riscv的编码格式就可以</p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>斯坦福编程范式</tag>
       </tags>
   </entry>
 </search>
