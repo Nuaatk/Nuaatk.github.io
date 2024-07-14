@@ -1,65 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>MMU虚拟内存管理</title>
-    <url>/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<h5 id="为什么需要虚拟内存"><a href="#为什么需要虚拟内存" class="headerlink" title="为什么需要虚拟内存"></a>为什么需要虚拟内存</h5><p>（1）进程之间的内存隔离性</p>
-<p>（2）实现了抽象性，为了对内存进行更好的管理</p>
-<h2 id="TLB和Page-Table的含义"><a href="#TLB和Page-Table的含义" class="headerlink" title="TLB和Page Table的含义"></a>TLB和Page Table的含义</h2><ul>
-<li>Translation lookaside Buffer（TLB）和Table walks units（TWU）是一个电路结构，而Page Table只是一个数据结构，位于内存当中。</li>
-</ul>
-<img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E8%99%9A%E6%8B%9F%E8%BD%AC%E7%89%A9%E7%90%86.png"
-                      class="" title="虚拟转物理"
-                >
-
-<ul>
-<li><p>TLB是Page Table的缓存</p>
-</li>
-<li><p>不同的进程拥有不同的PageTable，由satp寄存器进行切换，satp寄存器中存储的是指向页表的指针</p>
-</li>
-<li><p>大多数RISC-V中的物理内存地址是56bit，虚拟地址是39bit（sv39）</p>
-</li>
-<li><p>一个虚拟地址的组成由index+offset组成，一个物理地址由PPN+offset组成。offset固定是12位，对应Page的4096Byte大小。index&#x3D;56-12&#x3D;27。PPN&#x3D;offset-12&#x3D;44 。</p>
-</li>
-<li><p>pagedirectory中的一个条目称为PTE（page table entry），是64bit（寄存器大小）。PTE由三部分组成（10+44+10），前10bit是保留字段；中间44bit是PPN，也就是物理page号，指向了一个page（或pagetable）的物理地址；最后10bit是flag，标志着指向的物理page的属性（读、写、有效…）。</p>
-<p>一个directory是4096Bytes也就是一个page的大小，一个directory有512个entry</p>
-</li>
-</ul>
-<h4 id="为什么要分多级页表："><a href="#为什么要分多级页表：" class="headerlink" title="为什么要分多级页表："></a>为什么要分多级页表：</h4><img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%A4%9A%E7%BA%A7%E9%A1%B5%E8%A1%A8.png"
-                      class="" title="多级页表"
-                >
-
-<p>​	如果不分页，一个页表会有2^27个entry(页表项)(index的长度为27)，每个进程一个页表，很快就会将内存占满。所以实际上页表是由多级组成，虚拟地址中的index的27bit实际上分为三层索引(L2,L1,L0)，每层9bit，也被称为3个page directory</p>
-<p>​	但实际上这种方法仍然最大可以拥有2^27个entry(页表项)</p>
-<p>​	这种方式的主要优点是，如果地址空间中大部分地址都没有使用，你不必为每一个index准备一个entry。举个例子，如果你的地址空间只使用了一个page，4096Bytes。</p>
-<p>​	在最高级，你需要一个page directory。在这个page directory中，你需要一个数字是0的PTE，指向中间级page directory。所以在中间级，你也需要一个page directory，里面也是一个数字0的PTE，指向最低级page directory。所以这里总共需要3个page directory（也就是3 * 512个entry）。</p>
-<p>​	但是在一级页表中，需要2^27个entry。</p>
-<p>​	减少了由于没使用带来的内存占用，</p>
-<p>ps：如果多级页表全部占满的情况下占多少entry的大小：</p>
-<p>​		512（一级）+512x512（二级）+512x512x512（三级）&#x3D;2^9+2^18+2^27</p>
-<h4 id="Page-Table-walk（这里不考虑TLB）："><a href="#Page-Table-walk（这里不考虑TLB）：" class="headerlink" title="Page Table walk（这里不考虑TLB）："></a>Page Table walk（这里不考虑TLB）：</h4><p>​	访问流程（page hit）：</p>
-<p>​	</p>
-<p>​	访问流程（page miss）：</p>
-<h2 id="分页和分段"><a href="#分页和分段" class="headerlink" title="分页和分段"></a>分页和分段</h2><p>Page Table Entry(PTE)</p>
-<p>Physical Page Number(PPN)</p>
-<blockquote>
-<p>参考文章：</p>
-<p><a class="link"   href="https://zhuanlan.zhihu.com/p/270577411" >https://zhuanlan.zhihu.com/p/270577411<i class="fas fa-external-link-alt"></i></a></p>
-<p><a class="link"   href="https://www.cnblogs.com/MiaoMiaoGarden/p/15655962.html" >MIT6.S081 LAB3 pagetable &amp; virtual memory - 妙妙园 - 博客园 (cnblogs.com)<i class="fas fa-external-link-alt"></i></a></p>
-<p><a class="link"   href="https://zhuanlan.zhihu.com/p/559740388" >csapp L21 - 虚拟内存：基础 - 知乎 (zhihu.com)<i class="fas fa-external-link-alt"></i></a></p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>体系结构</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>DDR重要时序参数</title>
     <url>/2023/06/17/DDR%E9%87%8D%E8%A6%81%E6%97%B6%E5%BA%8F%E5%8F%82%E6%95%B0/</url>
     <content><![CDATA[<h1 id="DRAM时序"><a href="#DRAM时序" class="headerlink" title="DRAM时序"></a>DRAM时序</h1><img  
@@ -126,6 +67,65 @@
       </tags>
   </entry>
   <entry>
+    <title>MMU虚拟内存管理</title>
+    <url>/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<h5 id="为什么需要虚拟内存"><a href="#为什么需要虚拟内存" class="headerlink" title="为什么需要虚拟内存"></a>为什么需要虚拟内存</h5><p>（1）进程之间的内存隔离性</p>
+<p>（2）实现了抽象性，为了对内存进行更好的管理</p>
+<h2 id="TLB和Page-Table的含义"><a href="#TLB和Page-Table的含义" class="headerlink" title="TLB和Page Table的含义"></a>TLB和Page Table的含义</h2><ul>
+<li>Translation lookaside Buffer（TLB）和Table walks units（TWU）是一个电路结构，而Page Table只是一个数据结构，位于内存当中。</li>
+</ul>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E8%99%9A%E6%8B%9F%E8%BD%AC%E7%89%A9%E7%90%86.png"
+                      class="" title="虚拟转物理"
+                >
+
+<ul>
+<li><p>TLB是Page Table的缓存</p>
+</li>
+<li><p>不同的进程拥有不同的PageTable，由satp寄存器进行切换，satp寄存器中存储的是指向页表的指针</p>
+</li>
+<li><p>大多数RISC-V中的物理内存地址是56bit，虚拟地址是39bit（sv39）</p>
+</li>
+<li><p>一个虚拟地址的组成由index+offset组成，一个物理地址由PPN+offset组成。offset固定是12位，对应Page的4096Byte大小。index&#x3D;56-12&#x3D;27。PPN&#x3D;offset-12&#x3D;44 。</p>
+</li>
+<li><p>pagedirectory中的一个条目称为PTE（page table entry），是64bit（寄存器大小）。PTE由三部分组成（10+44+10），前10bit是保留字段；中间44bit是PPN，也就是物理page号，指向了一个page（或pagetable）的物理地址；最后10bit是flag，标志着指向的物理page的属性（读、写、有效…）。</p>
+<p>一个directory是4096Bytes也就是一个page的大小，一个directory有512个entry</p>
+</li>
+</ul>
+<h4 id="为什么要分多级页表："><a href="#为什么要分多级页表：" class="headerlink" title="为什么要分多级页表："></a>为什么要分多级页表：</h4><img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%A4%9A%E7%BA%A7%E9%A1%B5%E8%A1%A8.png"
+                      class="" title="多级页表"
+                >
+
+<p>​	如果不分页，一个页表会有2^27个entry(页表项)(index的长度为27)，每个进程一个页表，很快就会将内存占满。所以实际上页表是由多级组成，虚拟地址中的index的27bit实际上分为三层索引(L2,L1,L0)，每层9bit，也被称为3个page directory</p>
+<p>​	但实际上这种方法仍然最大可以拥有2^27个entry(页表项)</p>
+<p>​	这种方式的主要优点是，如果地址空间中大部分地址都没有使用，你不必为每一个index准备一个entry。举个例子，如果你的地址空间只使用了一个page，4096Bytes。</p>
+<p>​	在最高级，你需要一个page directory。在这个page directory中，你需要一个数字是0的PTE，指向中间级page directory。所以在中间级，你也需要一个page directory，里面也是一个数字0的PTE，指向最低级page directory。所以这里总共需要3个page directory（也就是3 * 512个entry）。</p>
+<p>​	但是在一级页表中，需要2^27个entry。</p>
+<p>​	减少了由于没使用带来的内存占用，</p>
+<p>ps：如果多级页表全部占满的情况下占多少entry的大小：</p>
+<p>​		512（一级）+512x512（二级）+512x512x512（三级）&#x3D;2^9+2^18+2^27</p>
+<h4 id="Page-Table-walk（这里不考虑TLB）："><a href="#Page-Table-walk（这里不考虑TLB）：" class="headerlink" title="Page Table walk（这里不考虑TLB）："></a>Page Table walk（这里不考虑TLB）：</h4><p>​	访问流程（page hit）：</p>
+<p>​	</p>
+<p>​	访问流程（page miss）：</p>
+<h2 id="分页和分段"><a href="#分页和分段" class="headerlink" title="分页和分段"></a>分页和分段</h2><p>Page Table Entry(PTE)</p>
+<p>Physical Page Number(PPN)</p>
+<blockquote>
+<p>参考文章：</p>
+<p><a class="link"   href="https://zhuanlan.zhihu.com/p/270577411" >https://zhuanlan.zhihu.com/p/270577411<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   href="https://www.cnblogs.com/MiaoMiaoGarden/p/15655962.html" >MIT6.S081 LAB3 pagetable &amp; virtual memory - 妙妙园 - 博客园 (cnblogs.com)<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   href="https://zhuanlan.zhihu.com/p/559740388" >csapp L21 - 虚拟内存：基础 - 知乎 (zhihu.com)<i class="fas fa-external-link-alt"></i></a></p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>体系结构</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>如何上传本地项目到GitHub</title>
     <url>/2023/06/17/github%E4%B8%8A%E4%BC%A0/</url>
     <content><![CDATA[<h1 id="上传本地项目到Github"><a href="#上传本地项目到Github" class="headerlink" title="上传本地项目到Github"></a>上传本地项目到Github</h1><h3 id="第一步：安装Git"><a href="#第一步：安装Git" class="headerlink" title="第一步：安装Git"></a>第一步：安装Git</h3><h3 id="第二步：创建文件夹"><a href="#第二步：创建文件夹" class="headerlink" title="第二步：创建文件夹"></a>第二步：创建文件夹</h3><p>创建一个本地项目所在的文件夹</p>
@@ -140,17 +140,6 @@
 <p>这两步缺一都需要输入密码才能关联</p>
 <h3 id="第七步：git-push-origin-master"><a href="#第七步：git-push-origin-master" class="headerlink" title="第七步：git push origin master"></a>第七步：git push origin master</h3><p>输入命令<code>git push origin master</code>将本地仓库推送到GitHub中</p>
 <p>第一次上传添加 -u</p>
-]]></content>
-      <tags>
-        <tag>Other</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解决hexo d 命令报错 Deploer not found git</title>
-    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
-    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
-<p>命令：</p>
-<p><code>npm insatll --save hexo-deployer-git</code></p>
 ]]></content>
       <tags>
         <tag>Other</tag>
@@ -235,6 +224,17 @@
 ]]></content>
       <tags>
         <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决hexo d 命令报错 Deploer not found git</title>
+    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
+    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
+<p>命令：</p>
+<p><code>npm insatll --save hexo-deployer-git</code></p>
+]]></content>
+      <tags>
+        <tag>Other</tag>
       </tags>
   </entry>
   <entry>
