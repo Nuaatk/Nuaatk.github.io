@@ -9,7 +9,7 @@
     
     <title>
         
-            MMU虚拟内存管理 |
+            虚拟内存管理 |
         
         TK&#39;s blog
     </title>
@@ -159,7 +159,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">MMU虚拟内存管理</span>
+                <span class="title-hover-animation">虚拟内存管理</span>
             </div>
 
             
@@ -187,7 +187,7 @@
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2024-07-14 17:34:17</span>
+        <span class="pc">2024-07-16 22:35:59</span>
     </span>
     
     
@@ -207,12 +207,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>677 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>2.7k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>2 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>10 分钟</span>
         </span>
     
     
@@ -230,8 +230,17 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <h5 id="为什么需要虚拟内存"><a href="#为什么需要虚拟内存" class="headerlink" title="为什么需要虚拟内存"></a>为什么需要虚拟内存</h5><p>（1）进程之间的内存隔离性</p>
+                <h2 id="为什么需要虚拟内存"><a href="#为什么需要虚拟内存" class="headerlink" title="为什么需要虚拟内存"></a>为什么需要虚拟内存</h2><p>（1）进程之间的内存隔离性</p>
 <p>（2）实现了抽象性，为了对内存进行更好的管理</p>
+<p>虚拟内存的管理需要MMU。从硬件来看MMU由三部分组成：</p>
+<ul>
+<li><p><strong>Translation Lookaside Buffers</strong>(TLB) that cache recently-used virtual-to-physical translations (PTEs)</p>
+</li>
+<li><p><strong>Page Table Walk Caches</strong> that offer fast access to the intermediate levels of a multi-level page table</p>
+</li>
+<li><p><strong>Hardware Page Table Walker</strong> that sequentially accesses the different levels of the Page Table to fetch the required PTE</p>
+</li>
+</ul>
 <h2 id="TLB和Page-Table的含义"><a href="#TLB和Page-Table的含义" class="headerlink" title="TLB和Page Table的含义"></a>TLB和Page Table的含义</h2><ul>
 <li>Translation lookaside Buffer（TLB）和Table walks units（TWU）是一个电路结构，而Page Table只是一个数据结构，位于内存当中。</li>
 </ul>
@@ -245,7 +254,7 @@
 <ul>
 <li><p>TLB是Page Table的缓存</p>
 </li>
-<li><p>不同的进程拥有不同的PageTable，由satp寄存器进行切换，satp寄存器中存储的是指向页表的指针</p>
+<li><p>不同的进程拥有不同的PageTable，由satp寄存器进行切换，satp寄存器(riscv)中存储的是指向页表的指针</p>
 </li>
 <li><p>大多数RISC-V中的物理内存地址是56bit，虚拟地址是39bit（sv39）</p>
 </li>
@@ -255,7 +264,7 @@
 <p>一个directory是4096Bytes也就是一个page的大小，一个directory有512个entry</p>
 </li>
 </ul>
-<h4 id="为什么要分多级页表："><a href="#为什么要分多级页表：" class="headerlink" title="为什么要分多级页表："></a>为什么要分多级页表：</h4><img  
+<h2 id="为什么要分多级页表"><a href="#为什么要分多级页表" class="headerlink" title="为什么要分多级页表"></a>为什么要分多级页表</h2><img  
                      lazyload
                      alt="image"
                      data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%A4%9A%E7%BA%A7%E9%A1%B5%E8%A1%A8.png"
@@ -270,16 +279,115 @@
 <p>​	减少了由于没使用带来的内存占用，</p>
 <p>ps：如果多级页表全部占满的情况下占多少entry的大小：</p>
 <p>​		512（一级）+512x512（二级）+512x512x512（三级）&#x3D;2^9+2^18+2^27</p>
-<h4 id="Page-Table-walk（这里不考虑TLB）："><a href="#Page-Table-walk（这里不考虑TLB）：" class="headerlink" title="Page Table walk（这里不考虑TLB）："></a>Page Table walk（这里不考虑TLB）：</h4><p>​	访问流程（page hit）：</p>
-<p>​	</p>
-<p>​	访问流程（page miss）：</p>
-<h2 id="分页和分段"><a href="#分页和分段" class="headerlink" title="分页和分段"></a>分页和分段</h2><p>Page Table Entry(PTE)</p>
+<h2 id="Page-Table-walk"><a href="#Page-Table-walk" class="headerlink" title="Page Table walk"></a>Page Table walk</h2><p><strong>访问流程（page hit）（这里不考虑TLB）：</strong></p>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/pagehit.png"
+                      class="" title="”pagehit“"
+                >
+
+<p>1、CPU解码出一个虚拟地址，发送给MMU</p>
+<p>2、MMU根据页表基地址寄存器(PTBR)确定页表在内存中的物理地址(PTEA)，由虚拟地址可知VPN，然后将对应的PTE的物理地址发送给cache&#x2F;memory结构请求访问（cache存储的是物理地址，大多数CPU是这样。如果cache没有访问到，再去memory寻找）</p>
+<p>3、物理内存根据PTEA将对应的PTE发送给MMU，其中PTE的地址字段只包含PPN。（偏移相同）</p>
+<p>4、MMU将PPN和VPO拼接起来，得到虚拟地址对应的物理地址。然后MMU再将物理地址发送给物理内存</p>
+<p>5、物理内存根据物理地址将数据发送给处理器</p>
+<p>PTW由状态机和TLB Miss 寄存器组成</p>
+<p><strong>访问流程（page miss）：</strong></p>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/pagemiss.png"
+                      class="" title="pagemiss"
+                >
+
+<p>1、当MMU收到PTE的时候，发现PTE的有效位valid&#x3D;0，说明该虚拟页还未缓存在物理页中，此时就会发起一个缺页异常，由内核来执行缺页异常处理程序</p>
+<p>2、通过内核来确定一个牺牲页，如果该牺牲页中的数据被修改过，就将其复制到对应的磁盘虚拟页中</p>
+<p>3、内核将需要的虚拟页保存到对应的物理页中，并修改对应的PTE</p>
+<p>4、从缺页异常处理程序返回得到异常的指令，重新执行该指令，就会执行页面命中的步骤</p>
+<h2 id="分页和分段的区别"><a href="#分页和分段的区别" class="headerlink" title="分页和分段的区别"></a>分页和分段的区别</h2><p>分段和分页都是为了解决直接使用物理地址导致的问题：</p>
+<p><strong>1、地址空间不隔离：</strong></p>
+<p>​	假设程序A的地址空间为0x00000000<del>0x00000099，程序B的地址空间为0x00000100</del>0x0x00000199。假设在运行程序A的时候，操作了地址0x000000150，那么就会导致严重的错误</p>
+<p><strong>2、程序运行时地址不确定：</strong></p>
+<p>​	程序在编译的时候地址就要确定，如果使用物理地址，那么则无法在编译的时候确定好哪个内存空间是free的。这仅在运行的时候才能确定。</p>
+<p><strong>3、内存使用率地下：</strong></p>
+<p>​	假设程序A大小为10M，程序B大小为70M，程序C的大小为30M，计算机的总内存为100M。</p>
+<p>​	当同时运行程序A,C时，内存占用了80M。此时如果要运行程序C，可以把其中一个程序换出到磁盘上。假设换出的时程序A，A腾出的10M与剩余的20M并不是一个连续的空间。仍然无法执行C。类似于堆的碎片化。</p>
+<p><strong>分段：</strong></p>
+<p>​		将程序分为代码段，数据段，堆栈段，每个段各自管理不同的数据。分段只解决了问题1和2，但由于段的粒度过大，仍受到内存碎片化的影响。</p>
+<ul>
+<li><strong>优点：</strong><ul>
+<li><strong>管理简单：</strong>分段机制下，内存管理简单直接，段切换开销小</li>
+<li><strong>低开销高效率：</strong>CPU原生支持，段切换只需切换寄存器内容，效率高</li>
+</ul>
+</li>
+<li><strong>缺点：</strong><ul>
+<li><strong>外部碎片问题：</strong>需要连续的大段内存，容易产生外部碎片，导致内存利用率低。</li>
+<li><strong>动态分配困难：</strong>难以动态调整内存大小，程序需要事先申请足够的内存</li>
+</ul>
+</li>
+</ul>
+<p><strong>分页：</strong></p>
+<p>​		分页的提出就是为了帮助分段解决问题3。分页的虚拟地址空间仍然是连续的，但是，每一页映射后的物理地址就不一定是连续的了。</p>
+<ul>
+<li><strong>优点：</strong><ul>
+<li><strong>内存利用率高：</strong>分页允许非连续的内存分配，减少了内存碎片问题，尤其是外部碎片问题（按照每页4KB的粒度分配，浪费一点也浪费不了多少，对于现在消耗内存动不动500MB起步的软件来说，4K内存能干什么，浪费了就浪费了）。</li>
+<li><strong>虚拟内存支持</strong>：通过页表，可以将物理内存与虚拟内存进行映射，支持更大的虚拟地址空间。（可以多个虚拟地址映射同一个物理地址，这样虚拟内存就比物理内存还大了）</li>
+<li><strong>内存保护</strong>：每页都有独立的访问权限，可以实现细粒度（每页就4KB，当然细，除非你是内存不到1MB的单片机）的内存保护机制。</li>
+<li><strong>灵活的内存分配</strong>：操作系统可以动态分配和回收页（其实现代OS对于内存问题的策略就是，你需要内存，我就给你一页，不够再给一页，给到够为止，这简略了内存分配算法，但实际上就是这么个策略，这也是为什么不再需要应用程序自己malloc内存空间的原因），提供更灵活的内存管理。</li>
+</ul>
+</li>
+<li><strong>缺点：</strong><ul>
+<li><strong>页表占用开销大：</strong>上面提到过。</li>
+<li><strong>页表查找开销：</strong>每次内存访问需要进行多次页表查找，增加了访问延迟。现代CPU通过引入TLB（Translation Lookaside Buffer，快表）缓存页表来缓解这个问题。</li>
+</ul>
+</li>
+</ul>
+<p><strong>段页式：</strong></p>
+<p>​		为每个段提供一个页表。</p>
+<p><strong>分段和分页的区别：</strong></p>
+<ul>
+<li><p>页是信息的物理单位，分页是为实现离散分配方式，以消减内存的外零头，提高内存的利用率。段则是信息的逻辑单位，它含有一组其意义相对完整的信息。分段的目的是为了能更好地满足用户的需要</p>
+</li>
+<li><p>页的大小固定，且由系统决定；而段的长度却不固定，决定于用户所编写的程序</p>
+</li>
+<li><p>分页的地址空间是一维的，程序员只需利用一个记忆符，即可表示一个地址；而分段的作业地址空间是二维的，程序员在标识一个地址时，既需给出段名，又需给出段内地址</p>
+</li>
+</ul>
+<h2 id="现代操作系统的实际情况"><a href="#现代操作系统的实际情况" class="headerlink" title="现代操作系统的实际情况"></a>现代操作系统的实际情况</h2><p>​	以X86为例，无论是分段还是分页，都是的内存管理机制，都同时存在，并不是让操作系统二选一。</p>
+<p>​	但操作系统通过设置”屏蔽“了段的存在，如下表所示，cs指向段号3，ds,ss,es都指向段号4。而又经过对GDT（全局描述表）查询，段号3，4实际上基地址和段的大小都相同。</p>
+<p>​	因此在内存地址翻译的时候都是讲分页，段已经名存实亡了，新一代的intel甚至将段寄存器当作0对待。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">段寄存器（x86）：</span><br><span class="line">	cs：001b（代码段）:: 0000000000011 0 11-段序号3</span><br><span class="line">	ds：0023（数据段）:: 0000000000100 0 11-段序号4</span><br><span class="line">	ss：0023（栈段）</span><br><span class="line">	es：0023（扩展段）</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<h2 id="Gem5中的实现"><a href="#Gem5中的实现" class="headerlink" title="Gem5中的实现"></a>Gem5中的实现</h2><p><strong>PageTableWalker Debug flags</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//page fault</span></span><br><span class="line"><span class="number">210403318068</span>: board.processor.cores1.core.mmu.dtb.walker: Performing table walk <span class="keyword">for</span> address <span class="number">0x3fe6640000</span></span><br><span class="line"><span class="number">210403318068</span>: board.processor.cores1.core.mmu.dtb.walker: Loading level2 PTE from <span class="number">0x100fe87f8</span><span class="comment">//最高级的页表地址由satp寄存器存储</span></span><br><span class="line"><span class="number">210403318401</span>: board.processor.cores1.core.mmu.dtb.walker: Got level2 PTE: <span class="number">0x403fa401</span></span><br><span class="line"><span class="number">210403318401</span>: board.processor.cores1.core.mmu.dtb.walker: Loading level1 PTE from <span class="number">0x100fe9998</span></span><br><span class="line"><span class="number">210403318734</span>: board.processor.cores1.core.mmu.dtb.walker: Got level1 PTE: <span class="number">0x403cfc01</span></span><br><span class="line"><span class="number">210403318734</span>: board.processor.cores1.core.mmu.dtb.walker: Loading level0 PTE from <span class="number">0x100f3f200</span></span><br><span class="line"><span class="number">210403323396</span>: board.processor.cores1.core.mmu.dtb.walker: Got level0 PTE: <span class="number">0</span></span><br><span class="line"><span class="number">210403323396</span>: board.processor.cores1.core.mmu.dtb.walker: PTE invalid, raising PF</span><br><span class="line"><span class="number">210403323396</span>: board.processor.cores1.core.mmu.dtb.walker: Raising page fault.</span><br><span class="line"></span><br><span class="line"><span class="comment">//3-level</span></span><br><span class="line"><span class="number">210404295090</span>: board.processor.cores0.core.mmu.dtb.walker: Performing table walk <span class="keyword">for</span> address <span class="number">0x3fcba6deb8</span></span><br><span class="line"><span class="number">210404295090</span>: board.processor.cores0.core.mmu.dtb.walker: Loading level2 PTE from <span class="number">0x100ff17f8</span></span><br><span class="line"><span class="number">210404295423</span>: board.processor.cores0.core.mmu.dtb.walker: Got level2 PTE: <span class="number">0x403fc801</span></span><br><span class="line"><span class="number">210404295423</span>: board.processor.cores0.core.mmu.dtb.walker: Loading level1 PTE from <span class="number">0x100ff22e8</span></span><br><span class="line"><span class="number">210404295756</span>: board.processor.cores0.core.mmu.dtb.walker: Got level1 PTE: <span class="number">0x403d6001</span></span><br><span class="line"><span class="number">210404295756</span>: board.processor.cores0.core.mmu.dtb.walker: Loading level0 PTE from <span class="number">0x100f58368</span></span><br><span class="line"><span class="number">210404296089</span>: board.processor.cores0.core.mmu.dtb.walker: Got level0 PTE: <span class="number">0x4f317053</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//2-level</span></span><br><span class="line"><span class="number">579021399</span>: board.processor.cores1.core.mmu.itb.walker: Performing table walk <span class="keyword">for</span> address <span class="number">0xffffffe000005248</span></span><br><span class="line"><span class="number">579021399</span>: board.processor.cores1.core.mmu.itb.walker: Loading level2 PTE from <span class="number">0x80ed3c00</span></span><br><span class="line"><span class="number">579023064</span>: board.processor.cores1.core.mmu.itb.walker: Got level2 PTE: <span class="number">0x4ffffc01</span></span><br><span class="line"><span class="number">579023064</span>: board.processor.cores1.core.mmu.itb.walker: Loading level1 PTE from <span class="number">0x13ffff000</span></span><br><span class="line"><span class="number">579024729</span>: board.processor.cores1.core.mmu.itb.walker: Got level1 PTE: <span class="number">0x200800cf</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<p>Page Table Entry(PTE)</p>
 <p>Physical Page Number(PPN)</p>
+<p>Virtual Page Number(VPN)</p>
+<p>Physical Page Offset(PPO)</p>
+<p>Virtual Page Offset(VPO)</p>
+<p>Page Table Walk(PTW)</p>
 <blockquote>
 <p>参考文章：</p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/270577411" >https://zhuanlan.zhihu.com/p/270577411<i class="fas fa-external-link-alt"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/MiaoMiaoGarden/p/15655962.html" >MIT6.S081 LAB3 pagetable &amp; virtual memory - 妙妙园 - 博客园 (cnblogs.com)<i class="fas fa-external-link-alt"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/559740388" >csapp L21 - 虚拟内存：基础 - 知乎 (zhihu.com)<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.cnblogs.com/xuanyuan/p/15266447.html" >现代操作系统管理内存，到底是分段还是分页，段寄存器还有用吗？ - 轩辕之风 - 博客园 (cnblogs.com)<i class="fas fa-external-link-alt"></i></a></p>
 </blockquote>
 
             </div>
@@ -290,7 +398,7 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">MMU虚拟内存管理</span>
+            <span class="type">本文标题</span>：<span class="content">虚拟内存管理</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">TKCC</span>
@@ -329,13 +437,13 @@
                         <div class="article-prev">
                             <a class="prev"
                                rel="prev"
-                               href="/2024/07/13/%E5%B8%B8%E8%A7%81%E6%80%BB%E7%BA%BF/"
+                               href="/2024/07/13/%E7%B1%BB%E7%9A%84%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8/"
                             >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
                                 <span class="title flex-center">
-                                <span class="post-nav-title-item"></span>
+                                <span class="post-nav-title-item">C++的成员函数为什么不占内存</span>
                                 <span class="post-nav-item">上一篇</span>
                             </span>
                             </a>
@@ -367,7 +475,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="nav-number">1.</span> <span class="nav-text">为什么需要虚拟内存</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TLB%E5%92%8CPage-Table%E7%9A%84%E5%90%AB%E4%B9%89"><span class="nav-number"></span> <span class="nav-text">TLB和Page Table的含义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%88%86%E5%A4%9A%E7%BA%A7%E9%A1%B5%E8%A1%A8%EF%BC%9A"><span class="nav-number"></span> <span class="nav-text">为什么要分多级页表：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Page-Table-walk%EF%BC%88%E8%BF%99%E9%87%8C%E4%B8%8D%E8%80%83%E8%99%91TLB%EF%BC%89%EF%BC%9A"><span class="nav-number"></span> <span class="nav-text">Page Table walk（这里不考虑TLB）：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E9%A1%B5%E5%92%8C%E5%88%86%E6%AE%B5"><span class="nav-number"></span> <span class="nav-text">分页和分段</span></a>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="nav-number">1.</span> <span class="nav-text">为什么需要虚拟内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TLB%E5%92%8CPage-Table%E7%9A%84%E5%90%AB%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">TLB和Page Table的含义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%88%86%E5%A4%9A%E7%BA%A7%E9%A1%B5%E8%A1%A8"><span class="nav-number">3.</span> <span class="nav-text">为什么要分多级页表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Page-Table-walk"><span class="nav-number">4.</span> <span class="nav-text">Page Table walk</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E9%A1%B5%E5%92%8C%E5%88%86%E6%AE%B5%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">5.</span> <span class="nav-text">分页和分段的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E9%99%85%E6%83%85%E5%86%B5"><span class="nav-number">6.</span> <span class="nav-text">现代操作系统的实际情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gem5%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">7.</span> <span class="nav-text">Gem5中的实现</span></a></li></ol>
     </div>
 </div>
 

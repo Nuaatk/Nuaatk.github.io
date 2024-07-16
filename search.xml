@@ -63,14 +63,23 @@
 </ul>
 ]]></content>
       <tags>
-        <tag>DDR学习</tag>
+        <tag>DDR</tag>
       </tags>
   </entry>
   <entry>
-    <title>MMU虚拟内存管理</title>
+    <title>虚拟内存管理</title>
     <url>/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<h5 id="为什么需要虚拟内存"><a href="#为什么需要虚拟内存" class="headerlink" title="为什么需要虚拟内存"></a>为什么需要虚拟内存</h5><p>（1）进程之间的内存隔离性</p>
+    <content><![CDATA[<h2 id="为什么需要虚拟内存"><a href="#为什么需要虚拟内存" class="headerlink" title="为什么需要虚拟内存"></a>为什么需要虚拟内存</h2><p>（1）进程之间的内存隔离性</p>
 <p>（2）实现了抽象性，为了对内存进行更好的管理</p>
+<p>虚拟内存的管理需要MMU。从硬件来看MMU由三部分组成：</p>
+<ul>
+<li><p><strong>Translation Lookaside Buffers</strong>(TLB) that cache recently-used virtual-to-physical translations (PTEs)</p>
+</li>
+<li><p><strong>Page Table Walk Caches</strong> that offer fast access to the intermediate levels of a multi-level page table</p>
+</li>
+<li><p><strong>Hardware Page Table Walker</strong> that sequentially accesses the different levels of the Page Table to fetch the required PTE</p>
+</li>
+</ul>
 <h2 id="TLB和Page-Table的含义"><a href="#TLB和Page-Table的含义" class="headerlink" title="TLB和Page Table的含义"></a>TLB和Page Table的含义</h2><ul>
 <li>Translation lookaside Buffer（TLB）和Table walks units（TWU）是一个电路结构，而Page Table只是一个数据结构，位于内存当中。</li>
 </ul>
@@ -84,7 +93,7 @@
 <ul>
 <li><p>TLB是Page Table的缓存</p>
 </li>
-<li><p>不同的进程拥有不同的PageTable，由satp寄存器进行切换，satp寄存器中存储的是指向页表的指针</p>
+<li><p>不同的进程拥有不同的PageTable，由satp寄存器进行切换，satp寄存器(riscv)中存储的是指向页表的指针</p>
 </li>
 <li><p>大多数RISC-V中的物理内存地址是56bit，虚拟地址是39bit（sv39）</p>
 </li>
@@ -94,7 +103,7 @@
 <p>一个directory是4096Bytes也就是一个page的大小，一个directory有512个entry</p>
 </li>
 </ul>
-<h4 id="为什么要分多级页表："><a href="#为什么要分多级页表：" class="headerlink" title="为什么要分多级页表："></a>为什么要分多级页表：</h4><img  
+<h2 id="为什么要分多级页表"><a href="#为什么要分多级页表" class="headerlink" title="为什么要分多级页表"></a>为什么要分多级页表</h2><img  
                      lazyload
                      alt="image"
                      data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%A4%9A%E7%BA%A7%E9%A1%B5%E8%A1%A8.png"
@@ -109,16 +118,115 @@
 <p>​	减少了由于没使用带来的内存占用，</p>
 <p>ps：如果多级页表全部占满的情况下占多少entry的大小：</p>
 <p>​		512（一级）+512x512（二级）+512x512x512（三级）&#x3D;2^9+2^18+2^27</p>
-<h4 id="Page-Table-walk（这里不考虑TLB）："><a href="#Page-Table-walk（这里不考虑TLB）：" class="headerlink" title="Page Table walk（这里不考虑TLB）："></a>Page Table walk（这里不考虑TLB）：</h4><p>​	访问流程（page hit）：</p>
-<p>​	</p>
-<p>​	访问流程（page miss）：</p>
-<h2 id="分页和分段"><a href="#分页和分段" class="headerlink" title="分页和分段"></a>分页和分段</h2><p>Page Table Entry(PTE)</p>
+<h2 id="Page-Table-walk"><a href="#Page-Table-walk" class="headerlink" title="Page Table walk"></a>Page Table walk</h2><p><strong>访问流程（page hit）（这里不考虑TLB）：</strong></p>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/pagehit.png"
+                      class="" title="”pagehit“"
+                >
+
+<p>1、CPU解码出一个虚拟地址，发送给MMU</p>
+<p>2、MMU根据页表基地址寄存器(PTBR)确定页表在内存中的物理地址(PTEA)，由虚拟地址可知VPN，然后将对应的PTE的物理地址发送给cache&#x2F;memory结构请求访问（cache存储的是物理地址，大多数CPU是这样。如果cache没有访问到，再去memory寻找）</p>
+<p>3、物理内存根据PTEA将对应的PTE发送给MMU，其中PTE的地址字段只包含PPN。（偏移相同）</p>
+<p>4、MMU将PPN和VPO拼接起来，得到虚拟地址对应的物理地址。然后MMU再将物理地址发送给物理内存</p>
+<p>5、物理内存根据物理地址将数据发送给处理器</p>
+<p>PTW由状态机和TLB Miss 寄存器组成</p>
+<p><strong>访问流程（page miss）：</strong></p>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/pagemiss.png"
+                      class="" title="pagemiss"
+                >
+
+<p>1、当MMU收到PTE的时候，发现PTE的有效位valid&#x3D;0，说明该虚拟页还未缓存在物理页中，此时就会发起一个缺页异常，由内核来执行缺页异常处理程序</p>
+<p>2、通过内核来确定一个牺牲页，如果该牺牲页中的数据被修改过，就将其复制到对应的磁盘虚拟页中</p>
+<p>3、内核将需要的虚拟页保存到对应的物理页中，并修改对应的PTE</p>
+<p>4、从缺页异常处理程序返回得到异常的指令，重新执行该指令，就会执行页面命中的步骤</p>
+<h2 id="分页和分段的区别"><a href="#分页和分段的区别" class="headerlink" title="分页和分段的区别"></a>分页和分段的区别</h2><p>分段和分页都是为了解决直接使用物理地址导致的问题：</p>
+<p><strong>1、地址空间不隔离：</strong></p>
+<p>​	假设程序A的地址空间为0x00000000<del>0x00000099，程序B的地址空间为0x00000100</del>0x0x00000199。假设在运行程序A的时候，操作了地址0x000000150，那么就会导致严重的错误</p>
+<p><strong>2、程序运行时地址不确定：</strong></p>
+<p>​	程序在编译的时候地址就要确定，如果使用物理地址，那么则无法在编译的时候确定好哪个内存空间是free的。这仅在运行的时候才能确定。</p>
+<p><strong>3、内存使用率地下：</strong></p>
+<p>​	假设程序A大小为10M，程序B大小为70M，程序C的大小为30M，计算机的总内存为100M。</p>
+<p>​	当同时运行程序A,C时，内存占用了80M。此时如果要运行程序C，可以把其中一个程序换出到磁盘上。假设换出的时程序A，A腾出的10M与剩余的20M并不是一个连续的空间。仍然无法执行C。类似于堆的碎片化。</p>
+<p><strong>分段：</strong></p>
+<p>​		将程序分为代码段，数据段，堆栈段，每个段各自管理不同的数据。分段只解决了问题1和2，但由于段的粒度过大，仍受到内存碎片化的影响。</p>
+<ul>
+<li><strong>优点：</strong><ul>
+<li><strong>管理简单：</strong>分段机制下，内存管理简单直接，段切换开销小</li>
+<li><strong>低开销高效率：</strong>CPU原生支持，段切换只需切换寄存器内容，效率高</li>
+</ul>
+</li>
+<li><strong>缺点：</strong><ul>
+<li><strong>外部碎片问题：</strong>需要连续的大段内存，容易产生外部碎片，导致内存利用率低。</li>
+<li><strong>动态分配困难：</strong>难以动态调整内存大小，程序需要事先申请足够的内存</li>
+</ul>
+</li>
+</ul>
+<p><strong>分页：</strong></p>
+<p>​		分页的提出就是为了帮助分段解决问题3。分页的虚拟地址空间仍然是连续的，但是，每一页映射后的物理地址就不一定是连续的了。</p>
+<ul>
+<li><strong>优点：</strong><ul>
+<li><strong>内存利用率高：</strong>分页允许非连续的内存分配，减少了内存碎片问题，尤其是外部碎片问题（按照每页4KB的粒度分配，浪费一点也浪费不了多少，对于现在消耗内存动不动500MB起步的软件来说，4K内存能干什么，浪费了就浪费了）。</li>
+<li><strong>虚拟内存支持</strong>：通过页表，可以将物理内存与虚拟内存进行映射，支持更大的虚拟地址空间。（可以多个虚拟地址映射同一个物理地址，这样虚拟内存就比物理内存还大了）</li>
+<li><strong>内存保护</strong>：每页都有独立的访问权限，可以实现细粒度（每页就4KB，当然细，除非你是内存不到1MB的单片机）的内存保护机制。</li>
+<li><strong>灵活的内存分配</strong>：操作系统可以动态分配和回收页（其实现代OS对于内存问题的策略就是，你需要内存，我就给你一页，不够再给一页，给到够为止，这简略了内存分配算法，但实际上就是这么个策略，这也是为什么不再需要应用程序自己malloc内存空间的原因），提供更灵活的内存管理。</li>
+</ul>
+</li>
+<li><strong>缺点：</strong><ul>
+<li><strong>页表占用开销大：</strong>上面提到过。</li>
+<li><strong>页表查找开销：</strong>每次内存访问需要进行多次页表查找，增加了访问延迟。现代CPU通过引入TLB（Translation Lookaside Buffer，快表）缓存页表来缓解这个问题。</li>
+</ul>
+</li>
+</ul>
+<p><strong>段页式：</strong></p>
+<p>​		为每个段提供一个页表。</p>
+<p><strong>分段和分页的区别：</strong></p>
+<ul>
+<li><p>页是信息的物理单位，分页是为实现离散分配方式，以消减内存的外零头，提高内存的利用率。段则是信息的逻辑单位，它含有一组其意义相对完整的信息。分段的目的是为了能更好地满足用户的需要</p>
+</li>
+<li><p>页的大小固定，且由系统决定；而段的长度却不固定，决定于用户所编写的程序</p>
+</li>
+<li><p>分页的地址空间是一维的，程序员只需利用一个记忆符，即可表示一个地址；而分段的作业地址空间是二维的，程序员在标识一个地址时，既需给出段名，又需给出段内地址</p>
+</li>
+</ul>
+<h2 id="现代操作系统的实际情况"><a href="#现代操作系统的实际情况" class="headerlink" title="现代操作系统的实际情况"></a>现代操作系统的实际情况</h2><p>​	以X86为例，无论是分段还是分页，都是的内存管理机制，都同时存在，并不是让操作系统二选一。</p>
+<p>​	但操作系统通过设置”屏蔽“了段的存在，如下表所示，cs指向段号3，ds,ss,es都指向段号4。而又经过对GDT（全局描述表）查询，段号3，4实际上基地址和段的大小都相同。</p>
+<p>​	因此在内存地址翻译的时候都是讲分页，段已经名存实亡了，新一代的intel甚至将段寄存器当作0对待。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">段寄存器（x86）：</span><br><span class="line">	cs：001b（代码段）:: 0000000000011 0 11-段序号3</span><br><span class="line">	ds：0023（数据段）:: 0000000000100 0 11-段序号4</span><br><span class="line">	ss：0023（栈段）</span><br><span class="line">	es：0023（扩展段）</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<h2 id="Gem5中的实现"><a href="#Gem5中的实现" class="headerlink" title="Gem5中的实现"></a>Gem5中的实现</h2><p><strong>PageTableWalker Debug flags</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//page fault</span></span><br><span class="line"><span class="number">210403318068</span>: board.processor.cores1.core.mmu.dtb.walker: Performing table walk <span class="keyword">for</span> address <span class="number">0x3fe6640000</span></span><br><span class="line"><span class="number">210403318068</span>: board.processor.cores1.core.mmu.dtb.walker: Loading level2 PTE from <span class="number">0x100fe87f8</span><span class="comment">//最高级的页表地址由satp寄存器存储</span></span><br><span class="line"><span class="number">210403318401</span>: board.processor.cores1.core.mmu.dtb.walker: Got level2 PTE: <span class="number">0x403fa401</span></span><br><span class="line"><span class="number">210403318401</span>: board.processor.cores1.core.mmu.dtb.walker: Loading level1 PTE from <span class="number">0x100fe9998</span></span><br><span class="line"><span class="number">210403318734</span>: board.processor.cores1.core.mmu.dtb.walker: Got level1 PTE: <span class="number">0x403cfc01</span></span><br><span class="line"><span class="number">210403318734</span>: board.processor.cores1.core.mmu.dtb.walker: Loading level0 PTE from <span class="number">0x100f3f200</span></span><br><span class="line"><span class="number">210403323396</span>: board.processor.cores1.core.mmu.dtb.walker: Got level0 PTE: <span class="number">0</span></span><br><span class="line"><span class="number">210403323396</span>: board.processor.cores1.core.mmu.dtb.walker: PTE invalid, raising PF</span><br><span class="line"><span class="number">210403323396</span>: board.processor.cores1.core.mmu.dtb.walker: Raising page fault.</span><br><span class="line"></span><br><span class="line"><span class="comment">//3-level</span></span><br><span class="line"><span class="number">210404295090</span>: board.processor.cores0.core.mmu.dtb.walker: Performing table walk <span class="keyword">for</span> address <span class="number">0x3fcba6deb8</span></span><br><span class="line"><span class="number">210404295090</span>: board.processor.cores0.core.mmu.dtb.walker: Loading level2 PTE from <span class="number">0x100ff17f8</span></span><br><span class="line"><span class="number">210404295423</span>: board.processor.cores0.core.mmu.dtb.walker: Got level2 PTE: <span class="number">0x403fc801</span></span><br><span class="line"><span class="number">210404295423</span>: board.processor.cores0.core.mmu.dtb.walker: Loading level1 PTE from <span class="number">0x100ff22e8</span></span><br><span class="line"><span class="number">210404295756</span>: board.processor.cores0.core.mmu.dtb.walker: Got level1 PTE: <span class="number">0x403d6001</span></span><br><span class="line"><span class="number">210404295756</span>: board.processor.cores0.core.mmu.dtb.walker: Loading level0 PTE from <span class="number">0x100f58368</span></span><br><span class="line"><span class="number">210404296089</span>: board.processor.cores0.core.mmu.dtb.walker: Got level0 PTE: <span class="number">0x4f317053</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//2-level</span></span><br><span class="line"><span class="number">579021399</span>: board.processor.cores1.core.mmu.itb.walker: Performing table walk <span class="keyword">for</span> address <span class="number">0xffffffe000005248</span></span><br><span class="line"><span class="number">579021399</span>: board.processor.cores1.core.mmu.itb.walker: Loading level2 PTE from <span class="number">0x80ed3c00</span></span><br><span class="line"><span class="number">579023064</span>: board.processor.cores1.core.mmu.itb.walker: Got level2 PTE: <span class="number">0x4ffffc01</span></span><br><span class="line"><span class="number">579023064</span>: board.processor.cores1.core.mmu.itb.walker: Loading level1 PTE from <span class="number">0x13ffff000</span></span><br><span class="line"><span class="number">579024729</span>: board.processor.cores1.core.mmu.itb.walker: Got level1 PTE: <span class="number">0x200800cf</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<p>Page Table Entry(PTE)</p>
 <p>Physical Page Number(PPN)</p>
+<p>Virtual Page Number(VPN)</p>
+<p>Physical Page Offset(PPO)</p>
+<p>Virtual Page Offset(VPO)</p>
+<p>Page Table Walk(PTW)</p>
 <blockquote>
 <p>参考文章：</p>
 <p><a class="link"   href="https://zhuanlan.zhihu.com/p/270577411" >https://zhuanlan.zhihu.com/p/270577411<i class="fas fa-external-link-alt"></i></a></p>
 <p><a class="link"   href="https://www.cnblogs.com/MiaoMiaoGarden/p/15655962.html" >MIT6.S081 LAB3 pagetable &amp; virtual memory - 妙妙园 - 博客园 (cnblogs.com)<i class="fas fa-external-link-alt"></i></a></p>
 <p><a class="link"   href="https://zhuanlan.zhihu.com/p/559740388" >csapp L21 - 虚拟内存：基础 - 知乎 (zhihu.com)<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   href="https://www.cnblogs.com/xuanyuan/p/15266447.html" >现代操作系统管理内存，到底是分段还是分页，段寄存器还有用吗？ - 轩辕之风 - 博客园 (cnblogs.com)<i class="fas fa-external-link-alt"></i></a></p>
 </blockquote>
 ]]></content>
       <tags>
@@ -146,6 +254,17 @@
       </tags>
   </entry>
   <entry>
+    <title>解决hexo d 命令报错 Deploer not found git</title>
+    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
+    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
+<p>命令：</p>
+<p><code>npm insatll --save hexo-deployer-git</code></p>
+]]></content>
+      <tags>
+        <tag>Other</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>二维前缀和与应用</title>
     <url>/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/</url>
     <content><![CDATA[<h2 id="二维前缀和定义"><a href="#二维前缀和定义" class="headerlink" title="二维前缀和定义"></a>二维前缀和定义</h2><img  
@@ -156,7 +275,7 @@
                 >
 
 <p>红色区域所有数的和即为(i,j)的二维前缀和</p>
-<h5 id="预处理："><a href="#预处理：" class="headerlink" title="预处理："></a>预处理：</h5><p>​	即让矩阵上所有位置上的数都变成二维前缀和</p>
+<h3 id="预处理："><a href="#预处理：" class="headerlink" title="预处理："></a>预处理：</h3><p>​	即让矩阵上所有位置上的数都变成二维前缀和</p>
 <img  
                      lazyload
                      alt="image"
@@ -189,7 +308,7 @@
                 >
 
 <p>即使用之前的值来迭代出下一个值。</p>
-<h5 id="查询："><a href="#查询：" class="headerlink" title="查询："></a>查询：</h5><img  
+<h3 id="查询："><a href="#查询：" class="headerlink" title="查询："></a>查询：</h3><img  
                      lazyload
                      alt="image"
                      data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/6.png"
@@ -203,7 +322,7 @@
 
 
 
-<h5 id="应用："><a href="#应用：" class="headerlink" title="应用："></a>应用：</h5><p>小美的平衡矩阵</p>
+<h3 id="应用："><a href="#应用：" class="headerlink" title="应用："></a>应用：</h3><p>小美的平衡矩阵</p>
 <p>小美拿到了一个𝑛∗𝑛<em>n</em>∗<em>n</em>的矩阵，其中每个元素是 0 或者 1。<br>小美认为一个矩形区域是完美的，当且仅当该区域内 0 的数量恰好等于 1 的数量。<br>现在，小美希望你回答有多少个𝑖∗𝑖<em>i</em>∗<em>i</em>的完美矩形区域。你需要回答1≤𝑖≤𝑛1≤<em>i</em>≤<em>n</em>的所有答案。</p>
 <p>输入例子：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br><span class="line">1010</span><br><span class="line">0101</span><br><span class="line">1100</span><br><span class="line">0011</span><br></pre></td></tr></table></figure>
@@ -224,17 +343,6 @@
 ]]></content>
       <tags>
         <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解决hexo d 命令报错 Deploer not found git</title>
-    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
-    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
-<p>命令：</p>
-<p><code>npm insatll --save hexo-deployer-git</code></p>
-]]></content>
-      <tags>
-        <tag>Other</tag>
       </tags>
   </entry>
   <entry>
@@ -337,11 +445,6 @@
       </tags>
   </entry>
   <entry>
-    <title></title>
-    <url>/2024/07/13/%E5%B8%B8%E8%A7%81%E6%80%BB%E7%BA%BF/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>斯坦福编程范式公开课第十二节：预处理器</title>
     <url>/2024/05/08/%E6%96%AF%E5%9D%A6%E7%A6%8F12/</url>
     <content><![CDATA[<h3 id="第12节：预处理器"><a href="#第12节：预处理器" class="headerlink" title="第12节：预处理器"></a>第12节：预处理器</h3><p><strong>#define</strong></p>
@@ -384,7 +487,7 @@
       </tags>
   </entry>
   <entry>
-    <title>斯坦福编程范式公开课第十四节：程序调试错误</title>
+    <title>斯坦福编程范式公开课第十四节：程序调试错误（内存对齐与结构体内存布局）</title>
     <url>/2024/05/10/%E6%96%AF%E5%9D%A6%E7%A6%8F14/</url>
     <content><![CDATA[<h3 id="第14节：程序调试错误"><a href="#第14节：程序调试错误" class="headerlink" title="第14节：程序调试错误"></a>第14节：程序调试错误</h3><p><strong>Segmentation  faul :</strong>  </p>
 <p>访问程序内存地址之外的地址,通常由于访问了一个空地址造成，即*(NULL)</p>
@@ -405,6 +508,34 @@
 
 <p> <strong>数组访问溢出:</strong></p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//例1</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="type">short</span> arr[<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=<span class="number">4</span>;i++)&#123;</span><br><span class="line">        arr[i]=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//访问arr[0]-arr[3]正常，但当i=4，访问的是arr[4]也就是i变量所在地址</span></span><br><span class="line"><span class="comment">//如果是大端系统，那么会将i赋值为0</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│ <span class="number">0</span>   <span class="number">0</span>   <span class="number">0</span>   <span class="number">4</span> │	i</span><br><span class="line">├───┼───┼───┼───┤</span><br><span class="line">│ <span class="number">0</span> │ <span class="number">0</span> │ <span class="number">0</span> │ <span class="number">0</span> │	arr[<span class="number">3</span>,<span class="number">0</span>]</span><br><span class="line">├───┴───┴───┴───┤</span><br><span class="line">│               │	why</span><br><span class="line">└───┴───┴───┴───┘</span><br><span class="line"><span class="comment">//例2</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">foo</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="built_in">array</span>[<span class="number">4</span>];</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;=<span class="number">4</span>;i++)&#123;</span><br><span class="line">    <span class="built_in">array</span>[i]-=<span class="number">4</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//访问arr[0]-arr[3]正常，但当i=4，访问的是arr[4]也就是saved PC所在地址</span></span><br><span class="line"><span class="comment">//saved PC会-4，saved PC本来应该指向CALL &lt;foo&gt;函数后面的第一条指令</span></span><br><span class="line"><span class="comment">//-4之后却又指向了CALL &lt;foo&gt;造成了无限递归</span></span><br><span class="line">┌───────────────┐</span><br><span class="line">│    saved PC   │	</span><br><span class="line">├───────────────┤	</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">3</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">2</span>]	</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">1</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	<span class="built_in">array</span>[<span class="number">0</span>]</span><br><span class="line">├───────────────┤</span><br><span class="line">│               │	i</span><br><span class="line">└───┴───┴───┴───┘</span><br><span class="line"></span><br><span class="line"><span class="comment">//这些只会在比较古老的版本中发生，现代的编译器会通过__stack_chk_guard来保护数组避免溢出</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>函数参数与结构体变量的内存存储布局：</strong></p>
+<p> printf函数：</p>
+<p>参数是无限制的，从右到左压栈（最右边参数位于最高地址，先入栈）</p>
+<p>struct：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">base</span>&#123;</span></span><br><span class="line">	<span class="type">int</span> code;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">type_one</span>&#123;</span></span><br><span class="line">	<span class="type">int</span> code;	<span class="comment">//值都是1</span></span><br><span class="line">    ---</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">type_two</span>&#123;</span></span><br><span class="line">    <span class="type">int</span> code;	<span class="comment">//值都是2</span></span><br><span class="line">    ---</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//规定一个指向结构体base的指针，该指针指向结构体中第一个变量地址即base，只能是1or2</span></span><br><span class="line"><span class="comment">//然后就可以根据code的值来进行强制类型转化，变为type_one或者type_two</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">base</span>* <span class="title">ptr</span>;</span></span><br><span class="line">ptr = ;</span><br><span class="line"><span class="keyword">if</span>(*(<span class="type">int</span>*)ptr==<span class="number">1</span>)&#123;(<span class="keyword">struct</span> type_one*)a&#125;<span class="comment">//则可以将ptr作为struct type_one*类型的指针</span></span><br><span class="line"><span class="keyword">else</span>(*(<span class="type">int</span>*)ptr==<span class="number">2</span>)&#123;(<span class="keyword">struct</span> type_two*)a&#125;<span class="comment">//则可以将ptr作为struct type_two*类型的指针</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//IPv4和IPv6的区分就是这样做的</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>为什么函数的第一个参数和结构体的第一个变量，都是低地址：</li>
+</ul>
+<p>因为结构体变量的基地址就是低位，第一个参数与基地址的偏移量为0，其实就是结构体的基地址。</p>
+<p>如上图（1）所示，结构体的第一个变量位于低地址，既可以利用基地址来判断结构体类型，从而对不同的ptr进行类型转换来区分type。</p>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/05/10/%E6%96%AF%E5%9D%A6%E7%A6%8F14/%E7%BB%93%E6%9E%84%E4%BD%93%E5%BC%BA%E5%88%B6%E8%BD%AC%E6%8D%A2.png"
+                      class="" title="结构体强制转换"
+                >
+
+<p>如果第一个参数的地址位于高位，那么就无从知晓这部分与整个结构体变量的基地址的距离了。</p>
+<p>如图（2）所示，如果code变量位于高地址，由于base，type_one，type_two的成员不同，导致不同结构体中code变量地址与基地址的距离不相同，没办法对比code，即便强行知道地址对比了code，转换也无法进行（其余变量  没对齐）</p>
+<p>因此就可以做上述的强制类型转换</p>
+<ul>
+<li>为什么结构体变量指向结构体的低地址：</li>
+</ul>
+<p>只是一个规定，这样所有偏移都是正的。也可也反过来，类似于电路中的正负极（个人理解）</p>
 ]]></content>
       <tags>
         <tag>斯坦福编程范式</tag>
@@ -515,30 +646,6 @@
 </tbody></table>
 <p>​	进行float强制转换的时候，也会先进行小端读取，0 00000000 00000000000000000000101，再进行位划分</p>
 <p>​	也就是浮点数也是按照小端格式存储的（转换再转换，负负得正了）</p>
-<h4 id="函数参数与结构体变量的内存存储布局："><a href="#函数参数与结构体变量的内存存储布局：" class="headerlink" title="函数参数与结构体变量的内存存储布局："></a><strong>函数参数与结构体变量的内存存储布局：</strong></h4><p> printf函数：</p>
-<p>参数是无限制的，从右到左压栈（最右边参数位于最高地址，先入栈）</p>
-<p>struct：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">base</span>&#123;</span></span><br><span class="line">	<span class="type">int</span> code;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">type_one</span>&#123;</span></span><br><span class="line">	<span class="type">int</span> code;	<span class="comment">//值都是1</span></span><br><span class="line">    ---</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">type_two</span>&#123;</span></span><br><span class="line">    <span class="type">int</span> code;	<span class="comment">//值都是2</span></span><br><span class="line">    ---</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//规定一个指向结构体base的指针，该指针指向结构体中第一个变量地址即base，只能是1or2</span></span><br><span class="line"><span class="comment">//然后就可以根据code的值来进行强制类型转化，变为type_one或者type_two</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">base</span>* <span class="title">ptr</span>;</span></span><br><span class="line">ptr = ;</span><br><span class="line"><span class="keyword">if</span>(*(<span class="type">int</span>*)ptr==<span class="number">1</span>)&#123;(<span class="keyword">struct</span> type_one*)a&#125;<span class="comment">//则可以将ptr作为struct type_one*类型的指针</span></span><br><span class="line"><span class="keyword">else</span>(*(<span class="type">int</span>*)ptr==<span class="number">2</span>)&#123;(<span class="keyword">struct</span> type_two*)a&#125;<span class="comment">//则可以将ptr作为struct type_two*类型的指针</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//IPv4和IPv6的区分就是这样做的</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>为什么函数的第一个参数和结构体的第一个变量，都是低地址：</li>
-</ul>
-<p>因为结构体变量的基地址就是低位，第一个参数与基地址的偏移量为0，其实就是结构体的基地址。</p>
-<p>如上图（1）所示，结构体的第一个变量位于低地址，既可以利用基地址来判断结构体类型，从而对不同的ptr进行类型转换来区分type。</p>
-<img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/05/02/%E6%96%AF%E5%9D%A6%E7%A6%8F2,3/%E7%BB%93%E6%9E%84%E4%BD%93%E5%BC%BA%E5%88%B6%E8%BD%AC%E6%8D%A2.png"
-                      class="" title="结构体强制转换"
-                >
-
-<p>如果第一个参数的地址位于高位，那么就无从知晓这部分与整个结构体变量的基地址的距离了。</p>
-<p>如图（2）所示，如果code变量位于高地址，由于base，type_one，type_two的成员不同，导致不同结构体中code变量地址与基地址的距离不相同，没办法对比code，即便强行知道地址对比了code，转换也无法进行（其余变量  没对齐）</p>
-<p>因此就可以做上述的强制类型转换</p>
-<ul>
-<li>为什么结构体变量指向结构体的低地址：</li>
-</ul>
-<p>只是一个规定，这样所有偏移都是正的。也可也反过来，类似于电路中的正负极（个人理解）</p>
 ]]></content>
       <tags>
         <tag>斯坦福编程范式</tag>
@@ -668,6 +775,20 @@
 ]]></content>
       <tags>
         <tag>斯坦福编程范式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++的成员函数为什么不占内存</title>
+    <url>/2024/07/13/%E7%B1%BB%E7%9A%84%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8/</url>
+    <content><![CDATA[<h5 id="类的内存占用情况："><a href="#类的内存占用情况：" class="headerlink" title="类的内存占用情况："></a>类的内存占用情况：</h5><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">C</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="type">char</span> a;</span><br><span class="line">        <span class="type">static</span> <span class="type">char</span> b;<span class="comment">//由于内存对齐，a，b共占用8byte</span></span><br><span class="line">        <span class="type">void</span> *p;<span class="comment">//指针占用8byte</span></span><br><span class="line">        <span class="type">static</span> <span class="type">int</span>* c;<span class="comment">//static 定义的静态变量不位于堆栈中，因此不影响C的内存布局</span></span><br><span class="line">        <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func1</span><span class="params">()</span></span>;<span class="comment">//虚函数表占用8byte</span></span><br><span class="line">        <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func2</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">int</span> <span class="title">func3</span><span class="params">()</span></span>&#123;<span class="comment">//普通函数不占用类的内存。</span></span><br><span class="line">            std::cout&lt;&lt;<span class="built_in">sizeof</span>(a)&lt;&lt;<span class="string">&quot; &quot;</span>&lt;&lt;<span class="built_in">sizeof</span>(b)&lt;&lt;<span class="string">&quot; &quot;</span>&lt;&lt;<span class="built_in">sizeof</span>(p)&lt;&lt;<span class="string">&quot; &quot;</span>&lt;&lt;<span class="built_in">sizeof</span>(c)&lt;&lt;std::endl;  </span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="comment">/*成员函数（包括构造函数、析构函数和其他成员函数）不会占用对象的内存空间。</span></span><br><span class="line"><span class="comment">        它们在类的内存模型中只存在一份代码，所有对象共享这份代码。成员函数被调用时，</span></span><br><span class="line"><span class="comment">        通过对象的指针或引用来确定要操作的对象，从而对相应的成员变量进行访问和操作。</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">&#125;;      </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// C c;</span></span><br><span class="line">    <span class="comment">// c.func3();</span></span><br><span class="line">    std::cout&lt;&lt;<span class="built_in">sizeof</span>(C)&lt;&lt;std::endl;  </span><br><span class="line">    <span class="comment">// std::cout&lt;&lt;sizeof(c)&lt;&lt;std::endl;  </span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>为什么成员函数不占用类的内存空间：</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">  		<span class="comment">/*成员函数的地址，编译期就已确定，并静态绑定或动态的绑定在对应的对象上。对</span></span><br><span class="line"><span class="comment">    	象调用成员函数时，编译器可以确定这些函数的地址，并通过传入this指针和其他参</span></span><br><span class="line"><span class="comment">    	数，完成函数的调用，所以类中就没有必要存储成员函数的信息。</span></span><br><span class="line"><span class="comment">    	*/</span></span><br><span class="line">		</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">N</span>&#123;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    N n;</span><br><span class="line">    n.<span class="built_in">func</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">		<span class="comment">//也就是是说当函数编译期间，n.func()的入口就会被编译为func函数定义所在地址进行跳转</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>虚函数表详解：</strong></p>
+]]></content>
+      <tags>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
