@@ -67,118 +67,6 @@
       </tags>
   </entry>
   <entry>
-    <title>如何上传本地项目到GitHub</title>
-    <url>/2023/06/17/github%E4%B8%8A%E4%BC%A0/</url>
-    <content><![CDATA[<h1 id="上传本地项目到Github"><a href="#上传本地项目到Github" class="headerlink" title="上传本地项目到Github"></a>上传本地项目到Github</h1><h3 id="第一步：安装Git"><a href="#第一步：安装Git" class="headerlink" title="第一步：安装Git"></a>第一步：安装Git</h3><h3 id="第二步：创建文件夹"><a href="#第二步：创建文件夹" class="headerlink" title="第二步：创建文件夹"></a>第二步：创建文件夹</h3><p>创建一个本地项目所在的文件夹</p>
-<p>然后右击<code>Git bash</code>在该文件夹目录下打开Git终端</p>
-<h3 id="第三步：git-init"><a href="#第三步：git-init" class="headerlink" title="第三步：git init"></a>第三步：git init</h3><p>在命令行中输入<code>git init</code>使得该文件夹变成一个可由git管理的仓库</p>
-<h3 id="第四步：git-add"><a href="#第四步：git-add" class="headerlink" title="第四步：git add ."></a>第四步：git add .</h3><p>在命令行中输入<code>git add .</code>将该文件夹所有的文件添加到缓存区</p>
-<h3 id="第五步：git-commit-m"><a href="#第五步：git-commit-m" class="headerlink" title="第五步：git commit -m"></a>第五步：git commit -m</h3><p>使用命令<code>git commit -m &quot;commit的备注信息&quot;</code></p>
-<h3 id="第六步：关联github与本地仓库"><a href="#第六步：关联github与本地仓库" class="headerlink" title="第六步：关联github与本地仓库"></a>第六步：关联github与本地仓库</h3><p>此步骤仅需要进行一次，输入<code>git remote add origin https://github.com/.git你自己的github网址</code></p>
-<p>首先在github创建一个空项目。复制https，即为本项目所上传到的网址</p>
-<p>如果想要免密登录需要在config里设置用户邮箱和github一致 </p>
-<p>并在gihub账户端设置ssh的公钥</p>
-<p>这两步缺一都需要输入密码才能关联</p>
-<h3 id="第七步：git-push-origin-master"><a href="#第七步：git-push-origin-master" class="headerlink" title="第七步：git push origin master"></a>第七步：git push origin master</h3><p>输入命令<code>git push origin master</code>将本地仓库推送到GitHub中</p>
-<p>第一次上传添加 -u</p>
-]]></content>
-      <tags>
-        <tag>Other</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解决hexo d 命令报错 Deploer not found git</title>
-    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
-    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
-<p>命令：</p>
-<p><code>npm insatll --save hexo-deployer-git</code></p>
-]]></content>
-      <tags>
-        <tag>Other</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>二维前缀和与应用</title>
-    <url>/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/</url>
-    <content><![CDATA[<h2 id="二维前缀和定义"><a href="#二维前缀和定义" class="headerlink" title="二维前缀和定义"></a>二维前缀和定义</h2><img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/1.png"
-                      class="" width="529" height="290" title="“1”"
-                >
-
-<p>红色区域所有数的和即为(i,j)的二维前缀和</p>
-<h3 id="预处理："><a href="#预处理：" class="headerlink" title="预处理："></a>预处理：</h3><p>​	即让矩阵上所有位置上的数都变成二维前缀和</p>
-<img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/2.png"
-                      class="" width="407" height="279" title="2"
-                >
-
-<p>对于每一个位置(i,j)的需要加起来的如图所示</p>
-<p>如果遍历每个值相加，复杂度太高了</p>
-<p>因此可以使用<code>Map[i][j] += Map[i - 1][j] + Map[i][j - 1] - Map[i - 1][j - 1];</code></p>
-<img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/3.png"
-                      class="" width="407" height="279" title="3"
-                >
-
-<img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/4.png"
-                      class="" width="407" height="279" title="4"
-                >
-
-<img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/5.png"
-                      class="" width="407" height="279" title="5"
-                >
-
-<p>即使用之前的值来迭代出下一个值。</p>
-<h3 id="查询："><a href="#查询：" class="headerlink" title="查询："></a>查询：</h3><img  
-                     lazyload
-                     alt="image"
-                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/6.png"
-                      class="" width="407" height="279" title="6"
-                >
-
-<p>如果想要求和两个坐标：（x1,y1）和（x2，y2）之间的所有值的和</p>
-<p>就可以使用<code>Map[x2][y2] - Map[x1 - 1][y2] - Map[x2][y1 - 1] + Map[x1 - 1][y1 - 1];</code></p>
-<p>这里要使用y1-1的原因是求和的点不包括y1-1和x1-1这两条边界。如下：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>&#125;,</span><br><span class="line">&#123;<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>&#125;,</span><br><span class="line">&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>&#125;,</span><br><span class="line">&#123;<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//设左上顶点为（0，0），如果要求（1，1）与（3，3）之间的和。</span></span><br><span class="line"><span class="comment">//那么要算M[3][3]-M[0][3]-M[3][0]+M[0][0]</span></span><br><span class="line"><span class="comment">//如果使用（1，1）那么第1列上所有的元素就被减去了</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="应用："><a href="#应用：" class="headerlink" title="应用："></a>应用：</h3><p>小美的平衡矩阵</p>
-<p>小美拿到了一个𝑛∗𝑛<em>n</em>∗<em>n</em>的矩阵，其中每个元素是 0 或者 1。<br>小美认为一个矩形区域是完美的，当且仅当该区域内 0 的数量恰好等于 1 的数量。<br>现在，小美希望你回答有多少个𝑖∗𝑖<em>i</em>∗<em>i</em>的完美矩形区域。你需要回答1≤𝑖≤𝑛1≤<em>i</em>≤<em>n</em>的所有答案。</p>
-<p>输入例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br><span class="line">1010</span><br><span class="line">0101</span><br><span class="line">1100</span><br><span class="line">0011</span><br></pre></td></tr></table></figure>
-
-<p>输出例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0</span><br><span class="line">7</span><br><span class="line">0</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
-
-<p>代码：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">210</span>;</span><br><span class="line"><span class="type">char</span> g[N][N];</span><br><span class="line"><span class="type">int</span> s[N][N], ans[N], n;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">solve</span><span class="params">(<span class="type">int</span> x1, <span class="type">int</span> y1, <span class="type">int</span> x2, <span class="type">int</span> y2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> s[x2][y2] - s[x1 - <span class="number">1</span>][y2] - s[x2][y1 - <span class="number">1</span>] + s[x1 - <span class="number">1</span>][y1 - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; ++ j) &#123;</span><br><span class="line">            cin &gt;&gt; g[i][j];</span><br><span class="line">            s[i][j] = g[i][j] - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; ++ j)</span><br><span class="line">            s[i][j] += s[i - <span class="number">1</span>][j] + s[i][j - <span class="number">1</span>] - s[i - <span class="number">1</span>][j - <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; ++ j) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">1</span>; k &lt;= n; ++ k) &#123;</span><br><span class="line">                <span class="keyword">if</span> (i + k - <span class="number">1</span> &lt;= n &amp;&amp; j + k - <span class="number">1</span> &lt;= n) &#123;</span><br><span class="line">                    <span class="type">int</span> x = <span class="built_in">solve</span>(i, j, i + k - <span class="number">1</span>, j + k - <span class="number">1</span>);</span><br><span class="line">                    <span class="keyword">if</span> (x * <span class="number">2</span> == k * k) ++ ans[k];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i)   <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans[i]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用二维前缀和，可以有效的避免计算矩阵和的时候遍历次数过多</span></span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<p>参考文章：</p>
-<p><a class="link"   href="https://www.cnblogs.com/My-flurry/p/11461640.html" >二维前缀和详解 - HEOI-动动 - 博客园 (cnblogs.com)<i class="fas fa-external-link-alt"></i></a></p>
-<p><a class="link"   href="https://www.zhihu.com/question/382522778/answer/3424577630" >https://www.zhihu.com/question/382522778/answer/3424577630<i class="fas fa-external-link-alt"></i></a></p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>虚拟内存管理</title>
     <url>/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
     <content><![CDATA[<h2 id="为什么需要虚拟内存"><a href="#为什么需要虚拟内存" class="headerlink" title="为什么需要虚拟内存"></a>为什么需要虚拟内存</h2><p>（1）进程之间的内存隔离性</p>
@@ -346,6 +234,118 @@
       </tags>
   </entry>
   <entry>
+    <title>如何上传本地项目到GitHub</title>
+    <url>/2023/06/17/github%E4%B8%8A%E4%BC%A0/</url>
+    <content><![CDATA[<h1 id="上传本地项目到Github"><a href="#上传本地项目到Github" class="headerlink" title="上传本地项目到Github"></a>上传本地项目到Github</h1><h3 id="第一步：安装Git"><a href="#第一步：安装Git" class="headerlink" title="第一步：安装Git"></a>第一步：安装Git</h3><h3 id="第二步：创建文件夹"><a href="#第二步：创建文件夹" class="headerlink" title="第二步：创建文件夹"></a>第二步：创建文件夹</h3><p>创建一个本地项目所在的文件夹</p>
+<p>然后右击<code>Git bash</code>在该文件夹目录下打开Git终端</p>
+<h3 id="第三步：git-init"><a href="#第三步：git-init" class="headerlink" title="第三步：git init"></a>第三步：git init</h3><p>在命令行中输入<code>git init</code>使得该文件夹变成一个可由git管理的仓库</p>
+<h3 id="第四步：git-add"><a href="#第四步：git-add" class="headerlink" title="第四步：git add ."></a>第四步：git add .</h3><p>在命令行中输入<code>git add .</code>将该文件夹所有的文件添加到缓存区</p>
+<h3 id="第五步：git-commit-m"><a href="#第五步：git-commit-m" class="headerlink" title="第五步：git commit -m"></a>第五步：git commit -m</h3><p>使用命令<code>git commit -m &quot;commit的备注信息&quot;</code></p>
+<h3 id="第六步：关联github与本地仓库"><a href="#第六步：关联github与本地仓库" class="headerlink" title="第六步：关联github与本地仓库"></a>第六步：关联github与本地仓库</h3><p>此步骤仅需要进行一次，输入<code>git remote add origin https://github.com/.git你自己的github网址</code></p>
+<p>首先在github创建一个空项目。复制https，即为本项目所上传到的网址</p>
+<p>如果想要免密登录需要在config里设置用户邮箱和github一致 </p>
+<p>并在gihub账户端设置ssh的公钥</p>
+<p>这两步缺一都需要输入密码才能关联</p>
+<h3 id="第七步：git-push-origin-master"><a href="#第七步：git-push-origin-master" class="headerlink" title="第七步：git push origin master"></a>第七步：git push origin master</h3><p>输入命令<code>git push origin master</code>将本地仓库推送到GitHub中</p>
+<p>第一次上传添加 -u</p>
+]]></content>
+      <tags>
+        <tag>Other</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>二维前缀和与应用</title>
+    <url>/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/</url>
+    <content><![CDATA[<h2 id="二维前缀和定义"><a href="#二维前缀和定义" class="headerlink" title="二维前缀和定义"></a>二维前缀和定义</h2><img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/1.png"
+                      class="" width="529" height="290" title="“1”"
+                >
+
+<p>红色区域所有数的和即为(i,j)的二维前缀和</p>
+<h3 id="预处理："><a href="#预处理：" class="headerlink" title="预处理："></a>预处理：</h3><p>​	即让矩阵上所有位置上的数都变成二维前缀和</p>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/2.png"
+                      class="" width="407" height="279" title="2"
+                >
+
+<p>对于每一个位置(i,j)的需要加起来的如图所示</p>
+<p>如果遍历每个值相加，复杂度太高了</p>
+<p>因此可以使用<code>Map[i][j] += Map[i - 1][j] + Map[i][j - 1] - Map[i - 1][j - 1];</code></p>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/3.png"
+                      class="" width="407" height="279" title="3"
+                >
+
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/4.png"
+                      class="" width="407" height="279" title="4"
+                >
+
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/5.png"
+                      class="" width="407" height="279" title="5"
+                >
+
+<p>即使用之前的值来迭代出下一个值。</p>
+<h3 id="查询："><a href="#查询：" class="headerlink" title="查询："></a>查询：</h3><img  
+                     lazyload
+                     alt="image"
+                     data-src="/2024/07/13/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/6.png"
+                      class="" width="407" height="279" title="6"
+                >
+
+<p>如果想要求和两个坐标：（x1,y1）和（x2，y2）之间的所有值的和</p>
+<p>就可以使用<code>Map[x2][y2] - Map[x1 - 1][y2] - Map[x2][y1 - 1] + Map[x1 - 1][y1 - 1];</code></p>
+<p>这里要使用y1-1的原因是求和的点不包括y1-1和x1-1这两条边界。如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>&#125;,</span><br><span class="line">&#123;<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>&#125;,</span><br><span class="line">&#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>&#125;,</span><br><span class="line">&#123;<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//设左上顶点为（0，0），如果要求（1，1）与（3，3）之间的和。</span></span><br><span class="line"><span class="comment">//那么要算M[3][3]-M[0][3]-M[3][0]+M[0][0]</span></span><br><span class="line"><span class="comment">//如果使用（1，1）那么第1列上所有的元素就被减去了</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="应用："><a href="#应用：" class="headerlink" title="应用："></a>应用：</h3><p>小美的平衡矩阵</p>
+<p>小美拿到了一个𝑛∗𝑛<em>n</em>∗<em>n</em>的矩阵，其中每个元素是 0 或者 1。<br>小美认为一个矩形区域是完美的，当且仅当该区域内 0 的数量恰好等于 1 的数量。<br>现在，小美希望你回答有多少个𝑖∗𝑖<em>i</em>∗<em>i</em>的完美矩形区域。你需要回答1≤𝑖≤𝑛1≤<em>i</em>≤<em>n</em>的所有答案。</p>
+<p>输入例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4</span><br><span class="line">1010</span><br><span class="line">0101</span><br><span class="line">1100</span><br><span class="line">0011</span><br></pre></td></tr></table></figure>
+
+<p>输出例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0</span><br><span class="line">7</span><br><span class="line">0</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<p>代码：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">210</span>;</span><br><span class="line"><span class="type">char</span> g[N][N];</span><br><span class="line"><span class="type">int</span> s[N][N], ans[N], n;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">solve</span><span class="params">(<span class="type">int</span> x1, <span class="type">int</span> y1, <span class="type">int</span> x2, <span class="type">int</span> y2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> s[x2][y2] - s[x1 - <span class="number">1</span>][y2] - s[x2][y1 - <span class="number">1</span>] + s[x1 - <span class="number">1</span>][y1 - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; ++ j) &#123;</span><br><span class="line">            cin &gt;&gt; g[i][j];</span><br><span class="line">            s[i][j] = g[i][j] - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; ++ j)</span><br><span class="line">            s[i][j] += s[i - <span class="number">1</span>][j] + s[i][j - <span class="number">1</span>] - s[i - <span class="number">1</span>][j - <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; ++ j) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">1</span>; k &lt;= n; ++ k) &#123;</span><br><span class="line">                <span class="keyword">if</span> (i + k - <span class="number">1</span> &lt;= n &amp;&amp; j + k - <span class="number">1</span> &lt;= n) &#123;</span><br><span class="line">                    <span class="type">int</span> x = <span class="built_in">solve</span>(i, j, i + k - <span class="number">1</span>, j + k - <span class="number">1</span>);</span><br><span class="line">                    <span class="keyword">if</span> (x * <span class="number">2</span> == k * k) ++ ans[k];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++ i)   <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans[i]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用二维前缀和，可以有效的避免计算矩阵和的时候遍历次数过多</span></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>参考文章：</p>
+<p><a class="link"   href="https://www.cnblogs.com/My-flurry/p/11461640.html" >二维前缀和详解 - HEOI-动动 - 博客园 (cnblogs.com)<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   href="https://www.zhihu.com/question/382522778/answer/3424577630" >https://www.zhihu.com/question/382522778/answer/3424577630<i class="fas fa-external-link-alt"></i></a></p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决hexo d 命令报错 Deploer not found git</title>
+    <url>/2023/06/17/hexo%20d%20%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99%20Deploer%20not%20found%20git/</url>
+    <content><![CDATA[<h1 id="解决hexo-d-命令报错-Deploer-not-found-git"><a href="#解决hexo-d-命令报错-Deploer-not-found-git" class="headerlink" title="解决hexo d 命令报错 Deploer not found git"></a>解决hexo d 命令报错 Deploer not found git</h1><p>安装hexo-deployer-git</p>
+<p>命令：</p>
+<p><code>npm insatll --save hexo-deployer-git</code></p>
+]]></content>
+      <tags>
+        <tag>Other</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>斯坦福编程范式公开课第一节：课程大纲</title>
     <url>/2024/05/01/%E6%96%AF%E5%9D%A6%E7%A6%8F1/</url>
     <content><![CDATA[<h3 id="第1节：课程大纲"><a href="#第1节：课程大纲" class="headerlink" title="第1节：课程大纲"></a>第1节：课程大纲</h3><p><strong>编程语言</strong></p>
@@ -408,29 +408,6 @@
       </tags>
   </entry>
   <entry>
-    <title>斯坦福编程范式公开课第十二节：预处理器</title>
-    <url>/2024/05/08/%E6%96%AF%E5%9D%A6%E7%A6%8F12/</url>
-    <content><![CDATA[<h3 id="第12节：预处理器"><a href="#第12节：预处理器" class="headerlink" title="第12节：预处理器"></a>第12节：预处理器</h3><p><strong>#define</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> KWidth  480</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> KHeight 720</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> KPerameter 2*(KWidth+KHeight)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Width is %d&quot;</span>, KWdith);</span><br><span class="line"><span class="type">int</span> area=KWidth*KHeight;</span><br><span class="line"></span><br><span class="line"><span class="comment">//当预处理器遇到#define，会将两个值存储到一个hashset中。以KWidth为Key，480为值。</span></span><br><span class="line"><span class="comment">//通过预处理器，代码中的KWdith会通过hashset转化为常量</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//预处理器不会进行错误检查</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//计算VectorNth 即计算第N个元素的地址</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NthElemAddr(base,elemSize,index) ((cahr*)base+index*elemSize)</span></span><br><span class="line">		</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> NDEBUG</span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> assert(cond) (void)0</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> assert(cond) (cond)?((void) 0):fprintf(stderr,<span class="string">&quot;---&quot;</span>),exit(0)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="type">void</span> *<span class="title function_">VectorNth</span><span class="params">(<span class="built_in">vector</span> *v,<span class="type">int</span> position)</span>&#123;</span><br><span class="line">    assert(position&gt;=<span class="number">0</span>);</span><br><span class="line">    assert(position&lt;v-&gt;loglength);</span><br><span class="line">    <span class="keyword">return</span> NthElemAddr(v-&gt;elems,v-&gt;elemSize,position);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在下面这些情况预处理器会有一些不足：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(a,b)   (((a)&gt;(b))?(a):(b))</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> max=MAX(fib(<span class="number">100</span>),fact(<span class="number">4000</span>));</span><br><span class="line"><span class="comment">//实际上会被展开为</span></span><br><span class="line"><span class="comment">//int max=(fib(100)&gt;fact(4000))?fib(100):fact(4000)</span></span><br><span class="line"><span class="comment">//fibnacci数列本身计算时间就非常长，使用宏会调用两次fib()，导致性能变差</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> max=MAX(m++,n++);</span><br><span class="line"><span class="comment">//int max=((m++)&gt;(n++))?(m++):(n++);</span></span><br><span class="line"><span class="comment">//较大的呢个数将会被自增两次</span></span><br></pre></td></tr></table></figure>
-
-<p>Jerry Cain：由于这些原因，我更喜欢使用static const来定义全局常量而不是#define，大家应该尽量避免预处理的这些特性。</p>
-<p><strong>#include</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;vector.h&quot;</span></span></span><br><span class="line"><span class="comment">//&lt;&gt;代表了这是一个系统头文件，由编译器提供，使用默认路径找到其位置</span></span><br><span class="line"><span class="comment">//&quot;&quot;的表示，预处理器会将vector.h中的内容写入到此文件中</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//cc.h</span></span><br><span class="line"><span class="comment">//在头文件定义的时候加入,避免同一个头文件被多次调用</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _cc_h_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _cc_h_</span></span><br><span class="line">----</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br></pre></td></tr></table></figure>
-
-<p>只能#include头文件，因为头文件只能用于声明，不能分配任何的存储空间（除非定义全局共享变量），也不并不产生相应的机器代码。</p>
-]]></content>
-      <tags>
-        <tag>斯坦福编程范式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>斯坦福编程范式公开课第十一节：指针与引用</title>
     <url>/2024/05/07/%E6%96%AF%E5%9D%A6%E7%A6%8F11/</url>
     <content><![CDATA[<h3 id="第11节：指针与引用"><a href="#第11节：指针与引用" class="headerlink" title="第11节：指针与引用"></a>第11节：指针与引用</h3><p><strong>swap的c和c++版本，来讲述指针如何在内存中实现。</strong></p>
@@ -487,6 +464,29 @@
       </tags>
   </entry>
   <entry>
+    <title>斯坦福编程范式公开课第十二节：预处理器</title>
+    <url>/2024/05/08/%E6%96%AF%E5%9D%A6%E7%A6%8F12/</url>
+    <content><![CDATA[<h3 id="第12节：预处理器"><a href="#第12节：预处理器" class="headerlink" title="第12节：预处理器"></a>第12节：预处理器</h3><p><strong>#define</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> KWidth  480</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> KHeight 720</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> KPerameter 2*(KWidth+KHeight)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Width is %d&quot;</span>, KWdith);</span><br><span class="line"><span class="type">int</span> area=KWidth*KHeight;</span><br><span class="line"></span><br><span class="line"><span class="comment">//当预处理器遇到#define，会将两个值存储到一个hashset中。以KWidth为Key，480为值。</span></span><br><span class="line"><span class="comment">//通过预处理器，代码中的KWdith会通过hashset转化为常量</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//预处理器不会进行错误检查</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//计算VectorNth 即计算第N个元素的地址</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NthElemAddr(base,elemSize,index) ((cahr*)base+index*elemSize)</span></span><br><span class="line">		</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> NDEBUG</span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> assert(cond) (void)0</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> assert(cond) (cond)?((void) 0):fprintf(stderr,<span class="string">&quot;---&quot;</span>),exit(0)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="type">void</span> *<span class="title function_">VectorNth</span><span class="params">(<span class="built_in">vector</span> *v,<span class="type">int</span> position)</span>&#123;</span><br><span class="line">    assert(position&gt;=<span class="number">0</span>);</span><br><span class="line">    assert(position&lt;v-&gt;loglength);</span><br><span class="line">    <span class="keyword">return</span> NthElemAddr(v-&gt;elems,v-&gt;elemSize,position);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在下面这些情况预处理器会有一些不足：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(a,b)   (((a)&gt;(b))?(a):(b))</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> max=MAX(fib(<span class="number">100</span>),fact(<span class="number">4000</span>));</span><br><span class="line"><span class="comment">//实际上会被展开为</span></span><br><span class="line"><span class="comment">//int max=(fib(100)&gt;fact(4000))?fib(100):fact(4000)</span></span><br><span class="line"><span class="comment">//fibnacci数列本身计算时间就非常长，使用宏会调用两次fib()，导致性能变差</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> max=MAX(m++,n++);</span><br><span class="line"><span class="comment">//int max=((m++)&gt;(n++))?(m++):(n++);</span></span><br><span class="line"><span class="comment">//较大的呢个数将会被自增两次</span></span><br></pre></td></tr></table></figure>
+
+<p>Jerry Cain：由于这些原因，我更喜欢使用static const来定义全局常量而不是#define，大家应该尽量避免预处理的这些特性。</p>
+<p><strong>#include</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;vector.h&quot;</span></span></span><br><span class="line"><span class="comment">//&lt;&gt;代表了这是一个系统头文件，由编译器提供，使用默认路径找到其位置</span></span><br><span class="line"><span class="comment">//&quot;&quot;的表示，预处理器会将vector.h中的内容写入到此文件中</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//cc.h</span></span><br><span class="line"><span class="comment">//在头文件定义的时候加入,避免同一个头文件被多次调用</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _cc_h_</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _cc_h_</span></span><br><span class="line">----</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> </span></span><br></pre></td></tr></table></figure>
+
+<p>只能#include头文件，因为头文件只能用于声明，不能分配任何的存储空间（除非定义全局共享变量），也不并不产生相应的机器代码。</p>
+]]></content>
+      <tags>
+        <tag>斯坦福编程范式</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>斯坦福编程范式公开课第十四节：程序调试错误（内存对齐与结构体内存布局）</title>
     <url>/2024/05/10/%E6%96%AF%E5%9D%A6%E7%A6%8F14/</url>
     <content><![CDATA[<h3 id="第14节：程序调试错误"><a href="#第14节：程序调试错误" class="headerlink" title="第14节：程序调试错误"></a>第14节：程序调试错误</h3><p><strong>Segmentation  faul :</strong>  </p>
@@ -536,21 +536,6 @@
 <li>为什么结构体变量指向结构体的低地址：</li>
 </ul>
 <p>只是一个规定，这样所有偏移都是正的。也可也反过来，类似于电路中的正负极（个人理解）</p>
-]]></content>
-      <tags>
-        <tag>斯坦福编程范式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>斯坦福编程范式公开课第十五节：并发编程</title>
-    <url>/2024/05/11/%E6%96%AF%E5%9D%A6%E7%A6%8F15/</url>
-    <content><![CDATA[<h3 id="第15节：并发编程"><a href="#第15节：并发编程" class="headerlink" title="第15节：并发编程"></a>第15节：并发编程</h3><p>这里的并发性更多是让程序在执行时具有并发性，对于服务器以及UI界面等应用，可以让用户有更好的体验。</p>
-<p>而不是针对于多核cpu的并行计算（并行和并发的区别），并行需要物理上拥有多核CPU。 </p>
-<p><strong>进程切换：</strong></p>
-<p>多线程实例：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//10个代理，每人卖15张票</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        SellTickets(agent,numTickets/numAgents);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agentID,<span class="type">int</span> numTicketToSell)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>(numTicketsToSell&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        numTicketToSell--;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;</span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//使用Thread包来进行并发</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    InitThreadPackage(<span class="literal">false</span>);<span class="comment">//false代表不打印调试信息</span></span><br><span class="line"> 	<span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        <span class="type">char</span> name[<span class="number">32</span>];</span><br><span class="line">        <span class="built_in">sprintf</span>(name,<span class="string">&quot;Agent%d Thread&quot;</span>,agent);</span><br><span class="line">        ThreadNew(name,SellTickets,<span class="number">2</span>,agent,numTickets/numAgents);<span class="comment">//将函数加入各个线程</span></span><br><span class="line">    &#125;</span><br><span class="line">    RunAllThread();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agentID,<span class="type">int</span> numTicketToSell)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>(numTicketsToSell&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        numTicketToSell--;</span><br><span class="line">        <span class="keyword">if</span>(RandomChance(<span class="number">0.1</span>))ThreadSleep(<span class="number">1000</span>);<span class="comment">//10分之一的概率该线程停止1s</span></span><br><span class="line">    &#125; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;<span class="comment">//这里的thread相关函数貌似并不是现实中c标准库中的函数，可运行的代码在tk/stanford/thread</span></span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//十个代理共享150张票</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agent,<span class="type">int</span> *numTicketp)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span>(*numTicketsp&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        *numTicketp--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;<span class="comment">//会导致最后一张票被十个人卖，也就是一共卖了159张票</span></span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//加入信号量来控制线程的访问</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    Semaphore lock = SemaphoreNOW(<span class="number">-1</span>,<span class="number">1</span>);</span><br><span class="line">    InitThreadPackage(<span class="literal">false</span>);<span class="comment">//false代表不打印调试信息</span></span><br><span class="line"> 	<span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        <span class="type">char</span> name[<span class="number">32</span>];</span><br><span class="line">        <span class="built_in">sprintf</span>(name,<span class="string">&quot;Agent%d Thread&quot;</span>,agent);</span><br><span class="line">        ThreadNew(name,SellTickets,<span class="number">3</span>,agent,&amp;numTickets,lock);<span class="comment">//将函数加入各个线程</span></span><br><span class="line">    &#125;</span><br><span class="line">    RunAllThread();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agent,<span class="type">int</span> *numTicketp,Semaphore lock)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        SemaphoreWait(lock);</span><br><span class="line">        <span class="keyword">if</span>(*numTicketp==<span class="number">0</span>)<span class="keyword">break</span>;</span><br><span class="line">        (*numTicketp)--;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        SemaphoreSignal(lock);</span><br><span class="line">    &#125;</span><br><span class="line">	SemaphoreSignal(lock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>时间片(time slice)：</p>
 ]]></content>
       <tags>
         <tag>斯坦福编程范式</tag>
@@ -646,6 +631,21 @@
 </tbody></table>
 <p>​	进行float强制转换的时候，也会先进行小端读取，0 00000000 00000000000000000000101，再进行位划分</p>
 <p>​	也就是浮点数也是按照小端格式存储的（转换再转换，负负得正了）</p>
+]]></content>
+      <tags>
+        <tag>斯坦福编程范式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>斯坦福编程范式公开课第十五节：并发编程</title>
+    <url>/2024/05/11/%E6%96%AF%E5%9D%A6%E7%A6%8F15/</url>
+    <content><![CDATA[<h3 id="第15节：并发编程"><a href="#第15节：并发编程" class="headerlink" title="第15节：并发编程"></a>第15节：并发编程</h3><p>这里的并发性更多是让程序在执行时具有并发性，对于服务器以及UI界面等应用，可以让用户有更好的体验。</p>
+<p>而不是针对于多核cpu的并行计算（并行和并发的区别），并行需要物理上拥有多核CPU。 </p>
+<p><strong>进程切换：</strong></p>
+<p>多线程实例：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//10个代理，每人卖15张票</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        SellTickets(agent,numTickets/numAgents);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agentID,<span class="type">int</span> numTicketToSell)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>(numTicketsToSell&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        numTicketToSell--;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;</span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//使用Thread包来进行并发</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    InitThreadPackage(<span class="literal">false</span>);<span class="comment">//false代表不打印调试信息</span></span><br><span class="line"> 	<span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        <span class="type">char</span> name[<span class="number">32</span>];</span><br><span class="line">        <span class="built_in">sprintf</span>(name,<span class="string">&quot;Agent%d Thread&quot;</span>,agent);</span><br><span class="line">        ThreadNew(name,SellTickets,<span class="number">2</span>,agent,numTickets/numAgents);<span class="comment">//将函数加入各个线程</span></span><br><span class="line">    &#125;</span><br><span class="line">    RunAllThread();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agentID,<span class="type">int</span> numTicketToSell)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>(numTicketsToSell&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        numTicketToSell--;</span><br><span class="line">        <span class="keyword">if</span>(RandomChance(<span class="number">0.1</span>))ThreadSleep(<span class="number">1000</span>);<span class="comment">//10分之一的概率该线程停止1s</span></span><br><span class="line">    &#125; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;<span class="comment">//这里的thread相关函数貌似并不是现实中c标准库中的函数，可运行的代码在tk/stanford/thread</span></span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//十个代理共享150张票</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agent,<span class="type">int</span> *numTicketp)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span>(*numTicketsp&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        *numTicketp--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;<span class="comment">//会导致最后一张票被十个人卖，也就是一共卖了159张票</span></span><br><span class="line">#########################################################################################</span><br><span class="line"><span class="comment">//加入信号量来控制线程的访问</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> numAgents =<span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> numTickets =<span class="number">150</span>;</span><br><span class="line">    Semaphore lock = SemaphoreNOW(<span class="number">-1</span>,<span class="number">1</span>);</span><br><span class="line">    InitThreadPackage(<span class="literal">false</span>);<span class="comment">//false代表不打印调试信息</span></span><br><span class="line"> 	<span class="keyword">for</span>(<span class="type">int</span> agent=<span class="number">1</span>;agent&lt;=numAgents;agent++)&#123;</span><br><span class="line">        <span class="type">char</span> name[<span class="number">32</span>];</span><br><span class="line">        <span class="built_in">sprintf</span>(name,<span class="string">&quot;Agent%d Thread&quot;</span>,agent);</span><br><span class="line">        ThreadNew(name,SellTickets,<span class="number">3</span>,agent,&amp;numTickets,lock);<span class="comment">//将函数加入各个线程</span></span><br><span class="line">    &#125;</span><br><span class="line">    RunAllThread();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">SellTickets</span><span class="params">(<span class="type">int</span> agent,<span class="type">int</span> *numTicketp,Semaphore lock)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        SemaphoreWait(lock);</span><br><span class="line">        <span class="keyword">if</span>(*numTicketp==<span class="number">0</span>)<span class="keyword">break</span>;</span><br><span class="line">        (*numTicketp)--;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Agent%d sells a ticket&quot;</span>,agentID);</span><br><span class="line">        SemaphoreSignal(lock);</span><br><span class="line">    &#125;</span><br><span class="line">	SemaphoreSignal(lock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Agent%d: All done\n&quot;</span>,agentID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>时间片(time slice)：</p>
 ]]></content>
       <tags>
         <tag>斯坦福编程范式</tag>
