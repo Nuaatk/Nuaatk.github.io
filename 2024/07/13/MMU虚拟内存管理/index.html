@@ -187,7 +187,7 @@
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2024-07-16 22:35:59</span>
+        <span class="pc">2024-07-19 15:54:02</span>
     </span>
     
     
@@ -207,12 +207,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>2.7k 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>2.5k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>10 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>9 分钟</span>
         </span>
     
     
@@ -307,7 +307,7 @@
 <p>4、从缺页异常处理程序返回得到异常的指令，重新执行该指令，就会执行页面命中的步骤</p>
 <h2 id="分页和分段的区别"><a href="#分页和分段的区别" class="headerlink" title="分页和分段的区别"></a>分页和分段的区别</h2><p>分段和分页都是为了解决直接使用物理地址导致的问题：</p>
 <p><strong>1、地址空间不隔离：</strong></p>
-<p>​	假设程序A的地址空间为0x00000000<del>0x00000099，程序B的地址空间为0x00000100</del>0x0x00000199。假设在运行程序A的时候，操作了地址0x000000150，那么就会导致严重的错误</p>
+<p>​	假设程序A的地址空间为<code>0x00000000~0x00000099</code>，程序B的地址空间为<code>0x00000100~0x0x00000199</code>。假设在运行程序A的时候，操作了地址<code>0x000000150</code>，那么就会导致严重的错误</p>
 <p><strong>2、程序运行时地址不确定：</strong></p>
 <p>​	程序在编译的时候地址就要确定，如果使用物理地址，那么则无法在编译的时候确定好哪个内存空间是free的。这仅在运行的时候才能确定。</p>
 <p><strong>3、内存使用率地下：</strong></p>
@@ -364,11 +364,6 @@
 
 
 
-
-
-
-<h2 id="Gem5中的实现"><a href="#Gem5中的实现" class="headerlink" title="Gem5中的实现"></a>Gem5中的实现</h2><p><strong>PageTableWalker Debug flags</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//page fault</span></span><br><span class="line"><span class="number">210403318068</span>: board.processor.cores1.core.mmu.dtb.walker: Performing table walk <span class="keyword">for</span> address <span class="number">0x3fe6640000</span></span><br><span class="line"><span class="number">210403318068</span>: board.processor.cores1.core.mmu.dtb.walker: Loading level2 PTE from <span class="number">0x100fe87f8</span><span class="comment">//最高级的页表地址由satp寄存器存储</span></span><br><span class="line"><span class="number">210403318401</span>: board.processor.cores1.core.mmu.dtb.walker: Got level2 PTE: <span class="number">0x403fa401</span></span><br><span class="line"><span class="number">210403318401</span>: board.processor.cores1.core.mmu.dtb.walker: Loading level1 PTE from <span class="number">0x100fe9998</span></span><br><span class="line"><span class="number">210403318734</span>: board.processor.cores1.core.mmu.dtb.walker: Got level1 PTE: <span class="number">0x403cfc01</span></span><br><span class="line"><span class="number">210403318734</span>: board.processor.cores1.core.mmu.dtb.walker: Loading level0 PTE from <span class="number">0x100f3f200</span></span><br><span class="line"><span class="number">210403323396</span>: board.processor.cores1.core.mmu.dtb.walker: Got level0 PTE: <span class="number">0</span></span><br><span class="line"><span class="number">210403323396</span>: board.processor.cores1.core.mmu.dtb.walker: PTE invalid, raising PF</span><br><span class="line"><span class="number">210403323396</span>: board.processor.cores1.core.mmu.dtb.walker: Raising page fault.</span><br><span class="line"></span><br><span class="line"><span class="comment">//3-level</span></span><br><span class="line"><span class="number">210404295090</span>: board.processor.cores0.core.mmu.dtb.walker: Performing table walk <span class="keyword">for</span> address <span class="number">0x3fcba6deb8</span></span><br><span class="line"><span class="number">210404295090</span>: board.processor.cores0.core.mmu.dtb.walker: Loading level2 PTE from <span class="number">0x100ff17f8</span></span><br><span class="line"><span class="number">210404295423</span>: board.processor.cores0.core.mmu.dtb.walker: Got level2 PTE: <span class="number">0x403fc801</span></span><br><span class="line"><span class="number">210404295423</span>: board.processor.cores0.core.mmu.dtb.walker: Loading level1 PTE from <span class="number">0x100ff22e8</span></span><br><span class="line"><span class="number">210404295756</span>: board.processor.cores0.core.mmu.dtb.walker: Got level1 PTE: <span class="number">0x403d6001</span></span><br><span class="line"><span class="number">210404295756</span>: board.processor.cores0.core.mmu.dtb.walker: Loading level0 PTE from <span class="number">0x100f58368</span></span><br><span class="line"><span class="number">210404296089</span>: board.processor.cores0.core.mmu.dtb.walker: Got level0 PTE: <span class="number">0x4f317053</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//2-level</span></span><br><span class="line"><span class="number">579021399</span>: board.processor.cores1.core.mmu.itb.walker: Performing table walk <span class="keyword">for</span> address <span class="number">0xffffffe000005248</span></span><br><span class="line"><span class="number">579021399</span>: board.processor.cores1.core.mmu.itb.walker: Loading level2 PTE from <span class="number">0x80ed3c00</span></span><br><span class="line"><span class="number">579023064</span>: board.processor.cores1.core.mmu.itb.walker: Got level2 PTE: <span class="number">0x4ffffc01</span></span><br><span class="line"><span class="number">579023064</span>: board.processor.cores1.core.mmu.itb.walker: Loading level1 PTE from <span class="number">0x13ffff000</span></span><br><span class="line"><span class="number">579024729</span>: board.processor.cores1.core.mmu.itb.walker: Got level1 PTE: <span class="number">0x200800cf</span></span><br></pre></td></tr></table></figure>
 
 
 
@@ -443,7 +438,7 @@
                               <i class="fas fa-chevron-left"></i>
                             </span>
                                 <span class="title flex-center">
-                                <span class="post-nav-title-item">C++的成员函数为什么不占内存</span>
+                                <span class="post-nav-title-item">C++类中成员函数为什么不占类的内存空间</span>
                                 <span class="post-nav-item">上一篇</span>
                             </span>
                             </a>
@@ -475,7 +470,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="nav-number">1.</span> <span class="nav-text">为什么需要虚拟内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TLB%E5%92%8CPage-Table%E7%9A%84%E5%90%AB%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">TLB和Page Table的含义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%88%86%E5%A4%9A%E7%BA%A7%E9%A1%B5%E8%A1%A8"><span class="nav-number">3.</span> <span class="nav-text">为什么要分多级页表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Page-Table-walk"><span class="nav-number">4.</span> <span class="nav-text">Page Table walk</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E9%A1%B5%E5%92%8C%E5%88%86%E6%AE%B5%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">5.</span> <span class="nav-text">分页和分段的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E9%99%85%E6%83%85%E5%86%B5"><span class="nav-number">6.</span> <span class="nav-text">现代操作系统的实际情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gem5%E4%B8%AD%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">7.</span> <span class="nav-text">Gem5中的实现</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="nav-number">1.</span> <span class="nav-text">为什么需要虚拟内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TLB%E5%92%8CPage-Table%E7%9A%84%E5%90%AB%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">TLB和Page Table的含义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%88%86%E5%A4%9A%E7%BA%A7%E9%A1%B5%E8%A1%A8"><span class="nav-number">3.</span> <span class="nav-text">为什么要分多级页表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Page-Table-walk"><span class="nav-number">4.</span> <span class="nav-text">Page Table walk</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E9%A1%B5%E5%92%8C%E5%88%86%E6%AE%B5%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">5.</span> <span class="nav-text">分页和分段的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E9%99%85%E6%83%85%E5%86%B5"><span class="nav-number">6.</span> <span class="nav-text">现代操作系统的实际情况</span></a></li></ol>
     </div>
 </div>
 

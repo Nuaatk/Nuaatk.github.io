@@ -9,7 +9,7 @@
     
     <title>
         
-            C++类中成员函数为什么不占类的内存空间 |
+            使用Gem5来探究内存分页机制 |
         
         TK&#39;s blog
     </title>
@@ -159,7 +159,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">C++类中成员函数为什么不占类的内存空间</span>
+                <span class="title-hover-animation">使用Gem5来探究内存分页机制</span>
             </div>
 
             
@@ -181,13 +181,13 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2024-07-13 14:31:09</span>
-        <span class="mobile">2024-07-13 14:31</span>
+        <span class="pc">2024-07-19 15:52:58</span>
+        <span class="mobile">2024-07-19 15:52</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2024-07-20 13:18:31</span>
+        <span class="pc">2024-07-19 15:55:38</span>
     </span>
     
     
@@ -197,7 +197,7 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/C/">C++</a>&nbsp;
+                        <a href="/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">体系结构</a>&nbsp;
                     </li>
                 
             </ul>
@@ -207,12 +207,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>800 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>557 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>3 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>2 分钟</span>
         </span>
     
     
@@ -230,28 +230,56 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <h5 id="类的内存占用情况："><a href="#类的内存占用情况：" class="headerlink" title="类的内存占用情况："></a>类的内存占用情况：</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">C</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="type">char</span> a;</span><br><span class="line">        <span class="type">static</span> <span class="type">char</span> b;<span class="comment">//由于内存对齐，a，b共占用8byte</span></span><br><span class="line">        <span class="type">void</span> *p;<span class="comment">//指针占用8byte</span></span><br><span class="line">        <span class="type">static</span> <span class="type">int</span>* c;<span class="comment">//static 定义的静态变量不位于堆栈中，因此不影响C的内存布局</span></span><br><span class="line">        <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func1</span><span class="params">()</span></span>;<span class="comment">//虚函数表占用8byte</span></span><br><span class="line">        <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func2</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">int</span> <span class="title">func3</span><span class="params">()</span></span>&#123;<span class="comment">//普通函数不占用类的内存。</span></span><br><span class="line">            std::cout&lt;&lt;<span class="built_in">sizeof</span>(a)&lt;&lt;<span class="string">&quot; &quot;</span>&lt;&lt;<span class="built_in">sizeof</span>(b)&lt;&lt;<span class="string">&quot; &quot;</span>&lt;&lt;<span class="built_in">sizeof</span>(p)&lt;&lt;<span class="string">&quot; &quot;</span>&lt;&lt;<span class="built_in">sizeof</span>(c)&lt;&lt;std::endl;  </span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="comment">/*成员函数（包括构造函数、析构函数和其他成员函数）不会占用对象的内存空间。</span></span><br><span class="line"><span class="comment">        它们在类的内存模型中只存在一份代码，所有对象共享这份代码。成员函数被调用时，</span></span><br><span class="line"><span class="comment">        通过对象的指针或引用来确定要操作的对象，从而对相应的成员变量进行访问和操作。</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">&#125;;      </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// C c;</span></span><br><span class="line">    <span class="comment">// c.func3();</span></span><br><span class="line">    std::cout&lt;&lt;<span class="built_in">sizeof</span>(C)&lt;&lt;std::endl;  </span><br><span class="line">    <span class="comment">// std::cout&lt;&lt;sizeof(c)&lt;&lt;std::endl;  </span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>为什么成员函数不占用类的内存空间：</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*成员函数的地址，编译期就已确定，并静态绑定或动态的绑定在对应的对象上。对</span></span><br><span class="line"><span class="comment">    	象调用成员函数时，编译器可以确定这些函数的地址，并通过传入this指针和其他参</span></span><br><span class="line"><span class="comment">    	数，完成函数的调用，所以类中就没有必要存储成员函数的信息。</span></span><br><span class="line"><span class="comment">    	*/</span></span><br><span class="line">		</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">N</span>&#123;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    N n;</span><br><span class="line">    n.<span class="built_in">func</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//也就是是说当函数编译期间，n.func()的入口就会被编译为func函数定义所在地址进行跳转</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>继承中成员函数的内存空间：</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> x, y;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;show&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> :<span class="keyword">public</span> A &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> z;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">sizeof</span>(A) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">sizeof</span>(B) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+                <h2 id="Gem5中查表的实现"><a href="#Gem5中查表的实现" class="headerlink" title="Gem5中查表的实现"></a>Gem5中查表的实现</h2><p>以RISC-V架构TimingSimpleCPU为例，添加<strong>PageTableWalker</strong> Debug flags，得到console输出。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//page fault</span></span><br><span class="line"><span class="number">210403318068</span>: board.processor.cores1.core.mmu.dtb.walker: Performing table walk <span class="keyword">for</span> address <span class="number">0x3fe6640000</span></span><br><span class="line"><span class="number">210403318068</span>: board.processor.cores1.core.mmu.dtb.walker: Loading level2 PTE from <span class="number">0x100fe87f8</span><span class="comment">//最高级的页表地址由satp寄存器存储</span></span><br><span class="line"><span class="number">210403318401</span>: board.processor.cores1.core.mmu.dtb.walker: Got level2 PTE: <span class="number">0x403fa401</span></span><br><span class="line"><span class="number">210403318401</span>: board.processor.cores1.core.mmu.dtb.walker: Loading level1 PTE from <span class="number">0x100fe9998</span></span><br><span class="line"><span class="number">210403318734</span>: board.processor.cores1.core.mmu.dtb.walker: Got level1 PTE: <span class="number">0x403cfc01</span></span><br><span class="line"><span class="number">210403318734</span>: board.processor.cores1.core.mmu.dtb.walker: Loading level0 PTE from <span class="number">0x100f3f200</span></span><br><span class="line"><span class="number">210403323396</span>: board.processor.cores1.core.mmu.dtb.walker: Got level0 PTE: <span class="number">0</span></span><br><span class="line"><span class="number">210403323396</span>: board.processor.cores1.core.mmu.dtb.walker: PTE invalid, raising PF</span><br><span class="line"><span class="number">210403323396</span>: board.processor.cores1.core.mmu.dtb.walker: Raising page fault.</span><br><span class="line"></span><br><span class="line"><span class="comment">//3-level</span></span><br><span class="line"><span class="number">210404295090</span>: board.processor.cores0.core.mmu.dtb.walker: Performing table walk <span class="keyword">for</span> address <span class="number">0x3fcba6deb8</span></span><br><span class="line"><span class="number">210404295090</span>: board.processor.cores0.core.mmu.dtb.walker: Loading level2 PTE from <span class="number">0x100ff17f8</span></span><br><span class="line"><span class="number">210404295423</span>: board.processor.cores0.core.mmu.dtb.walker: Got level2 PTE: <span class="number">0x403fc801</span></span><br><span class="line"><span class="number">210404295423</span>: board.processor.cores0.core.mmu.dtb.walker: Loading level1 PTE from <span class="number">0x100ff22e8</span></span><br><span class="line"><span class="number">210404295756</span>: board.processor.cores0.core.mmu.dtb.walker: Got level1 PTE: <span class="number">0x403d6001</span></span><br><span class="line"><span class="number">210404295756</span>: board.processor.cores0.core.mmu.dtb.walker: Loading level0 PTE from <span class="number">0x100f58368</span></span><br><span class="line"><span class="number">210404296089</span>: board.processor.cores0.core.mmu.dtb.walker: Got level0 PTE: <span class="number">0x4f317053</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//2-level</span></span><br><span class="line"><span class="number">579021399</span>: board.processor.cores1.core.mmu.itb.walker: Performing table walk <span class="keyword">for</span> address <span class="number">0xffffffe000005248</span></span><br><span class="line"><span class="number">579021399</span>: board.processor.cores1.core.mmu.itb.walker: Loading level2 PTE from <span class="number">0x80ed3c00</span></span><br><span class="line"><span class="number">579023064</span>: board.processor.cores1.core.mmu.itb.walker: Got level2 PTE: <span class="number">0x4ffffc01</span></span><br><span class="line"><span class="number">579023064</span>: board.processor.cores1.core.mmu.itb.walker: Loading level1 PTE from <span class="number">0x13ffff000</span></span><br><span class="line"><span class="number">579024729</span>: board.processor.cores1.core.mmu.itb.walker: Got level1 PTE: <span class="number">0x200800cf</span></span><br></pre></td></tr></table></figure>
 
 
 
-<p>可以看出继承中，父类和子类的内存空间都不包含成员函数的内存，但调用该函数时都指向同一块代码区域。</p>
-<p><strong>多态中成员函数的内存空间：</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">a</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;A a()&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">b</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;A b()&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">c</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;A c()&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">    <span class="type">int</span> x, y;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> :<span class="keyword">public</span> A &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">b</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;B b()&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>Gem5中查表流程：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//以最三级页表（level2，level1，level0）为例</span><br><span class="line">PTE地址=(satp.ppn&lt;&lt;PageShift(12))+(idx*sizof(PTESv39))//这里idx*的原因是，idx是偏移量，单位为sizof(PTESv39)=8</span><br><span class="line">//其中idx为虚拟地址中的最高级页表的index</span><br><span class="line">idx(vaddr&gt;&gt;shift)&amp;LEVEL_MASK;//LEVEL_MASK=(1&lt;&lt;LEVEL_BITS) - 1;</span><br><span class="line">shift=PageShift+LEVEL_BITS*2;//LEVEL_BITS=9</span><br></pre></td></tr></table></figure>
 
-
-
-<p>在多态中，使用虚函数会维护一个虚函数表，所以包含虚函数的类中会存在一个8byte大小的指针指向该虚函数表。</p>
-<p>虚函数表中存放着指针指向每个函数真正实现的地址，多态的实现就依靠这个虚函数表指向不同的实现函数。</p>
-<p>ps：类似于Handle，使用句柄进行操作。通过二级指针来方便操作。这样做的好处在于，当需要对虚函数表的时候，只需要修改列表中指针的指向就可以了，而不需要去修改用户端获取的指针。更安全。</p>
-<blockquote>
-<p><a class="link"   target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/563418849" >https://zhuanlan.zhihu.com/p/563418849<i class="fas fa-external-link-alt"></i></a></p>
-</blockquote>
+<p>也就是说level2的pte的地址就等于stap存储的页表起始位置+index2，查询该地址得到level2pte的值</p>
+<p>level1的pte地址就等于level2中pte的值+index1，查询该地址得到level1pte的值</p>
+<p>level0的pte地址就等于level1中pte的值+index0，查询该地址得到level0pte的值</p>
+<p>最后paddr&#x3D;level0中pte的值+offset</p>
+<p>以上面程序运行结果为例，vaddr&#x3D;0x3fe6640000，即0b011111111 100110011 001000000 000000000000。</p>
+<table>
+<thead>
+<tr>
+<th>vaddr</th>
+<th>index2</th>
+<th>index1</th>
+<th>index0</th>
+<th>offset</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>0b011111111</td>
+<td>0b100110011</td>
+<td>0b001000000</td>
+<td>0b000000000000</td>
+</tr>
+</tbody></table>
+<p>二级页表起始地址satp&#x3D;0x100fe8000，加偏移index2&#x3D;0x100fe87f8，根据0x100fe87f8查得pte&#x3D;0x403fa401，即0b100000000111111101001 0000000001</p>
+<table>
+<thead>
+<tr>
+<th>PTE</th>
+<th>PPN</th>
+<th>Flags</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>0b100000000111111101001(0x100fe9)</td>
+<td>0b0000000001</td>
+</tr>
+</tbody></table>
+<p>得到一级页表pte的地址为，0x100fe9000+0b100110011*8&#x3D;0x100fe9998</p>
+<p>以此类推得到paddr。</p>
+<p><strong>Gem5中查表的延时:</strong></p>
+<p>查一次表就相当于访存一次？</p>
 
             </div>
 
@@ -261,16 +289,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">C++类中成员函数为什么不占类的内存空间</span>
+            <span class="type">本文标题</span>：<span class="content">使用Gem5来探究内存分页机制</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">TKCC</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2024-07-13 14:31:09</span>
+            <span class="type">创建时间</span>：<span class="content">2024-07-19 15:52:58</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2024/07/13/类的内存占用/</span>
+            <span class="type">本文链接</span>：<span class="content">2024/07/19/使用Gem5来探究内存分页机制/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -288,7 +316,7 @@
                 <ul class="post-tags-box">
                     
                         <li class="tag-item">
-                            <a href="/tags/C/">#C++</a>&nbsp;
+                            <a href="/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">#体系结构</a>&nbsp;
                         </li>
                     
                 </ul>
@@ -297,29 +325,14 @@
             
                 <div class="article-nav">
                     
-                        <div class="article-prev">
-                            <a class="prev"
-                               rel="prev"
-                               href="/2024/07/19/%E4%BD%BF%E7%94%A8Gem5%E6%9D%A5%E6%8E%A2%E7%A9%B6%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5%E6%9C%BA%E5%88%B6/"
-                            >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                                <span class="title flex-center">
-                                <span class="post-nav-title-item">使用Gem5来探究内存分页机制</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                            </a>
-                        </div>
-                    
                     
                         <div class="article-next">
                             <a class="next"
                                rel="next"
-                               href="/2024/07/13/MMU%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"
+                               href="/2024/07/13/%E7%B1%BB%E7%9A%84%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">虚拟内存管理</span>
+                                <span class="post-nav-title-item">C++类中成员函数为什么不占类的内存空间</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
@@ -338,7 +351,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E6%83%85%E5%86%B5%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">类的内存占用情况：</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Gem5%E4%B8%AD%E6%9F%A5%E8%A1%A8%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.</span> <span class="nav-text">Gem5中查表的实现</span></a></li></ol>
     </div>
 </div>
 
